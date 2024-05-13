@@ -1,15 +1,20 @@
 import Link from 'next/link';
-import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal, AwaitedReactNode } from 'react';
 import {getProjectsDetails} from "@/actions/getProjectsDetails";
+import React from "react";
 export const runtime = "edge"
 
+interface Project {
+    title: string
+    id: string
+    slug: string
+}
 
 const WorkList = async () => {
-    const projects = await getProjectsDetails()
+    const projects: Partial<Project>[] = await getProjectsDetails()
 
     return (
         <div className="mb-32 grid text-center p-6 lg:max-w-7xl gap-2 lg:mb-0 lg:grid-cols-2 lg:text-right self-end">
-            {projects.map((project: { id: Key | null | undefined; slug: any; title: string | number | bigint | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | null | undefined; }) => (
+            {projects.map((project) => (
                 <div key={project.id}>
                     <Link
                         href={`/work/${project.slug || ''}`}>

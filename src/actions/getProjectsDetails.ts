@@ -1,18 +1,10 @@
-import prisma from "../../prisma/client";
-import getProjectSlug from "@/utils/getProjectSlug";
+import {Project} from "@prisma/client";
 
-export const runtime = "edge"
 
-export async function getProjectsDetails() {
-    const projects = await prisma.project.findMany({
-        select: {
-            title: true,
-            id: true
-        }
-    });
-
-    return projects.map(item => ({
-        ...item,
-        slug: getProjectSlug(item.title)
-    }));
+export async function getProjectsDetails(): Promise<Project[]> {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/projects`);
+    if (!res.ok) {
+        throw new Error('Failed to fetch projects');
+    }
+    return res.json();
 }
