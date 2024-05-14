@@ -1,0 +1,40 @@
+import BackgroundImage from "@/app/work/components/backgroundImage";
+
+export default function About() {
+    return (
+            <main className="flex min-h-screen flex-col items-center p-6">
+
+            <div className="flex w-full relative justify-center py-[6%] px-[2%] mx-auto ">
+                <div className="flex flex-wrap gap-4 md:flex-nowrap"> {/* Flex container with wrapping enabled */}
+                    <div className="flex-none w-full md:w-1/2 md:flex-initial"> {/* Column for the image */}
+                        <img src="https://assets.bossenbroek.photo/DSC_6535.jpg" alt="Anton Bossenbroek" className="w-[80%] h-auto"/>
+                    </div>
+                    <div className="flex-1 w-full md:w-1/2"> {/* Column for text content */}
+                        <h2 className="text-2xl leading-relaxed mt-4 max-w-[90%] md:mt-0">Anton Bossenbroek is a
+                            landscape photographer based in Turin, Italy. Anton's work is a continuous exploration of
+                            the complex relationship between nature and human influence. Using the expansive canvas of
+                            large-format photography, he delves into environmental and climate-related subjects,
+                            striving to unveil the subtle and complex interactions between humanity and the natural
+                            world.</h2> {/* Subtitle */}
+                        <div className="my-8 h-px bg-white w-full max-w-[90%]"/>
+                        <p className="mt-2 text-base leading-normal max-w-[90%]"> {/* Paragraph */}
+                            Anton's background in computer science, machine learning, and artificial intelligence plays
+                            a pivotal role in his artistic process. This fusion of technology and art enables him to
+                            play in the intersection of technology, science, and photography. By integrating analytical
+                            techniques and innovative approaches, he is able to enhance the depth and detail of his
+                            work, which he offers as a new way to engage with and understand the world around us.
+                        </p>
+                        <p className="mt-2 text-base leading-normal max-w-[90%]"> {/* Paragraph */}
+                            Currently, Anton is engaged in a project initially developed in collaboration with Magnum
+                            through their mentorship program. This endeavor maps the artificial light over the
+                            Netherlands at night, revealing the often unseen impacts of human existence on our
+                            environment. It's a visual exploration that seeks to illustrate the hidden aspects of our
+                            daily lives.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            </main>
+
+    )
+}

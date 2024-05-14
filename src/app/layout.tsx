@@ -21,7 +21,6 @@ export default function RootLayout({
     <main className="flex min-h-screen flex-col items-center justify-between p-6">
       <Navbar/>
       {children}
-
     </main>
    </body>
 
