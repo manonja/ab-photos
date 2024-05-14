@@ -18,7 +18,7 @@ const WorkList = async () => {
                 <div key={project.id}>
                     <Link
                         href={`/work/${project.slug || ''}`}>
-                        <h2 className={`group p-2 bg-black text-white px-5 relative transition-colors hover:bg-white hover:text-black align-middle m-2 text-4xl font-semibold`}>{project.title}</h2> </Link>
+                        <h2 className={`group p-2 bg-black text-white px-5 relative transition-colors hover:bg-fuchsia-500 hover:text-black align-middle m-2 text-4xl font-semibold`}>{project.title}</h2> </Link>
                 </div>
             ))}
         </div>
