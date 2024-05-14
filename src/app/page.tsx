@@ -1,7 +1,11 @@
 import WorkList from "@/app/work/components/workList";
+import BackgroundImage from "@/app/work/components/backgroundImage";
 
 export default function Home() {
   return (
-      <WorkList/>
+      <>
+              <BackgroundImage slug="7-rad"/>
+              <WorkList/>
+      </>
   );
 }

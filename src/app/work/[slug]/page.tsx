@@ -1,9 +1,11 @@
+import BackgroundImage from "@/app/work/components/backgroundImage";
+
 export const runtime = 'edge';
 
 export default function ProjectPage({ params }: { params: { slug: string } }) {
     return (
-        <>
-            <div>{params.slug}</div>
-        </>
+        <main className="flex min-h-screen flex-col justify-between items-center p-6">
+            <BackgroundImage slug={params.slug}/>
+        </main>
     )
 }
