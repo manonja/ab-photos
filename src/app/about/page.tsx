@@ -12,7 +12,7 @@ export default function About() {
                             landscape photographer based in Turin, Italy. Anton explores the tension between human exploitation of the landscape and its impact on the environment and society and the natural pristine lands.</h2> {/* Subtitle */}
                         <div className="my-8 h-px bg-white w-full max-w-[90%]"/>
                         <p className="mt-2 text-base leading-normal max-w-[90%]"> {/* Paragraph */}
-                            Antons&apos;s background in computer science, machine learning, and artificial intelligence plays
+                            Anton&apos;s background in computer science, machine learning, and artificial intelligence plays
                             a pivotal role in his artistic process. This fusion of technology and art enables him to
                             play in the intersection of technology, science, and photography. By integrating analytical
                             techniques and innovative approaches, he is able to enhance the depth and detail of his
