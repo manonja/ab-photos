@@ -1,12 +1,13 @@
+import SubscribeForm from "@/app/subscribe/components/subscribeForm";
+
 export default function Subscribe() {
     return (
         <main className="flex w-full min-h-screen flex-col items-center p-6">
-            <div className="flex w-full relative py-[6%] px-[2%] mx-auto ">
-                <div className="flex flex-wrap gap-4 md:flex-nowrap">
-                    <div className="flex-1 w-full md:flex-initial">
-                        <h2 className="uppercase text-2xl font-light">Subscribe</h2>
-                        <div className="my-8 h-px bg-white w-full max-w-full"/>
-                    </div>
+            <div className="flex flex-col relative py-[10%] px-[2%] mx-auto ">
+                <h2 className="uppercase text-2xl max-w-xl font-light">Stay up to date with Anton&apos;s newest projects, prints for sale and stories</h2>
+                <div className="my-8 h-px bg-white w-full max-w-full"/>
+                <div className="w-full">
+                    <SubscribeForm/>
                 </div>
             </div>
         </main>
