@@ -9,7 +9,7 @@ const SubscribeForm = () => {
 
     const subscribeUser = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/subscribe`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subscribe`, {
             body: JSON.stringify({
                 email: email,
             }),
