@@ -1,13 +1,15 @@
 "use client"
 import React, { useState } from 'react';
 
+export const runtime = "edge"
+
 const SubscribeForm = () => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
 
     const subscribeUser = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subscribe`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/subscribe`, {
             body: JSON.stringify({
                 email: email,
             }),
@@ -15,7 +17,7 @@ const SubscribeForm = () => {
                 'Content-Type': 'application/json',
             },
             method: 'POST',
-            mode: 'no-cors',
+            mode: "no-cors"
         });
 
         // @ts-ignore
@@ -41,7 +43,7 @@ const SubscribeForm = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     type="email"
-                    className="mt-1 focus:border-0 focus:ring-0 focus:border-transparent block w-full border-gray-300 bg-transparent py-2.5 text-sm text-gray-900 outline-none"
+                    className="mt-1 text-white focus:border-0 focus:ring-0 focus:border-transparent block w-full border-gray-300 bg-transparent py-2.5 text-sm outline-none"
 
                 />
             </div>
