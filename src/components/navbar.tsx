@@ -31,7 +31,7 @@ export default function Navbar() {
                 </a>
                 <a
                     className="pointer-events-none flex place-items-center gap-2  pr-4 p-4 lg:pointer-events-auto lg:p-0 hover:border-b"
-                    href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+                    href="/subscribe"
                     rel="noopener noreferrer"
                 >
                     Subscribe
