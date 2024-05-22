@@ -13,7 +13,7 @@ const WorkList = async () => {
     const projects: Partial<Project>[] = await getProjectsDetails()
 
     return (
-        <div className="mb-32 grid text-center p-6 lg:max-w-7xl gap-2 lg:mb-0 lg:grid-cols-2 lg:text-right self-end">
+        <div className="mb-32 grid text-center p-6 lg:max-w-7xl gap-2 lg:mb-0 lg:grid-cols-2 lg:text-right lg:self-end">
             {projects.map((project) => (
                 <div key={project.id}>
                     <Link
