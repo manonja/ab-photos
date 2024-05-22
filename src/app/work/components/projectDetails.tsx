@@ -14,7 +14,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = async ({slug}) => {
     return (
         <>
             <div className="mt-16 h-px bg-white w-full"/>
-            <main className="flex min-h-screen flex-col items-center">
+            <main className="flex flex-col items-center">
                 <div className="flex w-full relative justify-center py-[2%] mx-auto ">
                     <div className="flex flex-wrap gap-2 md:flex-nowrap">
                         <div className="flex-1 w-full md:w-1/3 md:flex-initial p-4">
