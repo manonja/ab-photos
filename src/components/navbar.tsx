@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Navbar() {
     return (
-        <div className="z-10 w-full items-center justify-between font-mono text-sm lg:flex">
+        <div className="z-10 w-full px-6 items-center justify-between font-mono text-sm lg:flex">
             <p className="fixed text-5xl left-0 top-0 flex w-full justify-center p-6 lg:static lg:w-auto ">
                 ANTON BOSSENBROEK
             </p>
