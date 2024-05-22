@@ -30,11 +30,37 @@ export default function Navbar() {
                     Contact
                 </a>
                 <a
-                    className="pointer-events-none flex place-items-center gap-2  pr-1 p-4 lg:pointer-events-auto lg:p-0 hover:border-b"
+                    className="pointer-events-none flex place-items-center gap-2  pr-4 p-4 lg:pointer-events-auto lg:p-0 hover:border-b"
                     href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
                     rel="noopener noreferrer"
                 >
                     Subscribe
+                </a>
+                <div
+                    className="flex place-items-center gap-2  pr-4 p-4 lg:p-0 lg:pr-2 "
+                >
+                    |
+                </div>
+
+                <a
+                    href="https://www.instagram.com/anton__photography"
+                    className="text-xs text-neutral-600 pointer-events-none flex place-items-center gap-2 py-4 lg:pointer-events-auto lg:p-0"
+                >
+                    <img
+                        src="/instagram.svg"
+                        alt="instagram icon"
+                        rel="noopener noreferrer"
+                    />
+                </a>
+                <a
+                    href="https://www.facebook.com/anton.bossenbroek"
+                    className="text-xs text-neutral-600 pointer-events-none flex place-items-center py-4 lg:pointer-events-auto lg:p-0"
+                >
+                    <img
+                        src="/facebook.svg"
+                        alt="instagram icon"
+                        rel="noopener noreferrer"
+                    />
                 </a>
             </div>
         </div>
