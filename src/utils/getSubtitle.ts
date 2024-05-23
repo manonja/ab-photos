@@ -7,7 +7,7 @@ export const getSubtitle = (slug: string): string => {
         subtitle = "Through rugged landscapes and solitary trails, this project captures the profound stillness and untamed beauty of the Pyrenees, inviting a reconnection with the wild essence within us."
     }
     else {
-        subtitle = "Industry is an attempt to explore the fascination on architecture"
+        subtitle = "Industry is an attempt to explore the intimate relationship between aesthetics and human savoir-faire in building engineering."
     }
     return subtitle;
 }

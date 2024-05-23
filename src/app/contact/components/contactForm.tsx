@@ -6,7 +6,7 @@ const ContactForm: React.FC = () => {
     return (
         <div className="contact-form-container">
             <form action={MAILCHIMP_CONTACT_URL} method="post">
-                <button className="text-4xl hover:bg-lime-400 py-2 hover:text-white font-extralight" type="submit">SEND A MESSAGE HERE</button>
+                <button className="text-4xl hover:bg-white py-2 hover:text-black font-extralight" type="submit">SEND A MESSAGE HERE</button>
             </form>
         </div>
     );
