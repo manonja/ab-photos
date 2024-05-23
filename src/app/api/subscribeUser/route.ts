@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: '' }, { status: 201 });
     } catch (error) {
         console.log('ERROR', error)
+        console.log('NEXT RESPONSE:', NextResponse.json({error}))
         return NextResponse.json(
             // @ts-ignore
             { error: error.message || error.toString() },

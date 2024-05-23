@@ -7,6 +7,7 @@ export async function subscribeUser(setMessage: (arg0: string) => void, setEmail
             email: email,
         }),
         headers: {
+            Authorization: `apikey ${process.env.NEXT_PUBLIC_MAILCHIMP_API_KEY}`,
             'Content-Type': 'application/json',
         },
         method: 'POST',
