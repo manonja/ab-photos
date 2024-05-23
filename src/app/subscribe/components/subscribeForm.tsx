@@ -11,7 +11,7 @@ const SubscribeForm = () => {
         console.log('EMAIL SENT', email)
         e.preventDefault()
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subscribe`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subscribeUser`, {
             body: JSON.stringify({
                 email: email,
             }),
