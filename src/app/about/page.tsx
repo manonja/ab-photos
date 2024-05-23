@@ -1,13 +1,12 @@
 export default function About() {
     return (
             <main className="flex min-h-screen flex-col items-center p-6">
-
             <div className="flex w-full relative justify-center py-[6%] px-[2%] mx-auto ">
-                <div className="flex flex-wrap gap-4 md:flex-nowrap"> {/* Flex container with wrapping enabled */}
-                    <div className="flex-none w-full md:w-1/2 md:flex-initial"> {/* Column for the image */}
+                <div className="flex flex-wrap gap-4 lg:flex-nowrap"> {/* Flex container with wrapping enabled */}
+                    <div className="flex-none w-full lg:w-1/2 lg:flex-initial lg:pt-0 pt-8"> {/* Column for the image */}
                         <img src="https://assets.bossenbroek.photo/DSC_6535.jpg" alt="Anton Bossenbroek" className="w-[80%] h-auto"/>
                     </div>
-                    <div className="flex-1 w-full md:w-1/2"> {/* Column for text content */}
+                    <div className="flex-1 w-full lg:w-1/2 lg:pt-0 pt-8"> {/* Column for text content */}
                         <h2 className="text-2xl leading-relaxed mt-4 max-w-[90%] md:mt-0">Anton Bossenbroek is a
                             landscape photographer based in Turin, Italy. Anton explores the tension between human exploitation of the landscape and its impact on the environment and society and the natural pristine lands.</h2> {/* Subtitle */}
                         <div className="my-8 h-px bg-white w-full max-w-[90%]"/>
