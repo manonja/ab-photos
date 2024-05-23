@@ -1,36 +1,15 @@
 "use client"
 import React, { useState } from 'react';
+import {subscribeUser} from "@/actions/subscribeUser";
+
+export const runtime = "edge"
 
 const SubscribeForm = () => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
 
-    const subscribeUser = async (e: { preventDefault: () => void; }) => {
-        e.preventDefault();
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subscribe`, {
-            body: JSON.stringify({
-                email: email,
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            method: 'POST',
-            mode: 'no-cors',
-        });
-
-        // @ts-ignore
-        const { error } = await res.json();
-        if (error) {
-            setMessage(error);
-            return;
-        }
-
-        setEmail('');
-        setMessage('Success! 🎉 You are now subscribed to the newsletter.');
-    };
-
     return (
-        <form onSubmit={subscribeUser} className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <form onSubmit={() => subscribeUser(setMessage, setEmail, email)} className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="col-span-1 md:col-span-2">
                 <label htmlFor="email-input" className="font-light">Your email</label>
                 <input
@@ -41,7 +20,7 @@ const SubscribeForm = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     type="email"
-                    className="mt-1 focus:border-0 focus:ring-0 focus:border-transparent block w-full border-gray-300 bg-transparent py-2.5 text-sm text-gray-900 outline-none"
+                    className="mt-1 text-white focus:border-0 focus:ring-0 focus:border-transparent block w-full border-gray-300 bg-transparent py-2.5 text-sm outline-none"
 
                 />
             </div>
