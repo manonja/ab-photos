@@ -14,6 +14,6 @@ export async function GET() {
     const updatedProjectList = projects.map(item => ({
         ...item,
         slug: getProjectSlug(item.title)
-    }));
+    })).filter((project) => project.title !== "Homepage");
     return NextResponse.json(updatedProjectList);
 }
