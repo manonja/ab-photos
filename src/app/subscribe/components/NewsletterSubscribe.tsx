@@ -5,7 +5,6 @@ import NewsletterForm from "@/app/subscribe/components/newsletterForm";
 const NewsletterSubscribe = () => {
 
     const MAILCHIMP_URL = process.env.NEXT_PUBLIC_MAILCHIMP_URL;
-    console.log('MAILCHIMP_URL', MAILCHIMP_URL)
 
     return (
         <MailchimpSubscribe
