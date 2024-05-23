@@ -5,17 +5,15 @@ export const runtime = "edge";
 export async function POST(req: NextRequest) {
     // @ts-ignore
     const { email } = await req.json();
-
-    console.log("EMAIL", email)
+    const AUDIENCE_ID = process.env.NEXT_PUBLIC_MAILCHIMP_AUDIENCE_ID; // Replace with your actual audience ID
+    const DATACENTER = process.env.NEXT_PUBLIC_MAILCHIMP_API_SERVER;
+    const API_KEY = process.env.NEXT_PUBLIC_MAILCHIMP_API_KEY;
 
     if (!email) {
         return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
 
     try {
-        const AUDIENCE_ID = process.env.NEXT_PUBLIC_MAILCHIMP_AUDIENCE_ID; // Replace with your actual audience ID
-        const DATACENTER = process.env.NEXT_PUBLIC_MAILCHIMP_API_SERVER;
-        const API_KEY = process.env.NEXT_PUBLIC_MAILCHIMP_API_KEY; // Ensure this is set in your environment variables
 
         const data = {
             email_address: email,
@@ -33,10 +31,6 @@ export async function POST(req: NextRequest) {
                 method: 'POST',
             }
         );
-
-        const responseData = await response.json();
-        console.log('Mailchimp API Response:', responseData);
-
 
         if (response.status >= 400) {
             return NextResponse.json(
