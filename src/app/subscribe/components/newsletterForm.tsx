@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, KeyboardEvent, ChangeEvent, MouseEvent } from 'react';
+import React, { useState, KeyboardEvent, ChangeEvent } from 'react';
 import { decode } from 'html-entities';
 
 interface NewsletterFormProps {
@@ -81,7 +81,7 @@ const NewsletterForm: React.FC<NewsletterFormProps> = ({ status, message, onVali
                     />
                 </div>
                 <div className="col-span-1 md:col-span-2">
-                        <button className="mt-2 p-2 focus:ring-0 bg-white font-light hover:bg-lime-400 hover:text-white hover:ring-lime-400 hover:ring-1 uppercase text-black  focus:ring-lime-400 focus:ring-offset-2"
+                        <button className="text-4xl hover:bg-lime-400 py-2 hover:text-white font-extralight"
                                 onClick={() => handleFormSubmit()}>
                             SUBSCRIBE
                         </button>
