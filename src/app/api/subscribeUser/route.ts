@@ -9,12 +9,12 @@ export async function POST(req: NextRequest) {
     const DATACENTER = process.env.NEXT_PUBLIC_MAILCHIMP_API_SERVER;
     const API_KEY = process.env.NEXT_PUBLIC_MAILCHIMP_API_KEY;
 
+    console.log('IN API SUBSCRIBE:', email, `https://${DATACENTER}.api.mailchimp.com/3.0/lists/${AUDIENCE_ID}/members` )
     if (!email) {
         return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
 
     try {
-
         const data = {
             email_address: email,
             status: 'subscribed',
@@ -41,6 +41,7 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({ error: '' }, { status: 201 });
     } catch (error) {
+        console.log('ERROR', error)
         return NextResponse.json(
             // @ts-ignore
             { error: error.message || error.toString() },
