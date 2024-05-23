@@ -2,7 +2,7 @@ export async function subscribeUser(setMessage: (arg0: string) => void, setEmail
     console.log('I AM HIT!')
     console.log('EMAIL SENT', email)
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subscribe`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subscribeUser`, {
         body: JSON.stringify({
             email: email,
         }),
