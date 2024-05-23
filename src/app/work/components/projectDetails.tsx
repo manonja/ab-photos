@@ -1,6 +1,7 @@
 import React from "react";
 import {getSubtitle} from "@/utils/getSubtitle";
 import {getDescription} from "@/utils/getDescription";
+import {getComplementaryText} from "@/utils/getComplementaryText";
 export const runtime = "edge"
 
 interface ProjectDetailsProps {
@@ -10,26 +11,28 @@ interface ProjectDetailsProps {
 const ProjectDetails: React.FC<ProjectDetailsProps> = async ({slug}) => {
     const subtitle = getSubtitle(slug)
     const description = getDescription(slug)
+    const complementaryText = getComplementaryText(slug)
     const date = slug === 'pyrenees' ? 'Summer 2021' : slug === "7-rad" ? '2019-2024' : '2018-present'
     return (
         <>
             <main className="flex flex-col items-center">
-                <div className="flex w-full relative justify-center py-[2%] mx-auto ">
+                <div className="flex w-full relative justify-center py-[2%] mx-auto">
                     <div className="flex flex-wrap gap-2 justify-around lg:flex-nowrap">
-                        <div className="flex-1 w-full lg:w-1/4 p-4">
+                        <div className="lg:flex-1 w-full lg:w-1/3 p-4">
                             <div className="uppercase text-2xl font-light">{slug}</div>
                             <div className="pt-6 font-light italic">{date}</div>
                         </div>
-                        <div className="flex-1 w-full lg:w-1/2 p-4 "> {/* Column for text content */}
+                        <div className="lg:flex-1 w-full lg:w-1/3 p-4 "> {/* Column for text content */}
                             <div className="text-2xl max-w-[90%] ">{subtitle}</div> {/* Subtitle */}
                             <div className="my-8 h-px bg-white w-full max-w-[90%]"/>
                             <p className="mt-2 text-base leading-normal max-w-[90%]"> {/* Paragraph */}
                                 {description}
                             </p>
                         </div>
-                        {/*<div className="flex-1 w-full lg:w-1/3 p-4">*/}
-                        {/*    {description}*/}
-                        {/*</div>*/}
+                        {complementaryText && <div className="flex-1 w-full lg:w-1/3 p-4">
+                            {complementaryText}
+                        </div>}
+
                     </div>
                 </div>
             </main>
