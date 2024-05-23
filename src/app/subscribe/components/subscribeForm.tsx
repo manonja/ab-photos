@@ -1,6 +1,5 @@
 "use client"
 import React, { useState } from 'react';
-import {subscribeUser} from "@/actions/subscribeUser";
 
 export const runtime = "edge"
 
@@ -8,8 +7,34 @@ const SubscribeForm = () => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
 
+    const subscribeUser = async (e: React.FormEvent<HTMLFormElement>) => {
+        console.log('EMAIL SENT', email)
+        e.preventDefault()
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subscribe`, {
+            body: JSON.stringify({
+                email: email,
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+        });
+
+        // @ts-ignore
+        const { error } = await res.json();
+        if (error) {
+            setMessage(error);
+            return;
+        }
+
+        setEmail('');
+        setMessage('Success! 🎉 You are now subscribed to the newsletter.');
+    }
+
+    console.log("MESSAGE:", message)
     return (
-        <form onSubmit={() => subscribeUser(setMessage, setEmail, email)} className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <form onSubmit={subscribeUser} className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="col-span-1 md:col-span-2">
                 <label htmlFor="email-input" className="font-light">Your email</label>
                 <input
