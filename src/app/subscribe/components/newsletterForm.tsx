@@ -81,7 +81,7 @@ const NewsletterForm: React.FC<NewsletterFormProps> = ({ status, message, onVali
                     />
                 </div>
                 <div className="col-span-1 md:col-span-2">
-                        <button className="text-4xl hover:bg-lime-400 py-2 hover:text-white font-extralight"
+                        <button className="text-4xl hover:bg-white py-2 hover:text-black font-extralight"
                                 onClick={() => handleFormSubmit()}>
                             SUBSCRIBE
                         </button>
