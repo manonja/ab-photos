@@ -16,8 +16,6 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['Lexend', ...defaultTheme.fontFamily.sans],
-        anton: ['Anton', 'sans-serif'],
-
       },
     },
   },
