@@ -6,7 +6,7 @@ export default function About() {
                     <div className="flex flex-wrap gap-4 lg:flex-nowrap"> {/* Flex container with wrapping enabled */}
                         <div
                             className="flex-none w-full lg:w-1/2 lg:flex-initial lg:pt-0 pt-8"> {/* Column for the image */}
-                            <img src="https://assets.bossenbroek.photo/DSC_6535.jpg" alt="Anton Bossenbroek"
+                            <img src="https://assets.bossenbroek.photo/anton_photo_clean.jpg" alt="Anton Bossenbroek"
                                  className="w-[80%] h-auto"/>
                         </div>
                         <div className="flex-1 w-full lg:w-1/2 lg:pt-0 pt-8"> {/* Column for text content */}
