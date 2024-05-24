@@ -2,8 +2,8 @@ import React from "react";
 
 export default function Navbar() {
     return (
-        <div className="z-10 w-full px-6 items-center justify-between font-mono text-sm lg:flex">
-            <a className="font-[anton] left-0 top-0 flex w-full justify-center p-6 lg:static lg:w-auto " href="/"   rel="noopener noreferrer">
+        <div className="z-10 w-full px-6 items-center justify-between text-sm lg:flex">
+            <a className="text-6xl font-[anton] left-0 top-0 flex w-full justify-center p-6 lg:static lg:w-auto " href="/"   rel="noopener noreferrer">
                 ANTON BOSSENBROEK
             </a>
             <div
