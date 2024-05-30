@@ -7,61 +7,64 @@ export default function Navbar() {
                 ANTON BOSSENBROEK
             </a>
             <div
-                className="fixed pb-6 bottom-0 gap-4 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-                <a
-                    className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 hover:border-b"
-                    href="/"
-                    rel="noopener noreferrer"
-                >
-                    Work
-                </a>
-                <a
-                    className="flex place-items-center gap-2 pr-1  p-2 pointer-events-auto lg:p-0 hover:border-b"
-                    href="/about"
-                    rel="noopener noreferrer"
-                >
-                    About
-                </a>
-                <a
-                    className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 hover:border-b"
-                    href="/contact"
-                    rel="noopener noreferrer"
-                >
-                    Contact
-                </a>
-                <a
-                    className="flex place-items-center gap-2  pr-4 p-2 pointer-events-auto lg:p-0 hover:border-b"
-                    href="/subscribe"
-                    rel="noopener noreferrer"
-                >
-                    Subscribe
-                </a>
-                <div
-                    className="flex place-items-center gap-2  pr-4 p-2 lg:p-0 lg:pr-2 "
-                >
-                    |
+                className=" fixed items-center lg:pb-6 pb-2 bottom-0 lg:gap-4 left-0 flex flex-col lg:flex-row h-auto w-full lg:items-end justify-center bg-gradient-to-t from-white via-white dark:from-black lg:static lg:h-auto lg:w-auto lg:bg-none">
+
+                <div className='flex flex-row gap-4'>
+                    <a
+                        className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 hover:border-b"
+                        href="/"
+                        rel="noopener noreferrer"
+                    >
+                        Work
+                    </a>
+                    <a
+                        className="flex place-items-center gap-2 pr-1  p-2 pointer-events-auto lg:p-0 hover:border-b"
+                        href="/about"
+                        rel="noopener noreferrer"
+                    >
+                        About
+                    </a>
+                    <a
+                        className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 hover:border-b"
+                        href="/contact"
+                        rel="noopener noreferrer"
+                    >
+                        Contact
+                    </a>
+                    <a
+                        className="flex place-items-center gap-2  pr-4 p-2 pointer-events-auto lg:p-0 hover:border-b"
+                        href="/subscribe"
+                        rel="noopener noreferrer"
+                    >
+                        Subscribe
+                    </a>
+
+
+                </div>
+                <div className='flex flex-row lg:pl-6 gap-2'>
+                    <a
+                        href="https://www.instagram.com/anton__photography"
+                        className="text-xs text-neutral-600 flex place-items-center gap-2 py-2 pointer-events-auto lg:p-0"
+                    >
+                        <img
+                            src="/instagram.svg"
+                            alt="instagram icon"
+                            rel="noopener noreferrer"
+                        />
+                    </a>
+                    <a
+                        href="https://www.facebook.com/anton.bossenbroek"
+                        className="text-xs text-neutral-600 flex place-items-center py-2 pointer-events-auto lg:p-0"
+                    >
+                        <img
+                            src="/facebook.svg"
+                            alt="instagram icon"
+                            rel="noopener noreferrer"
+                        />
+                    </a>
                 </div>
 
-                <a
-                    href="https://www.instagram.com/anton__photography"
-                    className="text-xs text-neutral-600 flex place-items-center gap-2 py-2 pointer-events-auto lg:p-0"
-                >
-                    <img
-                        src="/instagram.svg"
-                        alt="instagram icon"
-                        rel="noopener noreferrer"
-                    />
-                </a>
-                <a
-                    href="https://www.facebook.com/anton.bossenbroek"
-                    className="text-xs text-neutral-600 flex place-items-center py-2 pointer-events-auto lg:p-0"
-                >
-                    <img
-                        src="/facebook.svg"
-                        alt="instagram icon"
-                        rel="noopener noreferrer"
-                    />
-                </a>
+
             </div>
         </div>
     )
