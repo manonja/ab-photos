@@ -16,7 +16,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = async ({slug}) => {
                     <img
                         src={photo.desktop_blob}
                         alt={photo.caption || ''}
-                        className="w-full h-auto object-cover"
+                        className="w-full h-auto object-cover max-w-full max-h-screen"
                     />
                     {/*<p className="mt-2 text-left italic text-sm text-gray-400">{photo.caption}</p>*/}
                 </div>
