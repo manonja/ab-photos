@@ -7,7 +7,7 @@ export default function About() {
                         <div
                             className="flex-none w-full lg:w-1/2 lg:flex-initial lg:pt-0 pt-8"> {/* Column for the image */}
                             <img src="https://assets.bossenbroek.photo/anton_photo_resize.jpg" alt="Anton Bossenbroek"
-                                 className="w-[80%] h-auto"/>
+                                 className="lg:w-[90%] h-auto lg:pt-3"/>
                         </div>
                         <div className="flex-1 w-full lg:w-1/2 lg:pt-0 pt-8"> {/* Column for text content */}
                             <h2 className="text-2xl leading-relaxed mt-4 max-w-[90%] md:mt-0">Anton Bossenbroek is a
