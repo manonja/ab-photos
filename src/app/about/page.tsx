@@ -37,9 +37,7 @@ export default function About() {
                     </div>
                 </div>
             </main>
-            <footer className="text-xs text-gray-300 italic max-w-7xl">Copyright—All materials contained on this
-                site are protected and may not be reproduced, distributed, transmitted, displayed, published, or
-                broadcast without the prior written permission of Anton Bossenbroek Photography.
+            <footer className="text-xs text-gray-300 italic max-w-7xl">Copyright 2024 — Anton Bossenbroek Photography.
             </footer>
         </>
 
