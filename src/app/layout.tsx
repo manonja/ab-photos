@@ -21,8 +21,9 @@ export default function RootLayout({
     <html lang="en">
     <head>
       <script defer data-domain="bossenbroek.photo"
-              data-api="https://wandering-math-49d0.anton-bossenbroek.workers.dev/api/event"
-              src="https://wandering-math-49d0.anton-bossenbroek.workers.dev/js/script.js"></script>
+              // data-api="https://wandering-math-49d0.anton-bossenbroek.workers.dev/api/event"
+              // src="https://wandering-math-49d0.anton-bossenbroek.workers.dev/js/script.js
+      src="https://plausible.io/js/script.js"></script>
     </head>
     <body className={lexend.className}>
     <main className="flex min-h-screen flex-col items-center justify-between p-6">
