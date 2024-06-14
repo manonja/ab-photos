@@ -20,6 +20,18 @@ const nextConfig = {
       fullUrl: true,
     },
   },
+  async rewrites() {
+    return [
+      {
+        source: '/js/script.js',
+        destination: 'https://wandering-math-49d0.anton-bossenbroek.workers.dev/js/script.js',
+      },
+      {
+        source: '/api/event',
+        destination: 'https://wandering-math-49d0.anton-bossenbroek.workers.dev/api/event',
+      },
+    ];
+  }
 };
 
 export default nextConfig;
