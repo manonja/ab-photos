@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Lexend } from "next/font/google";
-import PlausibleProvider from 'next-plausible';
 
 
 import "./globals.css";
@@ -21,14 +20,16 @@ export default function RootLayout({
   return (
     <html lang="en">
     <head>
-      <PlausibleProvider domain="bossenbroek.photo" />
+      <script defer data-domain="bossenbroek.photo"
+              data-api="https://wandering-math-49d0.anton-bossenbroek.workers.dev/api/event"
+              src="https://wandering-math-49d0.anton-bossenbroek.workers.dev/js/script.js"></script>
     </head>
     <body className={lexend.className}>
     <main className="flex min-h-screen flex-col items-center justify-between p-6">
       <Navbar/>
       {children}
     </main>
-   </body>
+    </body>
 
     </html>
   );
