@@ -1,7 +1,7 @@
 export const getSubtitle = (slug: string): string => {
     let subtitle;
     if (slug === '7-rad') {
-        subtitle = "7 Rad - Atlas of the Dutch Noctucide is an exploration into the Dutch systemic and systematic eradication of the night sky "
+        subtitle = "7 Rad - is a visual exploration of how urban landscapes are transformed at night, depicting the grandeur, complexity and curiosity of a man-made environment."
     }
     else if (slug === 'pyrenees') {
         subtitle = "Through rugged landscapes and solitary trails, this project captures the profound stillness and untamed beauty of the Pyrenees, inviting a reconnection with the wild essence within us."

@@ -11,27 +11,20 @@ export default function About() {
                         </div>
                         <div className="flex-1 w-full lg:w-1/2 lg:pt-0 pt-8"> {/* Column for text content */}
                             <h2 className="text-2xl leading-relaxed mt-4 max-w-[90%] md:mt-0">Anton Bossenbroek is a
-                                landscape photographer based in Turin, Italy. Anton explores the tension between human
-                                exploitation of the landscape and its impact on the environment and society and the
-                                natural pristine lands.</h2> {/* Subtitle */}
+                                landscape photographer based in British Columbia, Canada. Anton explores the intersection
+                                of technological progress and natural landscapes</h2> {/* Subtitle */}
                             <div className="my-8 h-px bg-white w-full max-w-[90%]"/>
                             <p className="mt-2 text-base leading-normal max-w-[90%]"> {/* Paragraph */}
                                 Anton&apos;s background in computer science, machine learning, and artificial
-                                intelligence plays
-                                a pivotal role in his artistic process. This fusion of technology and art enables him to
-                                play in the intersection of technology, science, and photography. By integrating
-                                analytical
-                                techniques and innovative approaches, he is able to enhance the depth and detail of his
-                                work, which he offers as a new way to engage with and understand the world around us.
+                                intelligence plays a pivotal role in his artistic process. Anton&apos;s uses medium and large
+                                format to capture the grandeur and delicate balance of our world. This fusion of technology and
+                                art enables him to play in the intersection of technology, science, and photography.
                             </p>
                             <p className="mt-2 text-base leading-normal max-w-[90%]"> {/* Paragraph */}
                                 Currently, Anton is engaged in a project initially developed in collaboration with
-                                Magnum
-                                through their mentorship program. This endeavor maps the artificial light over the
-                                Netherlands at night, revealing the often unseen impacts of human existence on our
-                                environment. It is a visual exploration that seeks to illustrate the hidden aspects of
-                                our
-                                daily lives.
+                                Magnum through their mentorship program. This endeavor maps the artificial light over the
+                                Netherlands at night, a visual exploration that seeks to illustrate the hidden aspects of
+                                our daily lives.
                             </p>
                         </div>
                     </div>
