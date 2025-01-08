@@ -15,10 +15,10 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
-  logging: {
-    fetches: {
-      fullUrl: true,
-    },
+  experimental: {
+    serverActions: {
+      allowedOrigins: ['bossenbroek.photo', 'localhost:3000']
+    }
   }
 };
 
