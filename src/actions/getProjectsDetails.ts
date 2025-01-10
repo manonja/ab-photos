@@ -1,5 +1,4 @@
-import {Project} from "@prisma/client";
-
+import { Project } from "@/types/database";
 
 export async function getProjectsDetails(): Promise<Project[]> {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/projects`);

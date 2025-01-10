@@ -1,4 +1,4 @@
-import {Photo} from "@prisma/client";
+import { Photo } from "@/types/database";
 
 export async function getPhotoDetails(slug: string): Promise<Photo[]> {
     if (!slug) {
@@ -7,7 +7,7 @@ export async function getPhotoDetails(slug: string): Promise<Photo[]> {
 
     try {
         const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/photos/${slug}`;
-        console.log('Fetching from:', apiUrl); // Debug log
+        console.log('Fetching from:', apiUrl);
         
         const res = await fetch(apiUrl);
         
