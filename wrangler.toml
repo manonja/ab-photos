@@ -7,13 +7,6 @@ pages_build_output_dir = ".vercel/output/static"
 [vars]
 NEXT_PUBLIC_API_URL = "http://localhost:8788"
 
-[[headers]]
-pattern = "/*"
-headers = [
-  { key = "Access-Control-Allow-Origin", value = "https://assets.bossenbroek.photo" },
-  { key = "Access-Control-Allow-Methods", value = "GET, OPTIONS" },
-  { key = "Access-Control-Allow-Headers", value = "Content-Type" }
-]
 
 # Production environment config
 [env.production]

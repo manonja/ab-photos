@@ -6,7 +6,12 @@ First, run the development server:
 
 ```bash
 npm run dev
-
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -64,12 +69,22 @@ cd ab-photos-live
 npm install
 ```
 
-3. Generate your `.env.local` file from 1Password:
-```bash
-npm run env:get
-```
+3. Create a `.env.local` file in the root directory with the following variables:
+```env
+# Database URLs (Neon PostgreSQL)
+DIRECT_URL="your-direct-postgresql-url"
+DATABASE_URL="your-pooled-postgresql-url"
 
-This will create a `.env.local` file with all the necessary environment variables retrieved from 1Password.
+# API and Public URLs
+NEXT_PUBLIC_API_URL="your-api-url"
+
+# Mailchimp Configuration (if using newsletter features)
+NEXT_PUBLIC_MAILCHIMP_AUDIENCE_ID="your-audience-id"
+NEXT_PUBLIC_MAILCHIMP_API_KEY="your-api-key"
+NEXT_PUBLIC_MAILCHIMP_API_SERVER="your-server-region"
+NEXT_PUBLIC_MAILCHIMP_URL="your-mailchimp-form-url"
+NEXT_PUBLIC_CONTACT_FORM_URL="your-contact-form-url"
+```
 
 ### Development Workflow
 

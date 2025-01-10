@@ -14,7 +14,8 @@
     "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts",
     "test": "jest",
     "test:watch": "jest --watch",
-    "env:get": "./get-from-1password.sh"
+    "secrets:local": "./get-from-1password.sh local",
+    "secrets:cf": "./get-from-1password.sh cloudflare"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.9.3",
