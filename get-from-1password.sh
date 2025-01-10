@@ -11,7 +11,7 @@ trap 'echo >&2 "Error on line $LINENO. Exit code: $?"' ERR
 readonly VAULT="ab-photography"
 readonly ITEM="6h2jubbrerykhpr4daumreuap4"
 readonly CF_PROJECT="ab-photos"
-readonly LOCAL_API_URL="http://localhost:8787"
+readonly LOCAL_API_URL="http://localhost:8788"
 readonly CF_API_URL="https://bossenbroek.photo"
 
 # Define secrets to fetch (excluding NEXT_PUBLIC_API_URL as it's environment-specific)
@@ -180,20 +180,20 @@ main() {
 
     case "$action" in
         "local")
-            printf "Setting up local .env.local file...\n"
+            printf "Setting up local .dev.vars file...\n"
             if ! secrets=$(get_secrets "local"); then
                 printf >&2 "Failed to get secrets from 1Password. Aborting.\n"
                 exit 1
             fi
             
-            # Backup existing .env.local if it exists
-            if [ -f .env.local ]; then
-                mv .env.local ".env.local.backup-$(date +%Y%m%d-%H%M%S)"
+            # Backup existing .dev.vars if it exists
+            if [ -f .dev.vars ]; then
+                mv .dev.vars ".dev.vars.backup-$(date +%Y%m%d-%H%M%S)"
             fi
             
-            printf "%b" "$secrets" > .env.local
-            chmod 600 .env.local  # Secure file permissions
-            printf "✅ Local environment variables written to .env.local\n"
+            printf "%b" "$secrets" > .dev.vars
+            chmod 600 .dev.vars  # Secure file permissions
+            printf "✅ Local environment variables written to .dev.vars\n"
             ;;
             
         "cloudflare")
@@ -205,7 +205,7 @@ main() {
             
         *)
             printf >&2 "Usage: %s [local|cloudflare]\n" "$0"
-            printf >&2 "  local      - Create .env.local file with secrets from 1Password\n"
+            printf >&2 "  local      - Create .dev.vars file with secrets from 1Password\n"
             printf >&2 "  cloudflare - Update Cloudflare Pages secrets from 1Password\n"
             exit 1
             ;;
