@@ -6,12 +6,7 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -24,6 +19,37 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - npm 10.x or later
 - A Cloudflare account
 - Wrangler CLI installed globally (`npm install -g wrangler`)
+
+## Environment Setup
+
+This project requires certain environment variables to be set up before running. Follow these steps to configure your environment:
+
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Open the `.env` file and replace the placeholder values with your actual configuration:
+   - Database settings
+   - API keys
+   - Server configuration
+
+3. Make sure never to commit the `.env` file to version control.
+
+## Environment Variables
+
+| Variable | Description | Example Value |
+|----------|-------------|---------------|
+| DIRECT_URL | Direct PostgreSQL connection URL | postgresql://user:pass@host:5432/db |
+| DATABASE_URL | Pooled PostgreSQL connection URL | postgresql://user:pass@host:5432/db?pooled=true |
+| NEXT_PUBLIC_API_URL | Public API endpoint URL | https://api.yourdomain.com |
+| NEXT_PUBLIC_MAILCHIMP_AUDIENCE_ID | Mailchimp audience/list ID | abc123def |
+| NEXT_PUBLIC_MAILCHIMP_API_KEY | Mailchimp API key | 1234567890abcdef-us1 |
+| NEXT_PUBLIC_MAILCHIMP_API_SERVER | Mailchimp API server region | us1 |
+| NEXT_PUBLIC_MAILCHIMP_URL | Mailchimp form submission URL | https://your-form.mailchimp.com |
+| NEXT_PUBLIC_CONTACT_FORM_URL | Contact form submission endpoint | https://api.yourdomain.com/contact |
+| PORT | Application port | 3000 |
+| NODE_ENV | Environment name | development |
 
 ### Environment Setup
 
@@ -38,22 +64,12 @@ cd ab-photos-live
 npm install
 ```
 
-3. Create a `.env.local` file in the root directory with the following variables:
-```env
-# Database URLs (Neon PostgreSQL)
-DIRECT_URL="your-direct-postgresql-url"
-DATABASE_URL="your-pooled-postgresql-url"
-
-# API and Public URLs
-NEXT_PUBLIC_API_URL="your-api-url"
-
-# Mailchimp Configuration (if using newsletter features)
-NEXT_PUBLIC_MAILCHIMP_AUDIENCE_ID="your-audience-id"
-NEXT_PUBLIC_MAILCHIMP_API_KEY="your-api-key"
-NEXT_PUBLIC_MAILCHIMP_API_SERVER="your-server-region"
-NEXT_PUBLIC_MAILCHIMP_URL="your-mailchimp-form-url"
-NEXT_PUBLIC_CONTACT_FORM_URL="your-contact-form-url"
+3. Generate your `.env.local` file from 1Password:
+```bash
+npm run env:get
 ```
+
+This will create a `.env.local` file with all the necessary environment variables retrieved from 1Password.
 
 ### Development Workflow
 
