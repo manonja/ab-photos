@@ -13,7 +13,8 @@
     "deploy": "npm run pages:build && wrangler pages deploy .vercel/output/static",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "env:get": "./get-from-1password.sh"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.9.3",
