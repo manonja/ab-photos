@@ -167,3 +167,128 @@ In order to enable the example:
 After doing this you can run the `dev` or `preview` script and visit the `/api/hello` route to see the example in action.
 
 Finally, if you also want to see the example work in the deployed application make sure to add a `MY_KV_NAMESPACE` binding to your Pages application in its [dashboard kv bindings settings section](https://dash.cloudflare.com/?to=/:account/pages/view/:pages-project/settings/functions#kv_namespace_bindings_section). After having configured it make sure to re-deploy your application.
+
+## Contributing
+
+### Logging Best Practices
+
+We follow a structured logging approach to ensure consistency and debuggability across the application. Here are our logging conventions:
+
+#### 1. Log Prefixes and Context
+
+- Use source prefixes to identify the log origin:
+  ```typescript
+  // In API routes
+  console.log('[API] routeName: message', context);
+  
+  // In server actions
+  console.log('[Action] actionName: message', context);
+  ```
+
+#### 2. Log Structure
+
+Each log should follow this pattern:
+```typescript
+console.log('[Source] functionName: descriptiveMessage', {
+    // Context object with relevant data
+    param1,
+    param2,
+    // Add derived data when useful
+    resultCount: results.length
+});
+```
+
+#### 3. Logging Levels
+
+Use appropriate logging levels:
+- `console.log()` for general flow and successful operations
+- `console.warn()` for handled issues (e.g., non-OK responses)
+- `console.error()` for errors and exceptions
+
+#### 4. Request Lifecycle Logging
+
+For each operation, log the following stages:
+```typescript
+// 1. Starting the operation
+console.log('[Source] operation: Starting request', { params });
+
+// 2. Important steps
+console.log('[Source] operation: Performing step', { stepDetails });
+
+// 3. Successful completion
+console.log('[Source] operation: Successfully completed', { results });
+
+// 4. Error handling
+console.warn('[Source] operation: Non-OK response', { 
+    status,
+    statusText,
+    // Include relevant context
+    params 
+});
+
+// 5. Error cases
+console.error('[Source] operation: Error occurred', {
+    error,
+    // Include all relevant parameters
+    params
+});
+```
+
+#### 5. Context Objects
+
+Always include relevant context as a second parameter:
+```typescript
+// Good
+console.log('[API] getPhoto: Fetching photo', { photoId, userId });
+
+// Avoid
+console.log('[API] getPhoto: Fetching photo', photoId); // Missing context
+console.log(`[API] getPhoto: Fetching photo ${photoId}`); // String interpolation
+```
+
+#### 6. Error Logging
+
+When logging errors, include full context:
+```typescript
+try {
+    // Operation
+} catch (error) {
+    console.error('[Source] operation: Error occurred', {
+        error,
+        // Include all parameters that led to the error
+        params,
+        // Include any relevant state
+        state
+    });
+}
+```
+
+#### 7. Response Status Logging
+
+For API responses, log both success and failure cases:
+```typescript
+if (!response.ok) {
+    console.warn('[Source] operation: Non-OK response', {
+        status: response.status,
+        statusText: response.statusText,
+        // Include request parameters
+        params
+    });
+} else {
+    console.log('[Source] operation: Success response', {
+        // Include relevant response data
+        resultCount: data.length,
+        // Include request parameters
+        params
+    });
+}
+```
+
+These practices ensure:
+- Consistent log format across the application
+- Easy filtering and searching in log aggregators
+- Sufficient context for debugging issues
+- Clear operation lifecycle tracking
+- Proper error tracking and debugging
+
+### Best Practices (continued)

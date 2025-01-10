@@ -1,52 +1,73 @@
 import { Photo } from "@/types/database";
 
-export async function getPhotoDetails(slug: string): Promise<Photo[]> {
-    console.log('[API] getPhotoDetails: Starting request', { slug });
+/**
+ * Server action to fetch photo details from the API.
+ * Can fetch either all photos for a project or a specific photo by sequence.
+ * 
+ * @param projectId - The unique identifier of the project
+ * @param sequence - Optional sequence number to fetch a specific photo
+ * @returns Promise<Photo | null> - Array of photos, single photo, or null if not found
+ * @throws Will throw an error if the API request fails
+ */
+export async function getPhotoDetails(projectId: string, sequence?: number): Promise<Photo | null> {
+    console.log('[Action] getPhotoDetails: Starting request', { projectId, sequence });
     
-    if (!slug) {
-        console.error('[API] getPhotoDetails: Missing slug parameter');
-        throw new Error('Slug is required');
-    }
-
+    // Get the base URL for the API
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8788';
+    
     try {
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/photos/${slug}`;
-        console.log('[API] getPhotoDetails: Fetching from', apiUrl);
-        
-        const res = await fetch(apiUrl);
-        
-        if (!res.ok) {
-            const errorText = await res.text();
-            console.error('[API] getPhotoDetails: Error response', {
-                status: res.status,
-                statusText: res.statusText,
-                error: errorText,
-                slug
+        if (typeof sequence === 'number') {
+            // Fetch specific photo
+            console.log('[Action] getPhotoDetails: Fetching specific photo', { projectId, sequence });
+            const response = await fetch(`${baseUrl}/api/photos/${projectId}/${sequence}`);
+            
+            if (!response.ok) {
+                console.warn('[Action] getPhotoDetails: Non-OK response', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    projectId,
+                    sequence
+                });
+                
+                if (response.status === 404) return null;
+                throw new Error(`Failed to fetch photo: ${response.statusText}`);
+            }
+            
+            const photo = await response.json() as Photo;
+            console.log('[Action] getPhotoDetails: Successfully fetched photo', {
+                projectId,
+                sequence,
+                photoId: photo.id
             });
-            throw new Error(`Failed to fetch photo details for project ${slug}, status: ${res.status}`);
-        }
-        
-        const data = await res.json();
-        
-        if (!Array.isArray(data)) {
-            console.error('[API] getPhotoDetails: Invalid response format', {
-                receivedData: data,
-                slug
+            return photo;
+        } else {
+            // Fetch all photos for project
+            console.log('[Action] getPhotoDetails: Fetching all project photos', { projectId });
+            const response = await fetch(`${baseUrl}/api/photos/${projectId}`);
+            
+            if (!response.ok) {
+                console.warn('[Action] getPhotoDetails: Non-OK response', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    projectId
+                });
+                
+                if (response.status === 404) return null;
+                throw new Error(`Failed to fetch photos: ${response.statusText}`);
+            }
+            
+            const photos = await response.json() as Photo[];
+            console.log('[Action] getPhotoDetails: Successfully fetched photos', {
+                projectId,
+                photoCount: photos.length
             });
-            throw new Error('Invalid API response format: expected array');
+            return photos;
         }
-        
-        const photos = data as Photo[];
-        console.log('[API] getPhotoDetails: Successfully fetched', {
-            photoCount: photos.length,
-            slug
-        });
-        
-        return photos;
     } catch (error) {
-        console.error('[API] getPhotoDetails: Unexpected error', {
+        console.error('[Action] getPhotoDetails: Error occurred', {
             error,
-            slug,
-            apiUrl: process.env.NEXT_PUBLIC_API_URL
+            projectId,
+            sequence
         });
         throw error;
     }
