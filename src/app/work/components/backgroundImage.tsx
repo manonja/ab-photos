@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import {getPhotoDetails} from "@/actions/getPhotoDetails";
-import Image from 'next/image';
+// import Image from 'next/image';
 
 export const runtime = "edge"
 
@@ -11,13 +11,10 @@ interface BackgroundImageProps {
 const ImageLoader = async ({src}: {src: string}) => {
     return (
         <div className="fixed inset-0 -z-10">
-            <Image
+            <img
                 src={src}
                 alt="Background"
-                fill
-                className="object-cover"
-                priority
-                sizes="100vw"
+                className="object-cover w-full h-full"
             />
         </div>
     );

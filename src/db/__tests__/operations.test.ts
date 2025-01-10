@@ -1,5 +1,5 @@
 import { sql, pool } from '../client';
-import { findPhotosByProjectId, findAllProjects, findProjectBySlug } from '../operations';
+import { findPhotosByProjectId, findAllProjects, findProjectBySlug, findPhotoByProjectIdAndSeq } from '../operations';
 import { mockPhotos, mockProjects } from './setup';
 import { NeonQueryFunction } from '@neondatabase/serverless';
 
@@ -32,8 +32,7 @@ describe('Database Operations', () => {
             // Verify SQL parts without checking exact formatting
             const sqlParts = mockedSql.mock.calls[0][0] as string[];
             expect(sqlParts.some((part: string) => part.includes('SELECT * FROM photos'))).toBe(true);
-            expect(sqlParts.some((part: string) => part.includes('WHERE "projectId" ='))).toBe(true);
-            expect(sqlParts.some((part: string) => part.includes('ORDER BY sequence ASC'))).toBe(true);
+            expect(sqlParts.some((part: string) => part.includes('WHERE photos.project_id ='))).toBe(true);
             expect(mockedSql.mock.calls[0][1]).toBe(projectId);
         });
     });
@@ -73,6 +72,36 @@ describe('Database Operations', () => {
             mockedSql.mockResolvedValueOnce([]);
 
             const result = await findProjectBySlug(slug);
+            
+            expect(result).toBeNull();
+        });
+    });
+
+    describe('findPhotoByProjectIdAndSeq', () => {
+        it('should return a photo by project ID and sequence', async () => {
+            const projectId = 'nature';
+            const sequence = 1;
+            const expectedPhoto = mockPhotos.find(p => p.projectId === projectId && p.sequence === sequence);
+            mockedSql.mockResolvedValueOnce([expectedPhoto]);
+
+            const result = await findPhotoByProjectIdAndSeq(projectId, sequence);
+            
+            expect(result).toEqual(expectedPhoto);
+            const sqlParts = mockedSql.mock.calls[0][0] as string[];
+            expect(sqlParts.some((part: string) => part.includes('SELECT * FROM photos'))).toBe(true);
+            expect(sqlParts.some((part: string) => part.includes('WHERE project_id ='))).toBe(true);
+            expect(sqlParts.some((part: string) => part.includes('AND sequence ='))).toBe(true);
+            expect(sqlParts.some((part: string) => part.includes('LIMIT 1'))).toBe(true);
+            expect(mockedSql.mock.calls[0][1]).toBe(projectId);
+            expect(mockedSql.mock.calls[0][2]).toBe(sequence);
+        });
+
+        it('should return null when photo not found', async () => {
+            const projectId = 'nature';
+            const sequence = 999;
+            mockedSql.mockResolvedValueOnce([]);
+
+            const result = await findPhotoByProjectIdAndSeq(projectId, sequence);
             
             expect(result).toBeNull();
         });

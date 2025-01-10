@@ -97,3 +97,29 @@ export async function findProjectBySlug(slug: string): Promise<Project | null> {
         throw error;
     }
 }
+
+/**
+ * Retrieves a specific photo by project ID and sequence number.
+ * 
+ * @param projectId - The unique identifier of the project
+ * @param sequence - The sequence number of the photo within the project
+ * @returns Promise<Photo | null> - Photo object if found, null otherwise
+ * @throws Will throw an error if the database query fails
+ */
+export async function findPhotoByProjectIdAndSeq(projectId: string, sequence: number): Promise<Photo | null> {
+    try {
+        console.log('Fetching photo for project:', projectId, 'sequence:', sequence);
+        const result = await sql`
+            SELECT * FROM photos 
+            WHERE project_id = ${projectId}
+            AND sequence = ${sequence}
+            LIMIT 1
+        `;
+        console.log('Found photo:', result);
+        const photos = result as Photo[];
+        return photos[0] || null;
+    } catch (error) {
+        console.error('Error fetching photo:', error);
+        throw error;
+    }
+}
