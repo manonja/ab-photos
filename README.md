@@ -119,7 +119,17 @@ npm run test:watch  # Run tests in watch mode
 wrangler login
 ```
 
-2. Deploy to Cloudflare Pages:
+2. Understanding local development ports:
+When running the application locally with Wrangler, two ports are used:
+- Port 8788: Used for the Pages application (main frontend)
+- Port 8787: Used for the Worker API endpoints
+
+Make sure your `NEXT_PUBLIC_API_URL` in your environment configuration points to port 8787 for API requests:
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8787
+```
+
+3. Deploy to Cloudflare Pages:
 ```bash
 npm run deploy
 ```

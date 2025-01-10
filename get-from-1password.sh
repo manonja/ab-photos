@@ -11,7 +11,7 @@ trap 'echo >&2 "Error on line $LINENO. Exit code: $?"' ERR
 readonly VAULT="ab-photography"
 readonly ITEM="6h2jubbrerykhpr4daumreuap4"
 readonly CF_PROJECT="ab-photos"
-readonly LOCAL_API_URL="http://localhost:8788"
+readonly LOCAL_API_URL="http://localhost:8787"
 readonly CF_API_URL="https://bossenbroek.photo"
 
 # Define secrets to fetch (excluding NEXT_PUBLIC_API_URL as it's environment-specific)
