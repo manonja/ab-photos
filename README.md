@@ -16,6 +16,107 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Development
+
+### Prerequisites
+
+- Node.js 18.x or later
+- npm 10.x or later
+- A Cloudflare account
+- Wrangler CLI installed globally (`npm install -g wrangler`)
+
+### Environment Setup
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd ab-photos-live
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Create a `.env.local` file in the root directory with the following variables:
+```env
+# Database URLs (Neon PostgreSQL)
+DIRECT_URL="your-direct-postgresql-url"
+DATABASE_URL="your-pooled-postgresql-url"
+
+# API and Public URLs
+NEXT_PUBLIC_API_URL="your-api-url"
+
+# Mailchimp Configuration (if using newsletter features)
+NEXT_PUBLIC_MAILCHIMP_AUDIENCE_ID="your-audience-id"
+NEXT_PUBLIC_MAILCHIMP_API_KEY="your-api-key"
+NEXT_PUBLIC_MAILCHIMP_API_SERVER="your-server-region"
+NEXT_PUBLIC_MAILCHIMP_URL="your-mailchimp-form-url"
+NEXT_PUBLIC_CONTACT_FORM_URL="your-contact-form-url"
+```
+
+### Development Workflow
+
+1. Start the development server:
+```bash
+npm run dev
+```
+This runs Next.js in development mode with hot reloading at [http://localhost:3000](http://localhost:3000)
+
+2. Preview Cloudflare Pages locally:
+```bash
+npm run preview
+```
+This builds and runs your application in an environment that matches Cloudflare Pages
+
+3. Build for production:
+```bash
+npm run pages:build
+```
+This creates an optimized production build in the `.vercel/output` directory
+
+4. Run tests:
+```bash
+npm run test        # Run all tests
+npm run test:watch  # Run tests in watch mode
+```
+
+### Cloudflare Development
+
+1. Authenticate with Cloudflare:
+```bash
+wrangler login
+```
+
+2. Deploy to Cloudflare Pages:
+```bash
+npm run deploy
+```
+
+### Debugging
+
+- Use Chrome DevTools with the development server (a debugger is enabled at default port)
+- Check the `.vercel/output` directory for build output
+- View build logs with `wrangler pages deployment tail`
+
+### Best Practices
+
+1. Always test your changes locally using both:
+   - `npm run dev` for rapid development
+   - `npm run preview` to ensure Cloudflare compatibility
+
+2. Check for type errors:
+```bash
+npm run lint
+```
+
+3. Run tests before deploying:
+```bash
+npm run test
+```
+
+4. Use the appropriate environment variables for local development vs production
+
 ## Cloudflare integration
 
 Besides the `dev` script mentioned above `c3` has added a few extra scripts that allow you to integrate the application with the [Cloudflare Pages](https://pages.cloudflare.com/) environment, these are:

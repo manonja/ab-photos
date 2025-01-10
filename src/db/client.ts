@@ -1,7 +1,5 @@
-import { neon, neonConfig } from '@neondatabase/serverless';
+import { neon } from '@neondatabase/serverless';
 import { Pool } from '@neondatabase/serverless';
-
-neonConfig.fetchConnectionCache = true;
 
 // Get the database URL from environment variables
 const getDatabaseUrl = () => {
@@ -12,8 +10,16 @@ const getDatabaseUrl = () => {
     return url;
 };
 
-// Create a connection pool for concurrent requests
-export const pool = new Pool({ connectionString: getDatabaseUrl() });
-
 // Create a direct SQL client for single queries
-export const sql = neon(getDatabaseUrl()); 
+export const sql = neon(getDatabaseUrl());
+
+// Create a connection pool for concurrent requests
+export const pool = new Pool({ 
+    connectionString: getDatabaseUrl(),
+    // Add max connections to avoid overwhelming the serverless function
+    max: 10,
+    // Add connection timeout
+    connectionTimeoutMillis: 5000,
+    // Add idle timeout to clean up connections
+    idleTimeoutMillis: 60000
+}); 
