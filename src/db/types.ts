@@ -18,4 +18,16 @@ export interface Project {
 
 export interface DatabaseError extends Error {
     code?: string;
+    query?: string;
+    params?: unknown[];
+    detail?: string;
+    hint?: string;
+    position?: string;
+    internalQuery?: string;
+    where?: string;
+    schema?: string;
+    table?: string;
+    column?: string;
+    dataType?: string;
+    constraint?: string;
 } 

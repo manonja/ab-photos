@@ -19,6 +19,7 @@ export async function getPhotoDetails(projectId: string, sequence?: number): Pro
         if (typeof sequence === 'number') {
             // Fetch specific photo
             console.log('[Action] getPhotoDetails: Fetching specific photo', { projectId, sequence });
+            console.log('[Action] getPhotoDetails: Fetching from', `${baseUrl}/api/photos/${projectId}/${sequence}`);
             const response = await fetch(`${baseUrl}/api/photos/${projectId}/${sequence}`);
             
             if (!response.ok) {
