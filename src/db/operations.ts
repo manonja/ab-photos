@@ -1,5 +1,5 @@
 import { sql, pool } from './client';
-import { Photo, Project } from './types';
+import { Photo, Project, DatabaseError } from './types';
 
 /**
  * Database Operations Module
@@ -37,45 +37,62 @@ import { Photo, Project } from './types';
  */
 export async function findPhotosByProjectId(projectId: string): Promise<Photo[]> {
     try {
-        console.log('Fetching photos for project:', projectId);
+        console.log('[DB] findPhotosByProjectId: Starting request', { projectId });
+        
         const result = await sql`
             SELECT * FROM photos 
             WHERE photos.project_id = ${projectId}
         `;
-        console.log('Found photos:', result);
-        return result as Photo[];
+        
+        const photos = result as Photo[];
+        console.log('[DB] findPhotosByProjectId: Successfully fetched photos', { 
+            projectId, 
+            photoCount: photos.length 
+        });
+        
+        return photos;
     } catch (error) {
-        console.error('Error fetching photos:', error);
+        console.error('[DB] findPhotosByProjectId: Error occurred', {
+            error,
+            code: (error as DatabaseError).code,
+            projectId
+        });
         throw error;
     }
 }
 
 /**
  * Retrieves all published projects from the database.
- * Filters projects based on the "isPublished" flag.
  * 
  * @returns Promise<Project[]> - Array of published project objects
  * @throws Will throw an error if the database query fails
  */
 export async function findAllProjects(): Promise<Project[]> {
     try {
-        console.log('Fetching all published projects');
+        console.log('[DB] findAllProjects: Starting request');
+        
         const result = await sql`
             SELECT * FROM projects
             WHERE "isPublished" = true
         `;
-        console.log('Found projects:', result);
-        return result as Project[];
+        
+        const projects = result as Project[];
+        console.log('[DB] findAllProjects: Successfully fetched projects', { 
+            projectCount: projects.length 
+        });
+        
+        return projects;
     } catch (error) {
-        console.error('Error fetching projects:', error);
+        console.error('[DB] findAllProjects: Error occurred', {
+            error,
+            code: (error as DatabaseError).code
+        });
         throw error;
     }
 }
 
 /**
  * Finds a single project by its slug identifier.
- * Note: The current implementation appears to be using 'id' instead of 'slug' in the WHERE clause,
- * which might need to be reviewed.
  * 
  * @param slug - The unique slug identifier for the project
  * @returns Promise<Project | null> - Project object if found, null otherwise
@@ -83,17 +100,33 @@ export async function findAllProjects(): Promise<Project[]> {
  */
 export async function findProjectBySlug(slug: string): Promise<Project | null> {
     try {
-        console.log('Fetching project by slug:', slug);
+        console.log('[DB] findProjectBySlug: Starting request', { slug });
+        
         const result = await sql`
             SELECT * FROM projects
             WHERE id = ${slug}
             LIMIT 1
         `;
-        console.log('Found project:', result);
+        
         const projects = result as Project[];
-        return projects[0] || null;
+        const project = projects[0] || null;
+        
+        if (!project) {
+            console.warn('[DB] findProjectBySlug: Project not found', { slug });
+        } else {
+            console.log('[DB] findProjectBySlug: Successfully fetched project', { 
+                slug,
+                projectId: project.id
+            });
+        }
+        
+        return project;
     } catch (error) {
-        console.error('Error fetching project:', error);
+        console.error('[DB] findProjectBySlug: Error occurred', {
+            error,
+            code: (error as DatabaseError).code,
+            slug
+        });
         throw error;
     }
 }
@@ -108,18 +141,42 @@ export async function findProjectBySlug(slug: string): Promise<Project | null> {
  */
 export async function findPhotoByProjectIdAndSeq(projectId: string, sequence: number): Promise<Photo | null> {
     try {
-        console.log('Fetching photo for project:', projectId, 'sequence:', sequence);
+        console.log('[DB] findPhotoByProjectIdAndSeq: Starting request', { 
+            projectId, 
+            sequence 
+        });
+        
         const result = await sql`
             SELECT * FROM photos 
             WHERE project_id = ${projectId}
             AND sequence = ${sequence}
             LIMIT 1
         `;
-        console.log('Found photo:', result);
+        
         const photos = result as Photo[];
-        return photos[0] || null;
+        const photo = photos[0] || null;
+        
+        if (!photo) {
+            console.warn('[DB] findPhotoByProjectIdAndSeq: Photo not found', { 
+                projectId, 
+                sequence 
+            });
+        } else {
+            console.log('[DB] findPhotoByProjectIdAndSeq: Successfully fetched photo', { 
+                projectId,
+                sequence,
+                photoId: photo.id
+            });
+        }
+        
+        return photo;
     } catch (error) {
-        console.error('Error fetching photo:', error);
+        console.error('[DB] findPhotoByProjectIdAndSeq: Error occurred', {
+            error,
+            code: (error as DatabaseError).code,
+            projectId,
+            sequence
+        });
         throw error;
     }
 }

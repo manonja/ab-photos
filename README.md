@@ -104,6 +104,12 @@ npm run test:watch  # Run tests in watch mode
 wrangler login
 ```
 
+1. Run changes locally with wrangler,
+
+```bash
+npm run dev:wrangler
+```
+
 2. Deploy to Cloudflare Pages:
 ```bash
 npm run deploy
@@ -185,6 +191,126 @@ After doing this you can run the `dev` or `preview` script and visit the `/api/h
 Finally, if you also want to see the example work in the deployed application make sure to add a `MY_KV_NAMESPACE` binding to your Pages application in its [dashboard kv bindings settings section](https://dash.cloudflare.com/?to=/:account/pages/view/:pages-project/settings/functions#kv_namespace_bindings_section). After having configured it make sure to re-deploy your application.
 
 ## Contributing
+
+### Testing Guidelines
+
+We use Jest for testing our codebase. Here are our testing conventions and best practices:
+
+#### 1. Test File Structure
+
+- Place test files in `__tests__` directories next to the code being tested
+- Name test files with the `.test.ts` or `.test.tsx` extension
+- Mirror the source file structure in test files:
+```
+src/
+  └── db/
+      ├── client.ts
+      └── __tests__/
+          └── client.test.ts
+```
+
+#### 2. Test Organization
+
+Structure your tests using `describe` blocks for logical grouping:
+```typescript
+describe('Component/Module Name', () => {
+    describe('Specific Function/Feature', () => {
+        it('should behave in a specific way', () => {
+            // Test code
+        });
+    });
+});
+```
+
+#### 3. Mocking Best Practices
+
+- Create mock functions at the top of your test file:
+```typescript
+const mockFunction = jest.fn();
+jest.mock('module-name', () => ({
+    exportedFunction: mockFunction
+}));
+```
+
+- Use `mockImplementation` for complex mocks:
+```typescript
+mockFunction.mockImplementation(() => {
+    // Mock implementation
+});
+```
+
+- Use `mockImplementationOnce` for one-time behaviors:
+```typescript
+mockFunction.mockImplementationOnce(() => {
+    throw new Error('Test error');
+});
+```
+
+#### 4. Environment and Setup
+
+- Reset the test environment before each test:
+```typescript
+beforeEach(() => {
+    jest.clearAllMocks();
+    jest.resetModules();
+});
+```
+
+- Clean up after tests:
+```typescript
+afterEach(() => {
+    jest.restoreAllMocks();
+});
+```
+
+#### 5. Testing Async Code
+
+- Always use async/await for asynchronous tests:
+```typescript
+it('should handle async operations', async () => {
+    await expect(asyncFunction()).resolves.toBe(expectedValue);
+});
+```
+
+#### 6. Error Testing
+
+Test both success and error cases:
+```typescript
+it('should handle errors', async () => {
+    // Arrange
+    const mockError = new Error('Test error');
+    mockFunction.mockRejectedValue(mockError);
+
+    // Act & Assert
+    await expect(functionUnderTest())
+        .rejects.toThrow('Test error');
+});
+```
+
+#### 7. Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests for a specific file
+npm test path/to/file.test.ts
+
+# Run tests with coverage
+npm test -- --coverage
+```
+
+#### 8. Test Coverage Guidelines
+
+- Aim for 80% code coverage at minimum
+- Focus on testing:
+  - Critical business logic
+  - Error handling
+  - Edge cases
+  - API integrations
 
 ### Logging Best Practices
 
