@@ -38,6 +38,9 @@ const BackgroundImage: React.FC<BackgroundImageProps> = async ({ slug, sequence 
                         src={photo.desktop_blob}
                         alt={photo.caption || 'Background'}
                         className="object-cover w-full h-full"
+                        {...(process.env.NEXT_PUBLIC_API_URL === 'http://localhost:8788' && {
+                            referrerPolicy: "no-referrer"
+                        })}
                     />
                 </div>
             </Suspense>
