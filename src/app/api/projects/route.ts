@@ -1,19 +1,19 @@
-import { NextResponse } from "next/server";
-import prisma from "../../../../prisma/client";
-import getProjectSlug from "@/utils/getProjectSlug";
+import { NextResponse } from 'next/server';
+import { findAllProjects } from '@/db/operations';
+import { DatabaseError } from '@/db/types';
 
-export const runtime = "edge";
+export const runtime = 'edge';
+
 export async function GET() {
-    const projects = await prisma.project.findMany({
-        select: {
-            title: true,
-            id: true
-        }
-    });
-
-    const updatedProjectList = projects.map(item => ({
-        ...item,
-        slug: getProjectSlug(item.title)
-    })).filter((project) => project.title !== "Homepage");
-    return NextResponse.json(updatedProjectList);
+    try {
+        const projects = await findAllProjects();
+        return NextResponse.json(projects);
+    } catch (error) {
+        console.error('Error fetching projects:', error);
+        const dbError = error as DatabaseError;
+        return NextResponse.json(
+            { error: 'Failed to fetch projects', code: dbError.code },
+            { status: 500 }
+        );
+    }
 }
