@@ -1,11 +1,10 @@
-import WorkList from "@/app/work/components/workList";
-import BackgroundImage from "@/app/work/components/backgroundImage";
+import { FeaturedPhotos } from '@/components/FeaturedPhotos';
 
 export default function Home() {
   return (
-      <>
-              <BackgroundImage slug="7-rad"/>
-              <WorkList/>
-      </>
+    <main className="container mx-auto px-4 py-8">
+      <h1 className="text-4xl font-bold mb-8">Anton Bossenbroek Photography</h1>
+      <FeaturedPhotos />
+    </main>
   );
 }

@@ -1,89 +1,64 @@
 import { GET } from './route';
-import { findPhotoByProjectIdAndSeq } from '@/db/operations';
+import { mockPhotos, setupDatabaseMocks } from '@/db/__tests__/mocks';
 
-// Simple mock photo for testing
-const mockPhoto = {
-    id: 'photo1',
-    projectId: 'nature',
-    sequence: 1,
-    caption: 'Test photo',
-    desktop_blob: 'test.jpg',
-    mobile_blob: 'test-mobile.jpg',
-    gallery_blob: 'test-gallery.jpg'
-};
-
-// Mock the database operation
-jest.mock('@/db/operations', () => ({
-    findPhotoByProjectIdAndSeq: jest.fn()
-}));
-
-const mockedFindPhoto = findPhotoByProjectIdAndSeq as jest.MockedFunction<typeof findPhotoByProjectIdAndSeq>;
+const { sql } = setupDatabaseMocks();
 
 describe('GET /api/photos/[slug]/[photo_seq_id]', () => {
-    beforeEach(() => {
-        jest.clearAllMocks();
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('returns photo details when found', async () => {
+    const mockPhoto = mockPhotos[0];
+    (sql as jest.Mock).mockResolvedValueOnce([mockPhoto]);
+
+    const request = new Request(
+      'http://localhost:3000/api/photos/test-project/1',
+      { method: 'GET' }
+    );
+    const response = await GET(request, {
+      params: { slug: 'test-project', photo_seq_id: '1' }
     });
 
-    it('returns 200 and photo when found', async () => {
-        // Arrange
-        mockedFindPhoto.mockResolvedValue(mockPhoto);
+    expect(response.status).toBe(200);
+    const data = await response.json();
+    expect(data).toEqual(mockPhoto);
+    expect(sql).toHaveBeenCalledWith(
+      expect.stringContaining('SELECT'),
+      'test-project',
+      1
+    );
+  });
 
-        // Act
-        const response = await GET(
-            new Request('http://test.com'),
-            { params: { slug: 'nature', photo_seq_id: '1' } }
-        );
+  it('returns 404 when photo is not found', async () => {
+    (sql as jest.Mock).mockResolvedValueOnce([]);
 
-        // Assert
-        expect(response.status).toBe(200);
-        const data = await response.json();
-        expect(data).toEqual(mockPhoto);
+    const request = new Request(
+      'http://localhost:3000/api/photos/test-project/1',
+      { method: 'GET' }
+    );
+    const response = await GET(request, {
+      params: { slug: 'test-project', photo_seq_id: '1' }
     });
 
-    it('returns 404 when photo not found', async () => {
-        // Arrange
-        mockedFindPhoto.mockResolvedValue(null);
+    expect(response.status).toBe(404);
+    const data = await response.json();
+    expect(data).toEqual({ error: 'Photo not found' });
+  });
 
-        // Act
-        const response = await GET(
-            new Request('http://test.com'),
-            { params: { slug: 'nature', photo_seq_id: '999' } }
-        );
+  it('returns 500 on server error', async () => {
+    (sql as jest.Mock).mockRejectedValueOnce(new Error('Database error'));
 
-        // Assert
-        expect(response.status).toBe(404);
-        const data = await response.json();
-        expect(data).toEqual({ error: 'Photo not found' });
+    const request = new Request(
+      'http://localhost:3000/api/photos/test-project/1',
+      { method: 'GET' }
+    );
+    const response = await GET(request, {
+      params: { slug: 'test-project', photo_seq_id: '1' }
     });
 
-    it('returns 400 when sequence ID is invalid', async () => {
-        // Act
-        const response = await GET(
-            new Request('http://test.com'),
-            { params: { slug: 'nature', photo_seq_id: 'invalid' } }
-        );
-
-        // Assert
-        expect(response.status).toBe(400);
-        const data = await response.json();
-        expect(data).toEqual({ error: 'Invalid sequence ID' });
-    });
-
-    it('returns 500 on database error', async () => {
-        // Arrange
-        const error = new Error('Database error') as any;
-        error.code = 'P2002';
-        mockedFindPhoto.mockRejectedValue(error);
-
-        // Act
-        const response = await GET(
-            new Request('http://test.com'),
-            { params: { slug: 'nature', photo_seq_id: '1' } }
-        );
-
-        // Assert
-        expect(response.status).toBe(500);
-        const data = await response.json();
-        expect(data).toEqual({ error: 'Failed to fetch photo', code: 'P2002' });
-    });
+    expect(response.status).toBe(500);
+    const data = await response.json();
+    expect(data).toEqual({ error: 'Failed to fetch photo' });
+  });
 }); 

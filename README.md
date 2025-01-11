@@ -209,123 +209,132 @@ Finally, if you also want to see the example work in the deployed application ma
 
 ### Testing Guidelines
 
-We use Jest for testing our codebase. Here are our testing conventions and best practices:
+We use a comprehensive testing strategy combining Jest for unit/integration tests and Playwright for E2E testing. Here are our testing conventions and best practices:
 
-#### 1. Test File Structure
+#### 1. Component Testing with React Testing Library
 
-- Place test files in `__tests__` directories next to the code being tested
-- Name test files with the `.test.ts` or `.test.tsx` extension
-- Mirror the source file structure in test files:
-```
-src/
-  └── db/
-      ├── client.ts
-      └── __tests__/
-          └── client.test.ts
-```
+We use React Testing Library for testing React components. Tests should focus on user behavior rather than implementation details.
 
-#### 2. Test Organization
-
-Structure your tests using `describe` blocks for logical grouping:
+Example component test:
 ```typescript
-describe('Component/Module Name', () => {
-    describe('Specific Function/Feature', () => {
-        it('should behave in a specific way', () => {
-            // Test code
-        });
-    });
+import { render, screen, fireEvent } from '@testing-library/react';
+import { PhotoCard } from '../PhotoCard';
+
+describe('PhotoCard', () => {
+  const defaultProps = {
+    title: 'Test Photo',
+    imageUrl: '/test.jpg',
+  };
+
+  it('renders photo card with required props', () => {
+    render(<PhotoCard {...defaultProps} />);
+    
+    expect(screen.getByRole('heading')).toHaveTextContent(defaultProps.title);
+    expect(screen.getByRole('img')).toHaveAttribute('src', defaultProps.imageUrl);
+  });
+
+  it('calls onView when view button is clicked', () => {
+    const onView = jest.fn();
+    render(<PhotoCard {...defaultProps} onView={onView} />);
+    
+    fireEvent.click(screen.getByRole('button'));
+    expect(onView).toHaveBeenCalledTimes(1);
+  });
 });
 ```
 
-#### 3. Mocking Best Practices
+#### 2. API Route Testing
 
-- Create mock functions at the top of your test file:
+API routes are tested using Jest with proper mocking of database calls and external services.
+
+Example API test:
 ```typescript
-const mockFunction = jest.fn();
-jest.mock('module-name', () => ({
-    exportedFunction: mockFunction
+import { GET } from './route';
+import { sql } from '@/db/client';
+
+jest.mock('@/db/client', () => ({
+  sql: jest.fn(),
 }));
-```
 
-- Use `mockImplementation` for complex mocks:
-```typescript
-mockFunction.mockImplementation(() => {
-    // Mock implementation
+describe('GET /api/photos/featured', () => {
+  it('returns featured photos successfully', async () => {
+    const mockPhotos = [
+      { id: '1', desktop_blob: 'photo1.jpg', sequence: 1 },
+    ];
+    (sql as jest.Mock).mockResolvedValueOnce(mockPhotos);
+
+    const response = await GET();
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data).toEqual(mockPhotos);
+  });
+
+  it('handles errors gracefully', async () => {
+    (sql as jest.Mock).mockRejectedValueOnce(new Error('Database error'));
+
+    const response = await GET();
+    expect(response.status).toBe(500);
+  });
 });
 ```
 
-- Use `mockImplementationOnce` for one-time behaviors:
+#### 3. E2E Testing with Playwright
+
+We use Playwright for end-to-end testing of critical user flows.
+
+Example E2E test:
 ```typescript
-mockFunction.mockImplementationOnce(() => {
-    throw new Error('Test error');
+import { test, expect } from '@playwright/test';
+
+test.describe('Featured Photos', () => {
+  test('displays featured photos on homepage', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForSelector('[data-testid="featured-photos"]');
+
+    const photos = page.locator('article');
+    await expect(photos).toHaveCount(await photos.count());
+
+    // Test interaction
+    const firstPhoto = photos.first();
+    await firstPhoto.click();
+    await expect(page).toHaveURL(/.*\/photos\/.*/);
+  });
 });
 ```
 
-#### 4. Environment and Setup
-
-- Reset the test environment before each test:
-```typescript
-beforeEach(() => {
-    jest.clearAllMocks();
-    jest.resetModules();
-});
-```
-
-- Clean up after tests:
-```typescript
-afterEach(() => {
-    jest.restoreAllMocks();
-});
-```
-
-#### 5. Testing Async Code
-
-- Always use async/await for asynchronous tests:
-```typescript
-it('should handle async operations', async () => {
-    await expect(asyncFunction()).resolves.toBe(expectedValue);
-});
-```
-
-#### 6. Error Testing
-
-Test both success and error cases:
-```typescript
-it('should handle errors', async () => {
-    // Arrange
-    const mockError = new Error('Test error');
-    mockFunction.mockRejectedValue(mockError);
-
-    // Act & Assert
-    await expect(functionUnderTest())
-        .rejects.toThrow('Test error');
-});
-```
-
-#### 7. Running Tests
+#### 4. Running Tests
 
 ```bash
 # Run all tests
-npm test
+npm run test
 
 # Run tests in watch mode
 npm run test:watch
 
-# Run tests for a specific file
-npm test path/to/file.test.ts
+# Run E2E tests
+npm run test:e2e
 
-# Run tests with coverage
-npm test -- --coverage
+# Run E2E tests in UI mode
+npm run test:e2e:ui
 ```
 
-#### 8. Test Coverage Guidelines
+#### 5. Testing Best Practices
 
-- Aim for 80% code coverage at minimum
-- Focus on testing:
-  - Critical business logic
-  - Error handling
-  - Edge cases
-  - API integrations
+1. **Component Tests**
+   - Test user interactions and rendered output
+   - Use semantic queries (getByRole, getByLabelText)
+   - Mock minimal dependencies
+
+2. **API Tests**
+   - Mock database calls and external services
+   - Test success and error cases
+   - Verify response status and data structure
+
+3. **E2E Tests**
+   - Focus on critical user flows
+   - Use data-testid for stable selectors
+   - Test loading, success, and error states
 
 ### Logging Best Practices
 

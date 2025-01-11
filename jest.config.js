@@ -1,25 +1,24 @@
-const nextJest = require('next/jest')
+/** @type {import('jest').Config} */
+const config = {
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  testPathIgnorePatterns: [
+    '<rootDir>/.next/',
+    '<rootDir>/node_modules/',
+    '<rootDir>/src/integration-tests/',
+  ],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
+  },
+  testTimeout: 1000, // 1 second timeout
+  verbose: true,
+  clearMocks: true,
+  resetMocks: true,
+  restoreMocks: true,
+  moduleDirectories: ['node_modules', '<rootDir>'],
+};
 
-const createJestConfig = nextJest({
-    // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
-    dir: './',
-})
-
-// Add any custom config to be passed to Jest
-const customJestConfig = {
-    setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-    testEnvironment: 'jest-environment-jsdom',
-    moduleNameMapper: {
-        '^@/(.*)$': '<rootDir>/src/$1',
-    },
-    testPathIgnorePatterns: [
-        '<rootDir>/node_modules/',
-        '<rootDir>/.next/',
-        '<rootDir>/e2e-tests/',
-        '<rootDir>/src/integration-tests/',
-        '<rootDir>/src/db/__tests__/mocks.ts'
-    ],
-}
-
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-module.exports = createJestConfig(customJestConfig) 
+module.exports = config; 
