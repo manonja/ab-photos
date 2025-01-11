@@ -12,9 +12,12 @@ const customJestConfig = {
     moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/src/$1',
     },
-    testMatch: [
-        "**/__tests__/**/*.[jt]s?(x)",
-        "**/?(*.)+(spec|test).[jt]s?(x)"
+    testPathIgnorePatterns: [
+        '<rootDir>/node_modules/',
+        '<rootDir>/.next/',
+        '<rootDir>/e2e-tests/',
+        '<rootDir>/src/integration-tests/',
+        '<rootDir>/src/db/__tests__/mocks.ts'
     ],
 }
 

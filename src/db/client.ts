@@ -7,25 +7,52 @@ const getDatabaseUrl = () => {
     console.log('[DB] Client: Initializing database connection');
     const url = process.env.DATABASE_URL;
     if (!url) {
-        console.error('[DB] Client: Missing database configuration', {
-            error: 'DATABASE_URL environment variable is not set',
-            env: process.env.NODE_ENV
-        });
+        console.error('[Database Error] DATABASE_URL environment variable is not set. Please check your .env file.');
         throw new Error('DATABASE_URL is not set');
     }
     return url;
 };
 
 // Create a direct SQL client for single queries
-export const sql = neon(getDatabaseUrl());
+export const sql = (() => {
+    try {
+        return neon(getDatabaseUrl());
+    } catch (error) {
+        console.error('[Database Error] Failed to create SQL client:', {
+            error: error instanceof Error ? error.message : 'Unknown error',
+            timestamp: new Date().toISOString(),
+        });
+        throw error;
+    }
+})();
 
 // Create a connection pool for concurrent requests
-export const pool = new Pool({ 
-    connectionString: getDatabaseUrl(),
-    // Add max connections to avoid overwhelming the serverless function
-    max: 10,
-    // Add connection timeout
-    connectionTimeoutMillis: 5000,
-    // Add idle timeout to clean up connections
-    idleTimeoutMillis: 60000
+export const pool = (() => {
+    try {
+        return new Pool({ 
+            connectionString: getDatabaseUrl(),
+            max: 10,
+            connectionTimeoutMillis: 5000,
+            idleTimeoutMillis: 60000
+        });
+    } catch (error) {
+        console.error('[Database Error] Failed to create connection pool:', {
+            error: error instanceof Error ? error.message : 'Unknown error',
+            timestamp: new Date().toISOString(),
+            config: {
+                max: 10,
+                connectionTimeoutMillis: 5000,
+                idleTimeoutMillis: 60000
+            }
+        });
+        throw error;
+    }
+})();
+
+// Add event listeners for pool errors
+pool.on('error', (err: Error) => {
+    console.error('[Database Pool Error] Unexpected error on idle client:', {
+        error: err.message,
+        timestamp: new Date().toISOString(),
+    });
 }); 
