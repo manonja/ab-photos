@@ -4,6 +4,13 @@ import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev';
 // (when running the application with `next dev`), for more information see:
 // https://github.com/cloudflare/next-on-pages/blob/5712c57ea7/internal-packages/next-dev/README.md
 
+// Set the API URL based on the execution context
+if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_API_URL?.includes('bossenbroek.photo')) {
+  // For production builds, use the production domain
+  process.env.NEXT_PUBLIC_API_URL = 'https://ab-photo.pages.dev';
+  console.log('[Config] Setting production API URL:', process.env.NEXT_PUBLIC_API_URL);
+}
+
 console.log('[Config] environment: Build configuration', {
   NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   NODE_ENV: process.env.NODE_ENV,
@@ -52,7 +59,7 @@ const nextConfig = {
   },
   experimental: {
     serverActions: {
-      allowedOrigins: ['bossenbroek.photo', 'localhost:8788', 'localhost:3000']
+      allowedOrigins: ['bossenbroek.photo', 'localhost:8788', 'localhost:3000', 'ab-photo.pages.dev', 'ab-photos.pages.dev']
     }
   }
 };
