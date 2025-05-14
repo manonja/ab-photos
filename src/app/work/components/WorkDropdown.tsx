@@ -69,28 +69,30 @@ export default function WorkDropdown({ projects }: WorkDropdownProps) {
       onClick={(e) => e.stopPropagation()}
     >
       {/* Work header that toggles dropdown */}
-      <div 
-        className={`flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 ${isOpen ? 'border-b' : 'hover:border-b'}`}
-        onClick={toggleDropdown}
-        onMouseEnter={() => setIsOpen(true)}
-      >
-        <span className="cursor-pointer">Work</span>
+      <div className="p-0">
+        <span 
+          className={`cursor-pointer ${isOpen ? 'border-b' : 'hover:border-b'}`}
+          onClick={toggleDropdown}
+          onMouseEnter={() => setIsOpen(true)}
+        >
+          Work
+        </span>
       </div>
       
       {/* Dropdown menu */}
       <div 
-        className={`absolute top-full left-0 mt-1 lg:transform-none min-w-[150px] 
-                  z-20 py-1 transition-all duration-200 ease-in-out transform
+        className={`absolute top-full left-0 mt-1
+                  z-20 transition-all duration-200 ease-in-out transform
                   ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
+        style={{ padding: 0 }}
       >
         {projects.map((project) => (
-          <div key={project.id} className="transition-all duration-200 ease-in-out">
-            <Link
+          <div key={project.id} className="py-2">
+            <Link 
               href={`/work/${project.id}`}
-              className="block px-4 py-1.5 whitespace-nowrap text-sm"
               onClick={() => setIsOpen(false)}
             >
-              <span className="inline-block border-b border-transparent hover:border-black dark:hover:border-white">
+              <span className="border-b border-transparent hover:border-black dark:hover:border-white font-light">
                 {project.title}
               </span>
             </Link>

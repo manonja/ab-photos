@@ -1,5 +1,6 @@
 import { getProjectsDetails } from "@/actions/getProjectsDetails";
 import WorkDropdown from "./WorkDropdown";
+import Link from "next/link";
 
 export default async function NavbarWorkDropdown() {
   try {
@@ -13,7 +14,25 @@ export default async function NavbarWorkDropdown() {
         title: project.title
       }));
 
-    return <WorkDropdown projects={projectsData} />;
+    return (
+      <>
+        {/* For mobile screens */}
+        <div className="lg:hidden">
+          <Link
+            className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto hover:border-b"
+            href="/work"
+            rel="noopener noreferrer"
+          >
+            Work
+          </Link>
+        </div>
+        
+        {/* For desktop screens */}
+        <div className="hidden lg:block">
+          <WorkDropdown projects={projectsData} />
+        </div>
+      </>
+    );
   } catch (error) {
     console.error('Error loading projects for dropdown:', error);
     // If we fail to load projects, just show a regular link
