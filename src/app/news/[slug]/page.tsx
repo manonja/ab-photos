@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getPosts, getSinglePost } from '../../../lib/ghost/client';
-import PostContent from '../../../components/blog/PostContent';
+import PostContent from '../../../components/news/PostContent';
 
 export const runtime = 'edge';
 export const revalidate = 3600; // Revalidate every hour
@@ -45,7 +45,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+export default async function NewsPostPage({ params }: { params: { slug: string } }) {
   const post = await getSinglePost(params.slug);
   
   if (!post) {
@@ -53,8 +53,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   }
   
   return (
-    <div className="container mx-auto px-4 py-16">
-      <PostContent post={post} />
-    </div>
+    <>
+      <main className="flex min-h-screen flex-col items-center p-6">
+        <div className="w-full max-w-[75%] mx-auto py-8">
+          <PostContent post={post} />
+        </div>
+      </main>
+    </>
   );
 } 
