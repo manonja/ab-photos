@@ -37,7 +37,7 @@ export default async function NewsPage() {
             <div className="mt-16 text-center">
               <Link
                 href="/news/page/2"
-                className="inline-block rounded-md bg-blue-600 px-6 py-3 text-white hover:bg-blue-700"
+                className="inline-block rounded-md bg-pink-600 px-6 py-3 text-white hover:bg-pink-600"
               >
                 Load more posts
               </Link>

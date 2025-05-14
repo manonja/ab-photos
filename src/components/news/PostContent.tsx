@@ -131,7 +131,7 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
                     href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.slug}`)}`} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-gray-500 hover:text-blue-500"
+                    className="text-gray-500 hover:text-pink-600"
                   >
                     Twitter
                   </a>
@@ -139,13 +139,21 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
                     href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.slug}`)}`} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-gray-500 hover:text-blue-500"
+                    className="text-gray-500 hover:text-pink-600"
                   >
                     Facebook
                   </a>
+                  <a 
+                    href={`https://www.instagram.com/?url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.slug}`)}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-gray-500 hover:text-pink-600"
+                  >
+                    Instagram
+                  </a>
                 </div>
               </div>
-              <Link href="/news" className="text-blue-600 hover:text-blue-800">
+              <Link href="/news" className="text-pink-600 hover:text-pink-600">
                 ← Back to all posts
               </Link>
             </div>
