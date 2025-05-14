@@ -19,10 +19,10 @@ export default function Navbar() {
                     </a>
                     <a
                         className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 hover:border-b"
-                        href="/blog"
+                        href="/news"
                         rel="noopener noreferrer"
                     >
-                        Blog
+                        News
                     </a>
                     <a
                         className="flex place-items-center gap-2 pr-1  p-2 pointer-events-auto lg:p-0 hover:border-b"

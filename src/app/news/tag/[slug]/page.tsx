@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getPostsByTag, getTags } from '../../../../lib/ghost/client';
-import PostCard from '../../../../components/blog/PostCard';
+import PostCard from '../../../../components/news/PostCard';
 import { GhostTag } from '../../../../lib/ghost/types';
 
 export const runtime = 'edge';
@@ -47,24 +47,28 @@ export default async function TagPage({ params }: { params: { slug: string } }) 
   const tagName = posts[0].tags?.find((tag: GhostTag) => tag.slug === params.slug)?.name || params.slug;
   
   return (
-    <div className="container mx-auto px-4 py-16">
-      <div className="mb-12">
-        <Link href="/blog" className="mb-4 inline-block text-blue-600 hover:text-blue-800">
-          ← Back to all posts
-        </Link>
-        <h1 className="mb-2 text-4xl font-bold">
-          Tag: {tagName}
-        </h1>
-        <p className="text-lg text-gray-600">
-          {posts.length} {posts.length === 1 ? 'post' : 'posts'} tagged with &ldquo;{tagName}&rdquo;
-        </p>
-      </div>
+    <>
+      <main className="flex min-h-screen flex-col items-center p-6">
+        <div className="w-full max-w-[75%] mx-auto py-8">
+          <div className="mb-12">
+            <Link href="/news" className="mb-4 inline-block text-gray-400 hover:text-white">
+              ← Back to all posts
+            </Link>
+            <h1 className="mb-2 text-4xl font-bold">
+              Tag: {tagName}
+            </h1>
+            <p className="text-lg text-gray-500">
+              {posts.length} {posts.length === 1 ? 'post' : 'posts'} tagged with &ldquo;{tagName}&rdquo;
+            </p>
+          </div>
 
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {posts.map(post => (
-          <PostCard key={post.id} post={post} />
-        ))}
-      </div>
-    </div>
+          <div className="space-y-16">
+            {posts.map(post => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+        </div>
+      </main>
+    </>
   );
 } 
