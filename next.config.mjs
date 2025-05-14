@@ -59,7 +59,14 @@ const nextConfig = {
   },
   experimental: {
     serverActions: {
-      allowedOrigins: ['bossenbroek.photo', 'localhost:8788', 'localhost:3000', 'ab-photo.pages.dev', 'ab-photos.pages.dev']
+      allowedOrigins: [
+        'bossenbroek.photo', 
+        'localhost:8788', 
+        'localhost:3000', 
+        'ab-photo.pages.dev',
+        'ab-photos.pages.dev',
+        '*.ab-photos.pages.dev'
+      ]
     }
   }
 };
