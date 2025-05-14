@@ -21,7 +21,7 @@ export default function About() {
                         </div>
                         <div className="flex-1 w-full lg:w-1/2 lg:pt-0 pt-8">
                             <h2 className="text-2xl leading-relaxed mt-4 max-w-[90%] md:mt-0">Anton Bossenbroek is a
-                                landscape photographer based in British Columbia, Canada. Anton explores the intersection
+                                landscape photographer living between The Netherlands and Canada. Anton explores the intersection
                                 of technological progress and natural landscapes</h2>
                             <div className="my-8 h-px bg-white w-full max-w-[90%]"/>
                             <p className="mt-2 text-base leading-normal max-w-[90%]">
