@@ -74,15 +74,27 @@ export async function getPosts(options: any = {}) {
 export async function getSinglePost(slug: string) {
   try {
     console.log('[Ghost] getSinglePost: Starting request', { slug });
+    
+    // Use a more comprehensive set of fields, including ones that might contain images
     const post = await api.posts.read({
       slug,
       include: ['tags', 'authors'],
-      fields: ['id', 'title', 'slug', 'html', 'feature_image', 'excerpt', 'published_at', 'primary_tag', 'primary_author', 'reading_time']
+      fields: [
+        'id', 'title', 'slug', 'html', 'feature_image', 
+        'excerpt', 'published_at', 'primary_tag', 
+        'primary_author', 'reading_time', 'og_image',
+        'twitter_image', 'canonical_url', 'codeinjection_head',
+        'codeinjection_foot', 'custom_excerpt'
+      ]
     });
+    
     console.log('[Ghost] getSinglePost: Successfully retrieved post', { 
       title: post.title,
-      featureImage: post.feature_image
+      featureImage: post.feature_image,
+      hasHtml: !!post.html,
+      htmlLength: post.html ? post.html.length : 0
     });
+    
     return post as GhostPost;
   } catch (error) {
     console.error('[Ghost] getSinglePost: Error occurred', { error, slug });
