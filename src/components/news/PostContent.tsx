@@ -153,7 +153,7 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
                   </a>
                 </div>
               </div>
-              <Link href="/news" className="text-pink-600 hover:text-pink-600">
+              <Link href="/news" className=" hover:text-pink-600">
                 ← Back to all posts
               </Link>
             </div>
