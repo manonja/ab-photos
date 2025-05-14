@@ -13,9 +13,9 @@ export default function Navbar() {
 
                 <div className='flex flex-row gap-4'>
                     <Suspense fallback={
-                        <a className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 hover:border-b" href="/work">
+                        <span className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 hover:border-b cursor-default">
                             Work
-                        </a>
+                        </span>
                     }>
                         <NavbarWorkDropdown />
                     </Suspense>

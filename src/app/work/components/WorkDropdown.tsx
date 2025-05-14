@@ -62,13 +62,16 @@ export default function WorkDropdown({ projects }: WorkDropdownProps) {
     };
   }, [isOpen]);
 
+  // If there are projects, show the first one to preview
+  const firstProject = projects.length > 0 ? projects[0] : null;
+
   return (
     <div 
       ref={dropdownRef}
       className="relative"
       onClick={(e) => e.stopPropagation()}
     >
-      {/* Work header that toggles dropdown */}
+      {/* Work header that toggles dropdown but is not clickable as a link */}
       <div className="p-0">
         <span 
           className={`cursor-pointer ${isOpen ? 'border-b' : 'hover:border-b'}`}
