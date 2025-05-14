@@ -46,6 +46,21 @@ const nextConfig = {
       ? 'http://localhost:3000' 
       : 'http://localhost:8788'
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'static.ghost.org',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'anton-photography.ghost.io',
+        pathname: '/**',
+      },
+      // Add your specific Ghost subdomain if it's different from the above
+    ],
+  },
   typescript: {
     // !! WARN !!
     // To remove once mailchimp subscription fixed
