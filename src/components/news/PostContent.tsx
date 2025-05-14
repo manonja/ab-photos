@@ -18,6 +18,25 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
   return (
     <article className="mx-auto max-w-5xl">
       <div className="flex flex-col lg:flex-row gap-8">
+        {/* Featured Image - Left Side Panel */}
+        {post.feature_image && (
+          <div className="lg:w-1/3">
+            <div className="sticky top-8">
+              <div className="relative w-full overflow-hidden rounded-lg">
+                <Image
+                  src={post.feature_image}
+                  alt={post.title}
+                  width={500}
+                  height={670}
+                  priority
+                  className="object-cover w-full h-auto"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Main Content */}
         <div className="lg:w-2/3">
           {/* Title and meta */}
@@ -63,9 +82,9 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
             </div>
           </header>
 
-          {/* Post Content */}
+          {/* Post Content - Adding extra margin after hr elements */}
           <div 
-            className="prose prose-lg max-w-none mb-8"
+            className="prose prose-lg max-w-none mb-8 prose-hr:my-8"
             dangerouslySetInnerHTML={{ __html: post.html }} 
           />
 
@@ -98,59 +117,6 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
               </Link>
             </div>
           </footer>
-        </div>
-
-        {/* Featured Image - Right Side Panel */}
-        <div className="lg:w-1/3">
-          {post.feature_image && (
-            <div className="sticky top-8">
-              <div className="relative mb-8 aspect-[3/4] w-full overflow-hidden rounded-lg">
-                <Image
-                  src={post.feature_image}
-                  alt={post.title}
-                  fill
-                  priority
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
-              </div>
-              
-              {/* Author info */}
-              {post.primary_author && (
-                <div className="mt-8 p-6 bg-gray-50 rounded-lg">
-                  <h3 className="text-lg font-bold mb-4">About the Author</h3>
-                  <div className="flex items-center mb-4">
-                    {post.primary_author.profile_image && (
-                      <div className="relative mr-4 h-16 w-16 overflow-hidden rounded-full">
-                        <Image
-                          src={post.primary_author.profile_image}
-                          alt={post.primary_author.name}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    )}
-                    <div>
-                      <p className="font-medium">{post.primary_author.name}</p>
-                      {post.primary_author.bio && (
-                        <p className="text-sm text-gray-600 line-clamp-2">{post.primary_author.bio}</p>
-                      )}
-                    </div>
-                  </div>
-                  {post.primary_author.website && (
-                    <a 
-                      href={post.primary_author.website} 
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800"
-                    >
-                      Visit Website
-                    </a>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
         </div>
       </div>
     </article>
