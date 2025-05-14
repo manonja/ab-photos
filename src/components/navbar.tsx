@@ -1,4 +1,6 @@
 import React from "react";
+import { Suspense } from "react";
+import NavbarWorkDropdown from "@/app/work/components/NavbarWorkDropdown";
 
 export default function Navbar() {
     return (
@@ -10,13 +12,13 @@ export default function Navbar() {
                 className=" fixed items-center lg:pb-6 pb-2 bottom-0 lg:gap-4 left-0 flex flex-col lg:flex-row h-auto w-full lg:items-end justify-center bg-gradient-to-t from-white via-white dark:from-black lg:static lg:h-auto lg:w-auto lg:bg-none">
 
                 <div className='flex flex-row gap-4'>
-                    <a
-                        className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 hover:border-b"
-                        href="/"
-                        rel="noopener noreferrer"
-                    >
-                        Work
-                    </a>
+                    <Suspense fallback={
+                        <span className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 hover:border-b cursor-default">
+                            Work
+                        </span>
+                    }>
+                        <NavbarWorkDropdown />
+                    </Suspense>
                     <a
                         className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 hover:border-b"
                         href="/news"
