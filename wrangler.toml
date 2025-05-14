@@ -8,7 +8,7 @@ pages_build_output_dir = ".vercel/output/static"
 
 # Production environment config
 [env.production]
-vars = { }  # Production vars will be set in Cloudflare dashboard
+vars = { NEXT_PUBLIC_API_URL = "https://ab-photo.pages.dev" }  # Production vars will be set in Cloudflare dashboard
 
 # Preview environment config
 [env.preview]
