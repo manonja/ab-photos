@@ -31,6 +31,15 @@ const BackgroundImage: React.FC<BackgroundImageProps> = async ({ slug, sequence 
             return <div data-testid="background-fallback" className="fixed inset-0 -z-10 bg-black" />;
         }
 
+        // Debug the photo data
+        console.log('[Component] BackgroundImage: Photo data', {
+            id: photo.id,
+            slug,
+            sequence,
+            desktop_blob: photo.desktop_blob?.substring(0, 100) + '...',
+            apiUrl: process.env.NEXT_PUBLIC_API_URL
+        });
+
         return (
             <Suspense fallback={<div data-testid="background-fallback" className="fixed inset-0 -z-10 bg-black" />}>
                 <div className="fixed inset-0 -z-10">
@@ -38,9 +47,7 @@ const BackgroundImage: React.FC<BackgroundImageProps> = async ({ slug, sequence 
                         src={photo.desktop_blob}
                         alt={photo.caption || 'Background'}
                         className="object-cover w-full h-full"
-                        {...(process.env.NEXT_PUBLIC_API_URL === 'http://localhost:8788' && {
-                            referrerPolicy: "no-referrer"
-                        })}
+                        referrerPolicy="no-referrer"
                     />
                 </div>
             </Suspense>

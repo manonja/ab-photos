@@ -1,15 +1,44 @@
 import GhostContentAPI from '@tryghost/content-api';
 import { GhostPost, GhostTag, GhostAuthor } from './types';
 
+// Check for required Ghost configuration
+const ghostUrl = process.env.NEXT_PUBLIC_GHOST_URL;
+const ghostKey = process.env.NEXT_PUBLIC_GHOST_CONTENT_API_KEY;
+
+if (!ghostUrl) {
+  console.error('[Ghost] Error: NEXT_PUBLIC_GHOST_URL environment variable is not set');
+}
+
+if (!ghostKey) {
+  console.error('[Ghost] Error: NEXT_PUBLIC_GHOST_CONTENT_API_KEY environment variable is not set');
+}
+
 // Initialize Ghost Content API client
-const api = new GhostContentAPI({
-  url: process.env.NEXT_PUBLIC_GHOST_URL || '',
-  key: process.env.NEXT_PUBLIC_GHOST_CONTENT_API_KEY || '',
-  version: 'v5.0'
-});
+// Using type from the @tryghost/content-api module
+let api: ReturnType<typeof GhostContentAPI> | null = null;
+
+try {
+  if (ghostUrl && ghostKey) {
+    api = GhostContentAPI({
+      url: ghostUrl,
+      key: ghostKey,
+      version: 'v5.0'
+    });
+  } else {
+    console.error('[Ghost] Error: Cannot initialize Ghost Content API client due to missing configuration');
+  }
+} catch (error) {
+  console.error('[Ghost] Error initializing Ghost client:', error);
+}
 
 // Get all posts with optional params
 export async function getPosts(options: any = {}) {
+  // Return empty array if API is not initialized
+  if (!api) {
+    console.error('[Ghost] getPosts: Ghost API client is not initialized');
+    return [];
+  }
+
   const defaultOptions = {
     limit: 'all',
     include: ['tags', 'authors'],
@@ -28,7 +57,7 @@ export async function getPosts(options: any = {}) {
     // First try to get the full post details for better image URLs
     // This is a workaround as sometimes the feature_image might be null in the browse response
     // but available when fetching a single post
-    const posts = await api.posts.browse(mergedOptions);
+    const posts = await api!.posts.browse(mergedOptions);
     
     // For each post that has no feature_image, try to get it directly
     const enhancedPosts = await Promise.all(
@@ -36,7 +65,7 @@ export async function getPosts(options: any = {}) {
         if (!post.feature_image && post.slug) {
           try {
             // Try to get the full post details which might include the feature_image
-            const fullPost = await api.posts.read({
+            const fullPost = await api!.posts.read({
               slug: post.slug,
               include: ['tags', 'authors'],
               fields: ['id', 'feature_image']
@@ -72,11 +101,17 @@ export async function getPosts(options: any = {}) {
 
 // Get a single post by slug
 export async function getSinglePost(slug: string) {
+  // Return null if API is not initialized
+  if (!api) {
+    console.error('[Ghost] getSinglePost: Ghost API client is not initialized');
+    return null;
+  }
+
   try {
     console.log('[Ghost] getSinglePost: Starting request', { slug });
     
     // Use a more comprehensive set of fields, including ones that might contain images
-    const post = await api.posts.read({
+    const post = await api!.posts.read({
       slug,
       include: ['tags', 'authors'],
       fields: [
@@ -104,9 +139,15 @@ export async function getSinglePost(slug: string) {
 
 // Get all tags
 export async function getTags() {
+  // Return empty array if API is not initialized
+  if (!api) {
+    console.error('[Ghost] getTags: Ghost API client is not initialized');
+    return [];
+  }
+
   try {
     console.log('[Ghost] getTags: Starting request');
-    const tags = await api.tags.browse({ limit: 'all' });
+    const tags = await api!.tags.browse({ limit: 'all' });
     console.log('[Ghost] getTags: Successfully retrieved tags', { count: tags.length });
     return tags as GhostTag[];
   } catch (error) {
@@ -117,9 +158,15 @@ export async function getTags() {
 
 // Get posts by tag
 export async function getPostsByTag(slug: string) {
+  // Return empty array if API is not initialized
+  if (!api) {
+    console.error('[Ghost] getPostsByTag: Ghost API client is not initialized');
+    return [];
+  }
+
   try {
     console.log('[Ghost] getPostsByTag: Starting request', { slug });
-    const posts = await api.posts.browse({
+    const posts = await api!.posts.browse({
       filter: `tag:${slug}`,
       include: ['tags', 'authors'],
       fields: ['id', 'title', 'slug', 'feature_image', 'excerpt', 'published_at', 'primary_tag', 'primary_author'],
@@ -131,7 +178,7 @@ export async function getPostsByTag(slug: string) {
       posts.map(async (post: any) => {
         if (!post.feature_image && post.slug) {
           try {
-            const fullPost = await api.posts.read({
+            const fullPost = await api!.posts.read({
               slug: post.slug,
               include: ['tags', 'authors'],
               fields: ['id', 'feature_image']

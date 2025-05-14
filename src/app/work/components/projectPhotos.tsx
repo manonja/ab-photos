@@ -18,6 +18,13 @@ const ProjectPhotos: React.FC<ProjectPhotosProps> = async ({ slug }) => {
         const photos = await getPhotoDetails(slug);
         const photoArray = Array.isArray(photos) ? photos : photos ? [photos] : [];
 
+        console.log('[Component] ProjectPhotos: Retrieved photos', {
+            slug,
+            count: photoArray.length,
+            apiUrl: process.env.NEXT_PUBLIC_API_URL,
+            samplePhotoUrls: photoArray.slice(0, 2).map(p => p.desktop_blob?.substring(0, 50) + '...')
+        });
+
         if (!photoArray.length) {
             return (
                 <div className="text-center p-6">
@@ -34,9 +41,7 @@ const ProjectPhotos: React.FC<ProjectPhotosProps> = async ({ slug }) => {
                             src={photo.desktop_blob}
                             alt={photo.caption || ''}
                             className="w-full h-auto object-cover lg:max-w-full lg:max-h-screen"
-                            {...(process.env.NEXT_PUBLIC_API_URL === 'http://localhost:8788' && {
-                                referrerPolicy: "no-referrer"
-                            })}
+                            referrerPolicy="no-referrer"
                         />
                         {/* TODO: Add captions to DATABASE and uncomment when ready */}
                         {/* {photo.caption && (
