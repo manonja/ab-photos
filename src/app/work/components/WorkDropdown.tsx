@@ -13,11 +13,13 @@ interface WorkDropdownProps {
 export default function WorkDropdown({ projects }: WorkDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
+  
+  // Toggle dropdown open/closed
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
+  // Listen for clicks outside the dropdown to close it
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -34,51 +36,30 @@ export default function WorkDropdown({ projects }: WorkDropdownProps) {
   return (
     <div 
       ref={dropdownRef}
-      className="relative" 
-      onMouseEnter={() => setIsOpen(true)} 
-      onMouseLeave={() => setIsOpen(false)}
-      onClick={(e) => {
-        // Prevent click event from bubbling up
-        e.stopPropagation();
-      }}
+      className="relative"
+      // Only close when explicitly clicked outside (handled by useEffect)
+      onClick={(e) => e.stopPropagation()}
     >
+      {/* Work header that toggles dropdown */}
       <div 
-        className={`flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 hover:border-b ${isOpen ? 'border-b' : ''}`}
+        className={`flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 ${isOpen ? 'border-b' : 'hover:border-b'}`}
         onClick={toggleDropdown}
+        onMouseEnter={() => setIsOpen(true)}
       >
-        <Link
-          href="/work"
-          rel="noopener noreferrer"
-          onClick={(e) => {
-            // Only follow the link if dropdown is not open
-            if (isOpen) {
-              e.preventDefault();
-            }
-          }}
-        >
-          Work
-        </Link>
+        <span className="cursor-pointer">Work</span>
       </div>
       
+      {/* Dropdown menu */}
       <div 
-        className={`absolute top-full mt-1 lg:left-0 lg:right-auto right-0 lg:transform-none min-w-[150px] 
-                    bg-white dark:bg-black z-20 py-1 shadow-sm
-                    transition-all duration-200 ease-in-out transform 
-                    ${isOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`}
+        className={`absolute top-full left-0 mt-1 lg:transform-none min-w-[150px] 
+                  z-20 py-1 transition-all duration-200 ease-in-out transform
+                  ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
       >
         {projects.map((project) => (
-          <div 
-            key={project.id}
-            className="transition-all duration-200 ease-in-out"
-            style={{ 
-              opacity: isOpen ? 1 : 0,
-              transform: isOpen ? 'translateX(0)' : 'translateX(-5px)',
-              transitionDelay: '0.05s'
-            }}
-          >
+          <div key={project.id} className="transition-all duration-200 ease-in-out">
             <Link
               href={`/work/${project.id}`}
-              className="block px-4 py-1.5 whitespace-nowrap hover:border-b border-transparent text-sm"
+              className="block px-4 py-1.5 whitespace-nowrap text-sm hover:border-b"
               onClick={() => setIsOpen(false)}
             >
               {project.title}
