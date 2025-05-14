@@ -3,6 +3,19 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { GhostPost } from '../../lib/ghost/types';
 
+// Extract images from HTML
+const extractImagesFromHTML = (html: string): string[] => {
+  const imgRegex = /<img[^>]+src="([^">]+)"/g;
+  const images: string[] = [];
+  let match;
+  
+  while ((match = imgRegex.exec(html)) !== null) {
+    images.push(match[1]);
+  }
+  
+  return images;
+};
+
 interface PostContentProps {
   post: GhostPost;
 }
@@ -14,6 +27,10 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
     month: 'long',
     day: 'numeric',
   });
+  
+  // Extract images from content for potential use
+  const contentImages = extractImagesFromHTML(post.html);
+  console.log('[PostContent] Images in post content:', contentImages);
 
   return (
     <article className="mx-auto max-w-5xl">
@@ -33,6 +50,22 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw"
                 />
               </div>
+              
+              {/* Optional: Display additional images from the content */}
+              {contentImages.length > 1 && (
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  {contentImages.slice(0, 4).map((img, index) => (
+                    <div key={index} className="relative aspect-square overflow-hidden rounded">
+                      <Image
+                        src={img}
+                        alt={`Image ${index + 1} from article`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -82,9 +115,9 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
             </div>
           </header>
 
-          {/* Post Content - Adding extra margin after hr elements */}
+          {/* Enhanced Post Content styling with Ghost-specific classes */}
           <div 
-            className="prose prose-lg max-w-none mb-8 prose-hr:my-8"
+            className="ghost-content prose prose-lg max-w-none mb-8 prose-hr:my-8 prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-8 prose-h2:mb-4 prose-p:mb-4 prose-img:rounded-lg prose-a:text-blue-600 hover:prose-a:text-blue-800 prose-a:no-underline hover:prose-a:underline"
             dangerouslySetInnerHTML={{ __html: post.html }} 
           />
 
