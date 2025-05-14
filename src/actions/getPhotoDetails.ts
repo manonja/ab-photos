@@ -6,10 +6,10 @@ import { Photo } from "@/types/database";
  * 
  * @param projectId - The unique identifier of the project
  * @param sequence - Optional sequence number to fetch a specific photo
- * @returns Promise<Photo | null> - Array of photos, single photo, or null if not found
+ * @returns Promise<Photo | Photo[] | null> - Array of photos, single photo, or null if not found
  * @throws Will throw an error if the API request fails
  */
-export async function getPhotoDetails(projectId: string, sequence?: number): Promise<Photo | null> {
+export async function getPhotoDetails(projectId: string, sequence?: number): Promise<Photo | Photo[] | null> {
     console.log('[Action] getPhotoDetails: Starting request', { projectId, sequence });
     
     // Get the base URL for the API
