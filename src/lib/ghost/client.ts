@@ -13,7 +13,10 @@ export async function getPosts(options: any = {}) {
   const defaultOptions = {
     limit: 'all',
     include: ['tags', 'authors'],
-    order: 'published_at DESC'
+    order: 'published_at DESC',
+    // Filter out posts with the tag 'news' (which appears to be the Coming Soon post)
+    // You may need to adjust this filter based on your specific needs
+    filter: 'tag:-news'
   };
 
   const mergedOptions = { ...defaultOptions, ...options };
