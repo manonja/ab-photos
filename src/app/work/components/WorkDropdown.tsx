@@ -19,7 +19,7 @@ export default function WorkDropdown({ projects }: WorkDropdownProps) {
     setIsOpen(!isOpen);
   };
 
-  // Listen for clicks outside the dropdown to close it
+  // Set up a global click handler to close the dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -33,11 +33,39 @@ export default function WorkDropdown({ projects }: WorkDropdownProps) {
     };
   }, []);
 
+  // Set up event listeners for other navbar items
+  useEffect(() => {
+    // Find all navbar links except our own
+    const findNavbarLinks = () => {
+      const allNavLinks = document.querySelectorAll('a[href="/news"], a[href="/about"], a[href="/contact"], a[href="/subscribe"]');
+      return Array.from(allNavLinks);
+    };
+
+    // When hovering any other navbar item, close our dropdown
+    const handleNavLinkHover = () => {
+      if (isOpen) {
+        setIsOpen(false);
+      }
+    };
+
+    // Attach listeners to all other nav links
+    const navLinks = findNavbarLinks();
+    navLinks.forEach(link => {
+      link.addEventListener('mouseenter', handleNavLinkHover);
+    });
+
+    return () => {
+      // Clean up listeners
+      navLinks.forEach(link => {
+        link.removeEventListener('mouseenter', handleNavLinkHover);
+      });
+    };
+  }, [isOpen]);
+
   return (
     <div 
       ref={dropdownRef}
       className="relative"
-      // Only close when explicitly clicked outside (handled by useEffect)
       onClick={(e) => e.stopPropagation()}
     >
       {/* Work header that toggles dropdown */}
@@ -59,10 +87,12 @@ export default function WorkDropdown({ projects }: WorkDropdownProps) {
           <div key={project.id} className="transition-all duration-200 ease-in-out">
             <Link
               href={`/work/${project.id}`}
-              className="block px-4 py-1.5 whitespace-nowrap text-sm hover:border-b"
+              className="block px-4 py-1.5 whitespace-nowrap text-sm"
               onClick={() => setIsOpen(false)}
             >
-              {project.title}
+              <span className="inline-block border-b border-transparent hover:border-black dark:hover:border-white">
+                {project.title}
+              </span>
             </Link>
           </div>
         ))}
