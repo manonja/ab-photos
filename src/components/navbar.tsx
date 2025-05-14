@@ -18,6 +18,13 @@ export default function Navbar() {
                         Work
                     </a>
                     <a
+                        className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 hover:border-b"
+                        href="/news"
+                        rel="noopener noreferrer"
+                    >
+                        News
+                    </a>
+                    <a
                         className="flex place-items-center gap-2 pr-1  p-2 pointer-events-auto lg:p-0 hover:border-b"
                         href="/about"
                         rel="noopener noreferrer"
