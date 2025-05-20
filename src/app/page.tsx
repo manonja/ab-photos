@@ -7,7 +7,7 @@ import RotatingBackground from "@/components/RotatingBackground";
 export default function Home() {
   return (
     <>
-      <RotatingBackground interval={3000} />
+      <RotatingBackground interval={4000} />
       <WorkList />
     </>
   );

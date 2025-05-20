@@ -9,7 +9,7 @@ interface RotatingBackgroundProps {
  * Server component that fetches project data and feeds it to the client component
  * for rotating background images.
  */
-export default async function RotatingBackground({ interval = 3000 }: RotatingBackgroundProps) {
+export default async function RotatingBackground({ interval = 4000 }: RotatingBackgroundProps) {
   // Fetch projects and extract only what we need - the slugs of published projects
   const projects = await getProjectsDetails();
   const projectSlugs = projects

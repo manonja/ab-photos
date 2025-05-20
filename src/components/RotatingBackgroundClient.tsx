@@ -13,7 +13,7 @@ interface RotatingBackgroundClientProps {
 /**
  * Client component that rotates through background images with a crossfade transition.
  */
-export function RotatingBackgroundClient({ projectSlugs, interval = 3000 }: RotatingBackgroundClientProps) {
+export function RotatingBackgroundClient({ projectSlugs, interval = 4000 }: RotatingBackgroundClientProps) {
   const [backgrounds, setBackgrounds] = useState<Photo[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextIndex, setNextIndex] = useState(-1);
