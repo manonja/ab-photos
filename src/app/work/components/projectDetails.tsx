@@ -19,12 +19,12 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = async ({slug}) => {
                 <div className="flex w-full relative justify-center lg:py-[6%] py-[2%] mx-auto">
                     <div className="flex flex-wrap gap-2 justify-around lg:flex-nowrap">
                         <div className="lg:flex-1 w-full lg:w-1/3 p-4">
-                            <div className="uppercase text-2xl font-light">{slug}</div>
-                            <div className="pt-6 font-light italic">{date}</div>
+                            <div className="uppercase text-2xl font-normal -mt-16">{slug}</div>
+                            <div className="pt-6 font-light italic -mt-6">{date}</div>
                         </div>
                         <div className="lg:flex-1 w-full lg:w-1/3 p-4 "> {/* Column for text content */}
                             <div className="text-2xl max-w-[90%] ">{subtitle}</div> {/* Subtitle */}
-                            <div className="my-8 h-px bg-white w-full max-w-[90%]"/>
+                            <div className="my-8 h-px bg-gray-300 w-full max-w-[80%]"/>
                             <p className="mt-2 text-base leading-normal max-w-[90%]"> {/* Paragraph */}
                                 {description}
                             </p>
