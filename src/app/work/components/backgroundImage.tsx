@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import Image from "next/image";
 import { getPhotoDetails } from "@/actions/getPhotoDetails";
 import { Photo } from "@/db/types";
+import BackgroundImageClient from "./backgroundImageClient";
 
 // Only use edge runtime when not in development
 export const runtime = process.env.NODE_ENV === 'development' ? 'nodejs' : 'edge';
@@ -18,9 +19,9 @@ interface BackgroundImageProps {
 }
 
 /**
- * A component that displays a full-screen background image.
+ * A component that displays a full-screen background image with scroll-based fade out.
  * Can display a specific photo by sequence number or a random photo from the project.
- * Uses next/image for optimization when possible, falling back to img when needed.
+ * Uses next/image for optimization and implements progressive fade on scroll.
  * 
  * @param slug - The unique identifier of the project
  * @param sequence - Optional sequence number of the photo to display (defaults to 2)
@@ -82,22 +83,13 @@ const BackgroundImage: React.FC<BackgroundImageProps> = async ({ slug, sequence 
             <div data-testid="background-fallback" className="fixed inset-0 -z-10 bg-black" />
         );
 
-        // Dynamic URLs require next/image configuration in next.config.js
-        // or we need to use unoptimized mode
+        // Use the client component to handle scroll-based fade effects
         return (
             <Suspense fallback={ImageFallback}>
-                <div className="fixed inset-0 -z-10">
-                    <Image
-                        src={photo.desktop_blob}
-                        alt={photo.caption || `Background image for ${slug} project`}
-                        fill
-                        priority
-                        quality={90}
-                        className="object-cover"
-                        referrerPolicy="no-referrer"
-                        unoptimized={!photo.desktop_blob.startsWith('https://')} // Use unoptimized for data URLs
-                    />
-                </div>
+                <BackgroundImageClient
+                    src={photo.desktop_blob}
+                    alt={photo.caption || `Background image for ${slug} project`}
+                />
             </Suspense>
         );
     } catch (error) {
