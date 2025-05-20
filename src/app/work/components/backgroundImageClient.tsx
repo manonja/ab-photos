@@ -6,6 +6,7 @@ import Image from 'next/image';
 interface BackgroundImageClientProps {
   src: string;
   alt: string;
+  disableOverlay?: boolean;
 }
 
 /**
@@ -15,8 +16,13 @@ interface BackgroundImageClientProps {
  * Includes performance optimizations for smooth scrolling.
  * 
  * Added a semi-transparent overlay for better text contrast regardless of image color.
+ * The overlay can be disabled with the disableOverlay prop.
  */
-const BackgroundImageClient: React.FC<BackgroundImageClientProps> = ({ src, alt }) => {
+const BackgroundImageClient: React.FC<BackgroundImageClientProps> = ({ 
+  src, 
+  alt, 
+  disableOverlay = false 
+}) => {
   const [opacity, setOpacity] = useState(1);
   const [blurAmount, setBlurAmount] = useState(0);
   const [scaleAmount, setScaleAmount] = useState(100);
@@ -177,11 +183,13 @@ const BackgroundImageClient: React.FC<BackgroundImageClientProps> = ({ src, alt 
           unoptimized={!src.startsWith('https://')} // Use unoptimized for data URLs
         />
 
-        {/* Semi-transparent dark overlay for better text contrast */}
-        <div 
-          className="absolute inset-0 bg-black/30" 
-          aria-hidden="true"
-        />
+        {/* Semi-transparent dark overlay for better text contrast - can be disabled */}
+        {!disableOverlay && (
+          <div 
+            className="absolute inset-0 bg-black/30" 
+            aria-hidden="true"
+          />
+        )}
       </div>
     </>
   );

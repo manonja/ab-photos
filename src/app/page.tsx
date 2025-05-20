@@ -1,11 +1,11 @@
 import WorkList from "@/app/work/components/workList";
-import BackgroundImage from "@/app/work/components/backgroundImage";
+import RotatingBackground from "@/components/RotatingBackground";
 
 export default function Home() {
   return (
-      <>
-          <BackgroundImage slug="7-rad" sequence={6} />
-          <WorkList/>
-      </>
+    <>
+      <RotatingBackground interval={3000} />
+      <WorkList />
+    </>
   );
 }

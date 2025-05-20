@@ -16,6 +16,7 @@ interface BackgroundImageProps {
     slug: string;
     sequence?: number;
     random?: boolean;
+    disableOverlay?: boolean;
 }
 
 /**
@@ -26,8 +27,14 @@ interface BackgroundImageProps {
  * @param slug - The unique identifier of the project
  * @param sequence - Optional sequence number of the photo to display (defaults to 2)
  * @param random - If true, selects a random photo from the project instead of using sequence
+ * @param disableOverlay - If true, the semi-transparent dark overlay will be disabled
  */
-const BackgroundImage: React.FC<BackgroundImageProps> = async ({ slug, sequence = 5, random = false }) => {
+const BackgroundImage: React.FC<BackgroundImageProps> = async ({ 
+    slug, 
+    sequence = 2, 
+    random = false,
+    disableOverlay = false
+}) => {
     let photo: Photo | null = null;
     
     try {
@@ -89,6 +96,7 @@ const BackgroundImage: React.FC<BackgroundImageProps> = async ({ slug, sequence 
                 <BackgroundImageClient
                     src={photo.desktop_blob}
                     alt={photo.caption || `Background image for ${slug} project`}
+                    disableOverlay={disableOverlay}
                 />
             </Suspense>
         );
