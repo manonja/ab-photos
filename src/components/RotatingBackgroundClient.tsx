@@ -93,16 +93,17 @@ export function RotatingBackgroundClient({ projectSlugs, interval = 4000 }: Rota
         // Start the fade transition
         setFading(true);
         
+        // Update current project ID right when the fade starts
+        // This ensures the highlighting changes at the same time as the images start transitioning
+        const nextProjectId = backgrounds[next].originalProjectId;
+        setCurrentProjectId(nextProjectId);
+        console.log(`[RotatingBackgroundClient] Rotating to project ID: ${nextProjectId}`);
+        
         // After transition completes, update current to next
         const transitionDuration = 1500;
         setTimeout(() => {
           setCurrentIndex(next);
           setFading(false);
-          
-          // Update current project ID - use the ORIGINAL project ID for consistency
-          const nextProjectId = backgrounds[next].originalProjectId;
-          setCurrentProjectId(nextProjectId);
-          console.log(`[RotatingBackgroundClient] Rotating to project ID: ${nextProjectId}`);
           
           // Schedule next rotation
           rotationTimerRef.current = setTimeout(rotateBackground, interval);

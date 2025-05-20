@@ -34,7 +34,7 @@ const WorkList = ({ projects }: WorkListProps) => {
                 
                 return (
                     <div key={project.id} 
-                         className={`transition-opacity duration-1000 ${isCurrentProject ? 'opacity-100' : 'opacity-60'}`}>
+                         className={`transition-opacity duration-1500 ease-out-cubic ${isCurrentProject ? 'opacity-100' : 'opacity-60'}`}>
                         <Link href={href}>
                             <h2 className={`group p-2 bg-black text-white px-5 relative transition-colors hover:bg-white hover:text-black align-middle m-2 text-4xl font-semibold`}>
                                 {project.title}
