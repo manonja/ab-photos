@@ -17,12 +17,12 @@ console.log('[Config] environment: Build configuration', {
   npm_lifecycle_event: process.env.npm_lifecycle_event
 });
 
-// // Set the API URL based on the execution context
-// const isDev = process.env.npm_lifecycle_event === 'dev';
-// console.log('isDev', isDev);
-// console.log('process.env.npm_lifecycle_event', process.env.npm_lifecycle_event);
-// // For regular NextJS dev, use port 3000, otherwise use port 8788 for wrangler
-// process.env.NEXT_PUBLIC_API_URL = isDev ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8788';
+// // Uncomment this when developing locally
+const isDev = process.env.npm_lifecycle_event === 'dev';
+console.log('isDev', isDev);
+console.log('process.env.npm_lifecycle_event', process.env.npm_lifecycle_event);
+// For regular NextJS dev, use port 3000, otherwise use port 8788 for wrangler
+process.env.NEXT_PUBLIC_API_URL = isDev ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8788';
 
 if (process.env.NODE_ENV === 'development' || process.argv.includes('pages:dev')) {
   console.log('[Config] setupDevPlatform: Starting platform setup', {
@@ -48,8 +48,37 @@ const nextConfig = {
         hostname: 'anton-photography.ghost.io',
         pathname: '/**',
       },
-      // Add your specific Ghost subdomain if it's different from the above
+      {
+        protocol: 'https',
+        hostname: 'assets.bossenbroek.photo',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ab-photo.pages.dev',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ab-photos.pages.dev',
+        pathname: '/**',
+      },
+      {
+        // For local development
+        protocol: 'http', 
+        hostname: 'localhost',
+        pathname: '/**',
+        port: '3000',
+      },
+      {
+        // For local development with wrangler
+        protocol: 'http',
+        hostname: 'localhost',
+        pathname: '/**',
+        port: '8788',
+      }
     ],
+    unoptimized: process.env.NODE_ENV === 'development', // Unoptimized images during development for faster builds
   },
   typescript: {
     // !! WARN !!

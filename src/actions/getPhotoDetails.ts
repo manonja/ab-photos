@@ -3,6 +3,7 @@ import { Photo } from "@/types/database";
 /**
  * Server action to fetch photo details from the API.
  * Can fetch either all photos for a project or a specific photo by sequence.
+ * Uses ISR with 1-hour revalidation.
  * 
  * @param projectId - The unique identifier of the project
  * @param sequence - Optional sequence number to fetch a specific photo
@@ -20,7 +21,9 @@ export async function getPhotoDetails(projectId: string, sequence?: number): Pro
             // Fetch specific photo
             console.log('[Action] getPhotoDetails: Fetching specific photo', { projectId, sequence });
             console.log('[Action] getPhotoDetails: Fetching from', `${baseUrl}/api/photos/${projectId}/${sequence}`);
-            const response = await fetch(`${baseUrl}/api/photos/${projectId}/${sequence}`);
+            const response = await fetch(`${baseUrl}/api/photos/${projectId}/${sequence}`, {
+                next: { revalidate: 3600 } // Revalidate every hour
+            });
             
             if (!response.ok) {
                 console.warn('[Action] getPhotoDetails: Non-OK response', {
@@ -44,7 +47,9 @@ export async function getPhotoDetails(projectId: string, sequence?: number): Pro
         } else {
             // Fetch all photos for project
             console.log('[Action] getPhotoDetails: Fetching all project photos', { projectId });
-            const response = await fetch(`${baseUrl}/api/photos/${projectId}`);
+            const response = await fetch(`${baseUrl}/api/photos/${projectId}`, {
+                next: { revalidate: 3600 } // Revalidate every hour
+            });
             
             if (!response.ok) {
                 console.warn('[Action] getPhotoDetails: Non-OK response', {

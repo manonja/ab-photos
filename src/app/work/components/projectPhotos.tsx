@@ -27,8 +27,12 @@ const ProjectPhotos: React.FC<ProjectPhotosProps> = async ({ slug }) => {
 
         if (!photoArray.length) {
             return (
-                <div className="text-center p-6">
-                    <p>No photos available for this project.</p>
+                <div className="text-center p-6 mt-10">
+                    <p className="text-xl mb-2">Coming soon</p>
+                    <p className="text-sm text-gray-400">
+                        Photos for this project are currently being prepared. 
+                        Please check back later to view the complete collection.
+                    </p>
                 </div>
             );
         }
@@ -54,10 +58,14 @@ const ProjectPhotos: React.FC<ProjectPhotosProps> = async ({ slug }) => {
             </div>
         );
     } catch (error) {
-        console.error('Error in ProjectPhotos:', error);
+        console.error('[Component] ProjectPhotos: Error occurred', error);
         return (
-            <div className="text-center p-6">
-                <p>Error loading photos. Please try again later.</p>
+            <div className="text-center p-6 mt-10">
+                <p className="text-xl mb-2">Unable to load photos</p>
+                <p className="text-sm text-gray-400">
+                    There was an issue retrieving photos for this project. 
+                    Please try again later.
+                </p>
             </div>
         );
     }
