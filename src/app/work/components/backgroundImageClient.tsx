@@ -13,6 +13,8 @@ interface BackgroundImageClientProps {
  * As the user scrolls down, the background image gradually fades to black.
  * Also applies a subtle blur effect during the transition for enhanced visual appeal.
  * Includes performance optimizations for smooth scrolling.
+ * 
+ * Added a semi-transparent overlay for better text contrast regardless of image color.
  */
 const BackgroundImageClient: React.FC<BackgroundImageClientProps> = ({ src, alt }) => {
   const [opacity, setOpacity] = useState(1);
@@ -173,6 +175,12 @@ const BackgroundImageClient: React.FC<BackgroundImageClientProps> = ({ src, alt 
           className="object-cover"
           referrerPolicy="no-referrer"
           unoptimized={!src.startsWith('https://')} // Use unoptimized for data URLs
+        />
+
+        {/* Semi-transparent dark overlay for better text contrast */}
+        <div 
+          className="absolute inset-0 bg-black/30" 
+          aria-hidden="true"
         />
       </div>
     </>

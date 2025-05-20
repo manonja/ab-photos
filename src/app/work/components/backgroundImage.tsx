@@ -27,7 +27,7 @@ interface BackgroundImageProps {
  * @param sequence - Optional sequence number of the photo to display (defaults to 2)
  * @param random - If true, selects a random photo from the project instead of using sequence
  */
-const BackgroundImage: React.FC<BackgroundImageProps> = async ({ slug, sequence = 2, random = false }) => {
+const BackgroundImage: React.FC<BackgroundImageProps> = async ({ slug, sequence = 5, random = false }) => {
     let photo: Photo | null = null;
     
     try {
