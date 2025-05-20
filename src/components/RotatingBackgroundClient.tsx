@@ -143,7 +143,7 @@ export function RotatingBackgroundClient({ projectSlugs, interval = 4000 }: Rota
             className="object-cover"
             quality={90}
             referrerPolicy="no-referrer"
-            unoptimized={!nextPhoto.desktop_blob.startsWith('https://')}
+            unoptimized={true}
           />
         </div>
       )}
@@ -163,7 +163,7 @@ export function RotatingBackgroundClient({ projectSlugs, interval = 4000 }: Rota
           sizes="100vw"
           className="object-cover"
           referrerPolicy="no-referrer"
-          unoptimized={!currentPhoto.desktop_blob.startsWith('https://')}
+          unoptimized={true}
         />
       </div>
     </div>

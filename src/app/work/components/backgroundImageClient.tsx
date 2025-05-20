@@ -180,7 +180,7 @@ const BackgroundImageClient: React.FC<BackgroundImageClientProps> = ({
           quality={90}
           className="object-cover"
           referrerPolicy="no-referrer"
-          unoptimized={!src.startsWith('https://')} // Use unoptimized for data URLs
+          unoptimized={true} // Always use unoptimized for background images
         />
 
         {/* Semi-transparent dark overlay for better text contrast - can be disabled */}
