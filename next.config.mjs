@@ -17,12 +17,12 @@ console.log('[Config] environment: Build configuration', {
   npm_lifecycle_event: process.env.npm_lifecycle_event
 });
 
-// // Uncomment this when developing locally
-const isDev = process.env.npm_lifecycle_event === 'dev';
-console.log('isDev', isDev);
-console.log('process.env.npm_lifecycle_event', process.env.npm_lifecycle_event);
-// For regular NextJS dev, use port 3000, otherwise use port 8788 for wrangler
-process.env.NEXT_PUBLIC_API_URL = isDev ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8788';
+// UNCOMMENT line 21-25 when developing locally
+// const isDev = process.env.npm_lifecycle_event === 'dev';
+// console.log('isDev', isDev);
+// console.log('process.env.npm_lifecycle_event', process.env.npm_lifecycle_event);
+// // For regular NextJS dev, use port 3000, otherwise use port 8788 for wrangler
+// process.env.NEXT_PUBLIC_API_URL = isDev ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8788';
 
 if (process.env.NODE_ENV === 'development' || process.argv.includes('pages:dev')) {
   console.log('[Config] setupDevPlatform: Starting platform setup', {
