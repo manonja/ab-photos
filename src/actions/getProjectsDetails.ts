@@ -28,7 +28,6 @@ export async function getProjectsDetails({ useStatic = false } = {}): Promise<Pr
         
         // Using only revalidate option for proper ISR (Incremental Static Regeneration)
         const res = await fetch(apiUrl, {
-            cache: 'force-cache',
             next: { revalidate: 3600 } // Revalidate every hour
         });
         

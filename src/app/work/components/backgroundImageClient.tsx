@@ -178,9 +178,11 @@ const BackgroundImageClient: React.FC<BackgroundImageClientProps> = ({
           fill
           priority
           quality={90}
+          sizes="100vw"
           className="object-cover"
           referrerPolicy="no-referrer"
-          unoptimized={true} // Always use unoptimized for background images
+          unoptimized={true}
+          fetchPriority="high"
         />
 
         {/* Semi-transparent dark overlay for better text contrast - can be disabled */}
