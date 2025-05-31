@@ -14,7 +14,7 @@ export async function getPhotoDetails(projectId: string, sequence?: number): Pro
     console.log('[Action] getPhotoDetails: Starting request', { projectId, sequence });
     
     // Get the base URL for the API
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8788';
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
     
     try {
         if (typeof sequence === 'number') {
@@ -22,6 +22,7 @@ export async function getPhotoDetails(projectId: string, sequence?: number): Pro
             console.log('[Action] getPhotoDetails: Fetching specific photo', { projectId, sequence });
             console.log('[Action] getPhotoDetails: Fetching from', `${baseUrl}/api/photos/${projectId}/${sequence}`);
             const response = await fetch(`${baseUrl}/api/photos/${projectId}/${sequence}`, {
+                cache: 'force-cache',
                 next: { revalidate: 3600 } // Revalidate every hour
             });
             
@@ -48,6 +49,7 @@ export async function getPhotoDetails(projectId: string, sequence?: number): Pro
             // Fetch all photos for project
             console.log('[Action] getPhotoDetails: Fetching all project photos', { projectId });
             const response = await fetch(`${baseUrl}/api/photos/${projectId}`, {
+                cache: 'force-cache',
                 next: { revalidate: 3600 } // Revalidate every hour
             });
             
