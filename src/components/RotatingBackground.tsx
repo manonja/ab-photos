@@ -28,24 +28,28 @@ export default async function RotatingBackground({ interval = 4000, projects }: 
     return <div className="fixed inset-0 -z-10 bg-black" aria-label="Background image" />;
   }
 
-  // Pre-fetch the first image server-side to eliminate initial loading delay
-  let initialPhoto = null;
-  if (projectIds.length > 0) {
+  // Pre-fetch ALL images server-side to eliminate client-side fetching
+  const prefetchedPhotos: (Photo & { originalProjectId: string })[] = [];
+  
+  for (const projectId of projectIds) {
     try {
-      initialPhoto = await getPhotoDetails(projectIds[0], 2) as Photo;
-      console.log('[RotatingBackground] Pre-fetched initial photo for', projectIds[0]);
+      const photo = await getPhotoDetails(projectId, 2) as Photo;
+      if (photo) {
+        prefetchedPhotos.push({
+          ...photo,
+          originalProjectId: projectId
+        });
+        console.log(`[RotatingBackground] Pre-fetched photo for ${projectId}`);
+      }
     } catch (error) {
-      console.error('[RotatingBackground] Failed to pre-fetch initial photo:', error);
+      console.error(`[RotatingBackground] Failed to pre-fetch photo for ${projectId}:`, error);
     }
   }
 
-  // Pass project IDs and pre-fetched initial photo to the client component
+  // Pass all pre-fetched photos to the client component - no more client-side fetching needed
   return <RotatingBackgroundClient 
     projectSlugs={projectIds} 
     interval={interval} 
-    initialPhoto={initialPhoto ? {
-      ...initialPhoto,
-      originalProjectId: projectIds[0]
-    } : undefined}
+    prefetchedPhotos={prefetchedPhotos}
   />;
 } 
