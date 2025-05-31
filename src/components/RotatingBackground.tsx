@@ -14,39 +14,51 @@ interface RotatingBackgroundProps {
  */
 export default async function RotatingBackground({ interval = 4000, projects }: RotatingBackgroundProps) {
   // Fetch projects if not provided
-  const projectsData = projects || await getProjectsDetails();
+  let projectsData: Project[];
+  try {
+    projectsData = projects || await getProjectsDetails({ useStatic: true });
+  } catch (error) {
+    console.error('[RotatingBackground] Failed to fetch projects:', error);
+    // Use fallback static black background in case of error
+    return <div className="fixed inset-0 -z-10 bg-black" aria-label="Background image - fallback" />;
+  }
   
   // Extract only what we need - the IDs of published projects
   const projectIds = projectsData
     .filter(project => project.isPublished)
     .map(project => project.id);
   
-  console.log('[RotatingBackground] Projects for backgrounds:', projectIds);
-  
   // If no projects, show a black background
   if (projectIds.length === 0) {
-    return <div className="fixed inset-0 -z-10 bg-black" aria-label="Background image" />;
+    return <div className="fixed inset-0 -z-10 bg-black" aria-label="Background image - no projects" />;
   }
 
-  // Pre-fetch ALL images server-side to eliminate client-side fetching
+  // Pre-fetch AT MOST 3 images server-side - no need to load them all
   const prefetchedPhotos: (Photo & { originalProjectId: string })[] = [];
+  const MAX_PREFETCH = 3;
   
-  for (const projectId of projectIds) {
+  for (let i = 0; i < Math.min(MAX_PREFETCH, projectIds.length); i++) {
     try {
+      const projectId = projectIds[i];
       const photo = await getPhotoDetails(projectId, 2) as Photo;
       if (photo) {
         prefetchedPhotos.push({
           ...photo,
           originalProjectId: projectId
         });
-        console.log(`[RotatingBackground] Pre-fetched photo for ${projectId}`);
       }
     } catch (error) {
-      console.error(`[RotatingBackground] Failed to pre-fetch photo for ${projectId}:`, error);
+      console.error(`[RotatingBackground] Failed to pre-fetch photo:`, error);
+      // Continue trying other photos instead of failing completely
     }
   }
 
-  // Pass all pre-fetched photos to the client component - no more client-side fetching needed
+  // If we couldn't fetch any photos, don't crash - just show black background
+  if (prefetchedPhotos.length === 0) {
+    return <div className="fixed inset-0 -z-10 bg-black" aria-label="Background image - no photos" />;
+  }
+
+  // Pass the pre-fetched photos to the client component
   return <RotatingBackgroundClient 
     projectSlugs={projectIds} 
     interval={interval} 
