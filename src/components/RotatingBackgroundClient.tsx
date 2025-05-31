@@ -25,9 +25,9 @@ export function RotatingBackgroundClient({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextIndex, setNextIndex] = useState(-1);
   const [fading, setFading] = useState(false);
+  const [loadError, setLoadError] = useState<Record<string, boolean>>({});
   
   const rotationTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const initialLoadDone = useRef(prefetchedPhotos.length > 0);
   const { setCurrentProjectId } = useCurrentProject();
 
   // Set initial project ID
@@ -35,7 +35,6 @@ export function RotatingBackgroundClient({
     if (prefetchedPhotos.length > 0) {
       const initialProjectId = prefetchedPhotos[0].originalProjectId;
       setCurrentProjectId(initialProjectId);
-      console.log(`[RotatingBackgroundClient] Setting initial project ID: ${initialProjectId}`);
     }
   }, [prefetchedPhotos, setCurrentProjectId]);
 
@@ -46,7 +45,20 @@ export function RotatingBackgroundClient({
     
     function rotateBackground() {
       // Get index of next image
-      const next = (currentIndex + 1) % backgrounds.length;
+      let next = (currentIndex + 1) % backgrounds.length;
+      
+      // If this image previously had a load error, skip to the next one
+      let attempts = 0;
+      while (loadError[backgrounds[next].id] && attempts < backgrounds.length) {
+        next = (next + 1) % backgrounds.length;
+        attempts++;
+      }
+      
+      // If all images have load errors, just use the current one
+      if (attempts >= backgrounds.length) {
+        rotationTimerRef.current = setTimeout(rotateBackground, interval);
+        return;
+      }
       
       // First prep the next image (but keep it invisible)
       setNextIndex(next);
@@ -57,10 +69,8 @@ export function RotatingBackgroundClient({
         setFading(true);
         
         // Update current project ID right when the fade starts
-        // This ensures the highlighting changes at the same time as the images start transitioning
         const nextProjectId = backgrounds[next].originalProjectId;
         setCurrentProjectId(nextProjectId);
-        console.log(`[RotatingBackgroundClient] Rotating to project ID: ${nextProjectId}`);
         
         // After transition completes, update current to next
         const transitionDuration = 1500;
@@ -80,7 +90,15 @@ export function RotatingBackgroundClient({
     return () => {
       if (rotationTimerRef.current) clearTimeout(rotationTimerRef.current);
     };
-  }, [backgrounds, currentIndex, interval, setCurrentProjectId]);
+  }, [backgrounds, currentIndex, interval, setCurrentProjectId, loadError]);
+
+  // Handle image load errors
+  const handleImageError = (photoId: string) => {
+    setLoadError(prev => ({
+      ...prev,
+      [photoId]: true
+    }));
+  };
 
   // If no images loaded, show black background
   if (backgrounds.length === 0) {
@@ -96,7 +114,7 @@ export function RotatingBackgroundClient({
       <div className="fixed inset-0 -z-50 bg-black" aria-hidden="true" />
       
       {/* Next image - positioned below current image */}
-      {nextPhoto && (
+      {nextPhoto && !loadError[nextPhoto.id] && (
         <div className="fixed inset-0 -z-20">
           <Image
             src={nextPhoto.desktop_blob}
@@ -107,28 +125,36 @@ export function RotatingBackgroundClient({
             quality={90}
             referrerPolicy="no-referrer"
             unoptimized={true}
+            loading="eager"
+            onError={() => handleImageError(nextPhoto.id)}
           />
         </div>
       )}
       
       {/* Current image - fades out during transition */}
-      <div 
-        className={`fixed inset-0 -z-10 transition-opacity duration-1500 ease-out-cubic ${
-          fading ? 'opacity-0' : 'opacity-100'
-        }`}
-      >
-        <Image
-          src={currentPhoto.desktop_blob}
-          alt={currentPhoto.caption || `Project background`}
-          fill
-          priority
-          quality={90}
-          sizes="100vw"
-          className="object-cover"
-          referrerPolicy="no-referrer"
-          unoptimized={true}
-        />
-      </div>
+      {!loadError[currentPhoto.id] ? (
+        <div 
+          className={`fixed inset-0 -z-10 transition-opacity duration-1500 ease-out-cubic ${
+            fading ? 'opacity-0' : 'opacity-100'
+          }`}
+        >
+          <Image
+            src={currentPhoto.desktop_blob}
+            alt={currentPhoto.caption || `Project background`}
+            fill
+            priority
+            quality={90}
+            sizes="100vw"
+            className="object-cover"
+            referrerPolicy="no-referrer"
+            unoptimized={true}
+            fetchPriority="high"
+            onError={() => handleImageError(currentPhoto.id)}
+          />
+        </div>
+      ) : (
+        <div className="fixed inset-0 -z-10 bg-black" aria-label="Fallback background" />
+      )}
     </div>
   );
 } 

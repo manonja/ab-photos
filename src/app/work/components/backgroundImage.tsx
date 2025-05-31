@@ -45,7 +45,6 @@ const BackgroundImage: React.FC<BackgroundImageProps> = async ({
             
             // Using only revalidate option for proper ISR (Incremental Static Regeneration)
             const response = await fetch(url, { 
-                cache: 'force-cache',
                 next: { revalidate: 3600 } // Revalidate every hour
             });
             
