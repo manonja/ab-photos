@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { Lexend } from "next/font/google";
+import { getProjectsDetails } from '@/actions/getProjectsDetails';
+import { getPhotoDetails } from '@/actions/getPhotoDetails';
 
 import "./globals.css";
 import Navbar from "@/components/navbar";
 
 const lexend = Lexend({ subsets: ["latin"] });
 
+// Static metadata
 export const metadata: Metadata = {
   title: "Anton Bossenbroek Photography",
   description: "Anton Bossenbroek photography portfolio",
