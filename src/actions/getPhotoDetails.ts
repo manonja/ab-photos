@@ -40,7 +40,6 @@ export const getPhotoDetails = cache(async (projectId: string, sequence?: number
             
             try {
                 const response = await fetch(`${baseUrl}/api/photos/${projectId}/${sequence}`, {
-                    cache: 'force-cache',
                     next: { revalidate: 3600 } // Revalidate every hour
                 });
                 
@@ -62,7 +61,6 @@ export const getPhotoDetails = cache(async (projectId: string, sequence?: number
             
             try {
                 const response = await fetch(`${baseUrl}/api/photos/${projectId}`, {
-                    cache: 'force-cache',
                     next: { revalidate: 3600 } // Revalidate every hour
                 });
                 

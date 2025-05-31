@@ -37,21 +37,23 @@ export default async function RotatingBackground({ interval = 4000, projects }: 
   const prefetchedPhotos: (Photo & { originalProjectId: string })[] = [];
   const MAX_PREFETCH = 3;
   
-  for (let i = 0; i < Math.min(MAX_PREFETCH, projectIds.length); i++) {
-    try {
-      const projectId = projectIds[i];
-      const photo = await getPhotoDetails(projectId, 2) as Photo;
-      if (photo) {
-        prefetchedPhotos.push({
-          ...photo,
-          originalProjectId: projectId
-        });
+  // Use Promise.all to fetch the photos in parallel
+  await Promise.all(
+    projectIds.slice(0, MAX_PREFETCH).map(async (projectId) => {
+      try {
+        const photo = await getPhotoDetails(projectId, 2) as Photo;
+        if (photo) {
+          prefetchedPhotos.push({
+            ...photo,
+            originalProjectId: projectId
+          });
+        }
+      } catch (error) {
+        console.error(`[RotatingBackground] Failed to pre-fetch photo:`, error);
+        // Continue trying other photos instead of failing completely
       }
-    } catch (error) {
-      console.error(`[RotatingBackground] Failed to pre-fetch photo:`, error);
-      // Continue trying other photos instead of failing completely
-    }
-  }
+    })
+  );
 
   // If we couldn't fetch any photos, don't crash - just show black background
   if (prefetchedPhotos.length === 0) {
