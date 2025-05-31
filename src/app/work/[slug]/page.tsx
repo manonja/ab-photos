@@ -5,6 +5,7 @@ import React from "react";
 import { getStaticProjectPaths } from "@/actions/getProjectsDetails";
 
 export const runtime = 'edge';
+export const dynamic = 'force-static'; // Force static generation for all paths
 
 // Generate static pages at build time for better performance
 export async function generateStaticParams() {

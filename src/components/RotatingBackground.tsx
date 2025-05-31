@@ -1,6 +1,7 @@
 import { getProjectsDetails } from '@/actions/getProjectsDetails';
+import { getPhotoDetails } from '@/actions/getPhotoDetails';
 import { RotatingBackgroundClient } from '@/components/RotatingBackgroundClient';
-import { Project } from '@/types/database';
+import { Project, Photo } from '@/types/database';
 
 interface RotatingBackgroundProps {
   interval?: number;
@@ -27,6 +28,24 @@ export default async function RotatingBackground({ interval = 4000, projects }: 
     return <div className="fixed inset-0 -z-10 bg-black" aria-label="Background image" />;
   }
 
-  // Pass project IDs to the client component
-  return <RotatingBackgroundClient projectSlugs={projectIds} interval={interval} />;
+  // Pre-fetch the first image server-side to eliminate initial loading delay
+  let initialPhoto = null;
+  if (projectIds.length > 0) {
+    try {
+      initialPhoto = await getPhotoDetails(projectIds[0], 2) as Photo;
+      console.log('[RotatingBackground] Pre-fetched initial photo for', projectIds[0]);
+    } catch (error) {
+      console.error('[RotatingBackground] Failed to pre-fetch initial photo:', error);
+    }
+  }
+
+  // Pass project IDs and pre-fetched initial photo to the client component
+  return <RotatingBackgroundClient 
+    projectSlugs={projectIds} 
+    interval={interval} 
+    initialPhoto={initialPhoto ? {
+      ...initialPhoto,
+      originalProjectId: projectIds[0]
+    } : undefined}
+  />;
 } 

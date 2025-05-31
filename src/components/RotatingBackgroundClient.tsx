@@ -9,30 +9,52 @@ import { useCurrentProject } from '@/context/CurrentProjectContext';
 interface RotatingBackgroundClientProps {
   projectSlugs: string[];
   interval?: number;
+  initialPhoto?: Photo & { originalProjectId: string };
 }
 
 /**
  * Client component that rotates through background images with a crossfade transition.
  * The projectSlugs parameter contains the IDs of projects to display as backgrounds.
  */
-export function RotatingBackgroundClient({ projectSlugs, interval = 4000 }: RotatingBackgroundClientProps) {
-  const [backgrounds, setBackgrounds] = useState<(Photo & { originalProjectId: string })[]>([]);
+export function RotatingBackgroundClient({ 
+  projectSlugs, 
+  interval = 4000, 
+  initialPhoto 
+}: RotatingBackgroundClientProps) {
+  const [backgrounds, setBackgrounds] = useState<(Photo & { originalProjectId: string })[]>(
+    initialPhoto ? [initialPhoto] : []
+  );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextIndex, setNextIndex] = useState(-1);
   const [fading, setFading] = useState(false);
   
   const rotationTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const initialLoadDone = useRef(false);
+  const initialLoadDone = useRef(initialPhoto ? true : false);
   const { setCurrentProjectId } = useCurrentProject();
+
+  // Set initial project ID if we have an initial photo
+  useEffect(() => {
+    if (initialPhoto) {
+      setCurrentProjectId(initialPhoto.originalProjectId);
+      console.log(`[RotatingBackgroundClient] Setting initial project ID from server: ${initialPhoto.originalProjectId}`);
+    }
+  }, [initialPhoto, setCurrentProjectId]);
 
   // Load images
   useEffect(() => {
     async function loadImages() {
       try {
-        const loadedPhotos: (Photo & { originalProjectId: string })[] = [];
+        // If we already have an initial photo, start with that
+        const loadedPhotos: (Photo & { originalProjectId: string })[] = 
+          initialPhoto ? [initialPhoto] : [];
         
-        // Fetch one photo for each project
-        for (const projectId of projectSlugs) {
+        // Fetch one photo for each project (skip the first one if we already have it)
+        const projectsToFetch = initialPhoto 
+          ? projectSlugs.filter(id => id !== initialPhoto.originalProjectId)
+          : projectSlugs;
+        
+        // Fetch all photos in parallel instead of sequentially
+        const photoPromises = projectsToFetch.map(async (projectId) => {
           try {
             const photoResult = await getPhotoDetails(projectId, 2);
             
@@ -43,24 +65,35 @@ export function RotatingBackgroundClient({ projectSlugs, interval = 4000 }: Rota
                 originalProjectId: projectId
               };
               
-              loadedPhotos.push(photo);
               console.log(`[RotatingBackgroundClient] Loaded photo for project ${projectId}:`, {
                 photoProjectId: photo.projectId,
                 originalProjectId: projectId
               });
+              
+              return photo;
             }
           } catch (err) {
             console.error(`Could not load photo for project ${projectId}`);
           }
-        }
+          return null;
+        });
         
-        if (loadedPhotos.length > 0) {
-          setBackgrounds(loadedPhotos);
+        // Wait for all photo fetches to complete
+        const results = await Promise.all(photoPromises);
+        const validPhotos = results.filter(Boolean) as (Photo & { originalProjectId: string })[];
+        
+        // Combine with any initial photos
+        const allPhotos = [...loadedPhotos, ...validPhotos];
+        
+        if (allPhotos.length > 0) {
+          setBackgrounds(allPhotos);
           
-          // Set initial current project ID using the ORIGINAL project ID, not the photo's
-          const initialProjectId = loadedPhotos[0].originalProjectId;
-          setCurrentProjectId(initialProjectId);
-          console.log(`[RotatingBackgroundClient] Setting initial project ID: ${initialProjectId}`);
+          // Only set initial current project ID if we don't have an initial photo
+          if (!initialPhoto) {
+            const initialProjectId = allPhotos[0].originalProjectId;
+            setCurrentProjectId(initialProjectId);
+            console.log(`[RotatingBackgroundClient] Setting initial project ID: ${initialProjectId}`);
+          }
           
           initialLoadDone.current = true;
         }
@@ -74,7 +107,7 @@ export function RotatingBackgroundClient({ projectSlugs, interval = 4000 }: Rota
     return () => {
       if (rotationTimerRef.current) clearTimeout(rotationTimerRef.current);
     };
-  }, [projectSlugs, setCurrentProjectId]);
+  }, [projectSlugs, setCurrentProjectId, initialPhoto]);
 
   // Manage image rotation
   useEffect(() => {

@@ -1,7 +1,45 @@
 import { getProjectsDetails } from "@/actions/getProjectsDetails";
+import { getPhotoDetails } from "@/actions/getPhotoDetails";
 import RotatingBackground from "@/components/RotatingBackground";
 import { CurrentProjectProvider } from "@/context/CurrentProjectContext";
 import WorkListWrapper from "@/app/work/components/workListWrapper";
+import type { Metadata } from "next";
+
+/**
+ * Generate metadata with preload hints for images
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  // Try to fetch the first project and its photo for preloading
+  let preloadHints = [];
+  
+  try {
+    const projects = await getProjectsDetails();
+    const publishedProjects = projects.filter(project => project.isPublished);
+    
+    if (publishedProjects.length > 0) {
+      const firstProject = publishedProjects[0];
+      const photo = await getPhotoDetails(firstProject.id, 2);
+      
+      if (photo && typeof photo === 'object' && 'desktop_blob' in photo) {
+        preloadHints.push({
+          rel: 'preload',
+          as: 'image',
+          imageSrcSet: photo.desktop_blob,
+          fetchPriority: 'high',
+        });
+      }
+    }
+  } catch (error) {
+    console.error('Error preloading image:', error);
+  }
+  
+  return {
+    other: {
+      // @ts-ignore - Next.js types might not include all valid link properties
+      link: preloadHints,
+    },
+  };
+}
 
 /**
  * Home page with rotating background images that change every 4 seconds
