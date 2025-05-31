@@ -107,6 +107,7 @@ export function RotatingBackgroundClient({
             quality={90}
             referrerPolicy="no-referrer"
             unoptimized={true}
+            loading="eager"
           />
         </div>
       )}
@@ -127,6 +128,7 @@ export function RotatingBackgroundClient({
           className="object-cover"
           referrerPolicy="no-referrer"
           unoptimized={true}
+          fetchPriority="high"
         />
       </div>
     </div>

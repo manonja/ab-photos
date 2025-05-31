@@ -110,6 +110,20 @@ const nextConfig = {
           { key: "Access-Control-Allow-Headers", value: "Content-Type, Authorization" },
           { key: "Access-Control-Allow-Credentials", value: "true" }
         ]
+      },
+      {
+        // Cache control for images
+        source: "/:path*.(jpg|jpeg|png|webp|avif|gif|svg)",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" }
+        ]
+      },
+      {
+        // Cache control for static assets
+        source: "/_next/static/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" }
+        ]
       }
     ];
   }

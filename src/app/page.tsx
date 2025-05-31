@@ -1,5 +1,6 @@
 import { getProjectsDetails } from "@/actions/getProjectsDetails";
 import { getPhotoDetails } from "@/actions/getPhotoDetails";
+import { Suspense } from "react";
 import RotatingBackground from "@/components/RotatingBackground";
 import { CurrentProjectProvider } from "@/context/CurrentProjectContext";
 import WorkListWrapper from "@/app/work/components/workListWrapper";
@@ -24,8 +25,10 @@ export async function generateMetadata(): Promise<Metadata> {
         preloadHints.push({
           rel: 'preload',
           as: 'image',
-          imageSrcSet: photo.desktop_blob,
+          href: photo.desktop_blob,
           fetchPriority: 'high',
+          imageSizes: '100vw', // Helps browser understand image importance
+          type: 'image/jpeg', // Add proper MIME type
         });
       }
     }
@@ -53,7 +56,9 @@ export default async function Home() {
   
   return (
     <CurrentProjectProvider>
-      <RotatingBackground interval={4000} projects={projects} />
+      <Suspense fallback={<div className="fixed inset-0 -z-10 bg-black" aria-label="Loading background" />}>
+        <RotatingBackground interval={4000} projects={projects} />
+      </Suspense>
       <WorkListWrapper />
     </CurrentProjectProvider>
   );
