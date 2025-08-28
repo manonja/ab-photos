@@ -17,7 +17,13 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "secrets:local": "./get-from-1password.sh local",
-    "secrets:cf": "./get-from-1password.sh cloudflare"
+    "secrets:cf": "./get-from-1password.sh cloudflare",
+    "blog": "node scripts/blog-cli.js",
+    "blog:new": "node scripts/blog-cli.js new",
+    "blog:image": "node scripts/blog-cli.js add-image",
+    "blog:list": "node scripts/blog-cli.js list",
+    "blog:preview": "node scripts/blog-cli.js preview",
+    "blog:publish": "node scripts/blog-cli.js publish"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
