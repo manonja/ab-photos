@@ -1,4 +1,5 @@
 import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev';
+import createMDX from '@next/mdx';
 
 // Here we use the @cloudflare/next-on-pages next-dev module to allow us to use bindings during local development
 // (when running the application with `next dev`), for more information see:
@@ -18,11 +19,11 @@ console.log('[Config] environment: Build configuration', {
 });
 
 // UNCOMMENT line 21-25 when developing locally
-// const isDev = process.env.npm_lifecycle_event === 'dev';
-// console.log('isDev', isDev);
-// console.log('process.env.npm_lifecycle_event', process.env.npm_lifecycle_event);
-// // For regular NextJS dev, use port 3000, otherwise use port 8788 for wrangler
-// process.env.NEXT_PUBLIC_API_URL = isDev ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8788';
+const isDev = process.env.npm_lifecycle_event === 'dev';
+console.log('isDev', isDev);
+console.log('process.env.npm_lifecycle_event', process.env.npm_lifecycle_event);
+// For regular NextJS dev, use port 3000, otherwise use port 8788 for wrangler
+process.env.NEXT_PUBLIC_API_URL = isDev ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8788';
 
 if (process.env.NODE_ENV === 'development' || process.argv.includes('pages:dev')) {
   console.log('[Config] setupDevPlatform: Starting platform setup', {
@@ -34,8 +35,20 @@ if (process.env.NODE_ENV === 'development' || process.argv.includes('pages:dev')
   console.log('[Config] setupDevPlatform: Platform setup completed');
 }
 
+// Configure MDX
+const withMDX = createMDX({
+  extension: /\.mdx?$/,
+  options: {
+    // If you use remark-gfm, you'll need to install it
+    remarkPlugins: [],
+    rehypePlugins: [],
+  },
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Add MDX page extensions
+  pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
   images: {
     remotePatterns: [
       {
@@ -134,4 +147,5 @@ console.log('[Config] environment: Final configuration', {
   NODE_ENV: process.env.NODE_ENV
 });
 
-export default nextConfig;
+// Export with MDX configuration
+export default withMDX(nextConfig);
