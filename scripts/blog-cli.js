@@ -47,7 +47,6 @@ tags: ["photography", "event"]
 published: ${!options.draft}
 ---
 
-import { ImageGallery, PhotoComparison, Quote, VideoEmbed } from '@/components/blog'
 
 Write your opening paragraph here. This will grab the reader's attention and set the tone for your post.
 
@@ -122,9 +121,9 @@ Remember to set \`published: true\` when you're ready to publish!
     // Write file
     await fs.writeFile(filepath, template)
     
-    // Run compile scripts
+    // Run compile script
     console.log(chalk.yellow(`\n⚙️  Updating compiled data...`))
-    execSync('node scripts/compile-mdx.js && node scripts/update-mdx-imports.js', { stdio: 'inherit' })
+    execSync('node scripts/compile-html.js', { stdio: 'inherit' })
     
     console.log(chalk.green(`✓ Created: ${filepath}`))
     console.log(chalk.blue(`\n📝 Opening in VS Code...`))

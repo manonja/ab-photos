@@ -10,7 +10,7 @@ export function blogPostToGhostPost(post: BlogPost): GhostPost {
     uuid: post.slug,
     title: post.title,
     slug: post.slug,
-    html: '', // MDX content is handled differently, not as HTML string
+    html: post.content, // HTML content from compiled JSON
     feature_image: post.featuredImage,
     featured: false,
     visibility: 'public',
@@ -20,7 +20,7 @@ export function blogPostToGhostPost(post: BlogPost): GhostPost {
     custom_excerpt: post.excerpt,
     excerpt: post.excerpt,
     url: `/news/${post.slug}`,
-    reading_time: parseInt(post.readingTime) || 5,
+    reading_time: 5, // Default reading time
     
     // Map tags
     tags: post.tags.map(tag => ({
@@ -69,9 +69,9 @@ export function blogPostToGhostPost(post: BlogPost): GhostPost {
     meta_title: post.title,
     meta_description: post.excerpt,
     
-    // Keep reference to MDX content component
+    // Keep reference to HTML content
     mdxContent: post.content
-  } as GhostPost & { mdxContent: React.ComponentType };
+  } as GhostPost & { mdxContent: string };
   
   return ghostPost;
 }

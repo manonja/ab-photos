@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev",
-    "build": "node scripts/compile-mdx.js && node scripts/update-mdx-imports.js && next build",
+    "build": "node scripts/compile-html.js && next build",
     "start": "next start",
     "lint": "next lint",
-    "pages:build": "node scripts/compile-mdx.js && node scripts/update-mdx-imports.js && npx @cloudflare/next-on-pages",
+    "pages:build": "node scripts/compile-html.js && npx @cloudflare/next-on-pages",
     "pages:dev": "npx wrangler pages dev .vercel/output/static --compatibility-flag=nodejs_compat",
     "dev:wrangler": "npm run pages:build && npm run pages:dev",
     "test:prod": "npm run pages:build && npx wrangler pages dev .vercel/output/static --compatibility-flag=nodejs_compat",
@@ -26,10 +26,7 @@
     "blog:publish": "node scripts/blog-cli.js publish"
   },
   "dependencies": {
-    "@mdx-js/loader": "^3.1.0",
-    "@mdx-js/react": "^3.1.0",
     "@neondatabase/serverless": "^0.9.3",
-    "@next/mdx": "^15.5.2",
     "chalk": "^5.6.0",
     "commander": "^14.0.0",
     "gray-matter": "^4.0.3",

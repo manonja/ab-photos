@@ -10,7 +10,7 @@ export interface BlogFrontmatter {
 
 export interface BlogPost extends BlogFrontmatter {
   slug: string
-  content: React.ComponentType
+  content: string // HTML content as string
 }
 
 export interface BlogImageProps {

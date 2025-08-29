@@ -1,12 +1,11 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { MDXProvider } from '@mdx-js/react';
-import { components } from '@/lib/blog/mdx-components';
+// Removed MDX imports - now using HTML content
 import { GhostPost } from '../../lib/ghost/types';
 
 interface PostContentMDXProps {
-  post: GhostPost & { mdxContent?: React.ComponentType };
+  post: GhostPost & { mdxContent?: string };
 }
 
 const PostContentMDX: React.FC<PostContentMDXProps> = ({ post }) => {
@@ -87,12 +86,11 @@ const PostContentMDX: React.FC<PostContentMDXProps> = ({ post }) => {
             </div>
           </header>
 
-          {/* MDX Content */}
-          <div className="prose prose-lg max-w-none mb-8">
-            <MDXProvider components={components}>
-              {MDXContent && <MDXContent />}
-            </MDXProvider>
-          </div>
+          {/* HTML Content */}
+          <div 
+            className="ghost-content prose prose-lg max-w-none mb-8"
+            dangerouslySetInnerHTML={{ __html: MDXContent as any }}
+          />
 
           {/* Footer */}
           <footer className="mt-12 border-t border-gray-200 pt-8">
