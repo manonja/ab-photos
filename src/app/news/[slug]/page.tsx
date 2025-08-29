@@ -6,7 +6,7 @@ import { blogPostToGhostPost } from '@/lib/blog/adapter';
 // import PostContent from '../../../components/news/PostContent';
 import PostContentMDX from '../../../components/news/PostContentMDX';
 
-export const runtime = 'edge';
+// Removed edge runtime to allow filesystem access for MDX blog
 export const revalidate = 3600; // Revalidate every hour
 
 // Generate metadata for this page

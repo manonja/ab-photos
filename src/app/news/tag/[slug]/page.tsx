@@ -1,25 +1,25 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getPostsByTag, getTags } from '../../../../lib/ghost/client';
+import { getBlogPostsByTag, getBlogTags } from '@/lib/blog';
+import { blogPostToGhostPost } from '@/lib/blog/adapter';
 import PostCard from '../../../../components/news/PostCard';
-import { GhostTag } from '../../../../lib/ghost/types';
 
-export const runtime = 'edge';
+// Removed edge runtime to allow filesystem access for MDX blog
 export const revalidate = 3600; // Revalidate every hour
 
 // Generate metadata for this page
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const posts = await getPostsByTag(params.slug);
+  const blogPosts = await getBlogPostsByTag(params.slug);
   
-  if (!posts || posts.length === 0) {
+  if (!blogPosts || blogPosts.length === 0) {
     return {
       title: 'Tag Not Found | Anton Bossenbroek Photography',
     };
   }
   
-  // Get tag name from the first post's tags
-  const tagName = posts[0].tags?.find((tag: GhostTag) => tag.slug === params.slug)?.name || params.slug;
+  // Format tag name for display
+  const tagName = params.slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   
   return {
     title: `${tagName} | Anton Bossenbroek Photography`,
@@ -29,22 +29,25 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 // Generate static paths for all tags
 export async function generateStaticParams() {
-  const tags = await getTags();
+  const tags = await getBlogTags();
   
-  return tags.map((tag: GhostTag) => ({
-    slug: tag.slug,
+  return tags.map(tag => ({
+    slug: tag.toLowerCase().replace(/\s+/g, '-'),
   }));
 }
 
 export default async function TagPage({ params }: { params: { slug: string } }) {
-  const posts = await getPostsByTag(params.slug);
+  const blogPosts = await getBlogPostsByTag(params.slug);
   
-  if (!posts || posts.length === 0) {
+  if (!blogPosts || blogPosts.length === 0) {
     notFound();
   }
   
-  // Get tag name from the first post's tags
-  const tagName = posts[0].tags?.find((tag: GhostTag) => tag.slug === params.slug)?.name || params.slug;
+  // Convert to Ghost format for compatibility
+  const posts = blogPosts.map(blogPostToGhostPost);
+  
+  // Format tag name for display
+  const tagName = params.slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   
   return (
     <>
