@@ -31,6 +31,23 @@ npm run secrets:cf       # Get Cloudflare env from 1Password
 npm run cf-typegen       # Generate TypeScript types for CF bindings
 ```
 
+## Blog System (MDX)
+
+The blog system uses MDX files stored locally in `content/blog/`. Key features:
+- **MDX Support**: Write in Markdown with React components
+- **CLI Tool**: `npm run blog:new "Title"` to create posts
+- **Image Management**: Store in `public/images/blog/`
+- **Components**: ImageGallery, Quote, VideoEmbed available in posts
+- **No External CMS**: Zero monthly costs, full version control
+
+### Blog Commands
+```bash
+npm run blog:new "Post Title"    # Create new post
+npm run blog:image path/to/img   # Add image to blog
+npm run blog:list               # List all posts
+npm run blog:publish            # Commit and push changes
+```
+
 ## Architecture & Patterns
 
 ### Edge Runtime
@@ -66,7 +83,7 @@ console.error('[Source] functionName: Error occurred', { error, params });
 - Test async operations with `async/await`
 
 ### Image Optimization
-- Remote patterns configured for Ghost CMS and assets.bossenbroek.photo
+- Remote patterns configured for assets.bossenbroek.photo and local blog images
 - Unoptimized in development for faster builds
 - Background images use custom caching strategy
 
@@ -76,7 +93,6 @@ Critical variables loaded from 1Password:
 - `DIRECT_URL` - Direct PostgreSQL connection
 - `NEXT_PUBLIC_API_URL` - API endpoint (auto-configured)
 - `NEXT_PUBLIC_MAILCHIMP_*` - Mailchimp integration
-- Ghost CMS credentials
 
 ### Deployment Notes
 - Main branch deploys to production
@@ -91,6 +107,8 @@ Critical variables loaded from 1Password:
 3. **New project page**: Update `src/app/work/[slug]/page.tsx` and related components
 4. **Running tests**: Use `npm test` before commits, ensure all pass
 5. **Debugging locally**: Use `npm run dev` for quick iteration, `npm run dev:wrangler` for CF testing
+6. **Creating blog posts**: Use `npm run blog:new "Post Title"` to create MDX posts
+7. **Managing blog content**: See `/docs/blog-workflow.md` for detailed instructions
 
 ## Coding Best Practices
 

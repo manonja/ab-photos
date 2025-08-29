@@ -51,16 +51,17 @@ const nextConfig = {
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'static.ghost.org',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'anton-photography.ghost.io',
-        pathname: '/**',
-      },
+      // Ghost domains removed - no longer needed
+      // {
+      //   protocol: 'https',
+      //   hostname: 'static.ghost.org',
+      //   pathname: '/**',
+      // },
+      // {
+      //   protocol: 'https',
+      //   hostname: 'anton-photography.ghost.io',
+      //   pathname: '/**',
+      // },
       {
         protocol: 'https',
         hostname: 'assets.bossenbroek.photo',
