@@ -1,14 +1,18 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getPosts, getSinglePost } from '../../../lib/ghost/client';
-import PostContent from '../../../components/news/PostContent';
+// import { getPosts, getSinglePost } from '../../../lib/ghost/client';
+import { getAllBlogPosts, getBlogPostBySlug } from '@/lib/blog';
+import { blogPostToGhostPost } from '@/lib/blog/adapter';
+// import PostContent from '../../../components/news/PostContent';
+import PostContentMDX from '../../../components/news/PostContentMDX';
 
 export const runtime = 'edge';
 export const revalidate = 3600; // Revalidate every hour
 
 // Generate metadata for this page
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const post = await getSinglePost(params.slug);
+  const blogPost = await getBlogPostBySlug(params.slug);
+  const post = blogPost ? blogPostToGhostPost(blogPost) : null;
   
   if (!post) {
     return {
@@ -38,7 +42,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 // Generate static paths for all posts
 export async function generateStaticParams() {
-  const posts = await getPosts();
+  const posts = await getAllBlogPosts();
   
   return posts.map((post) => ({
     slug: post.slug,
@@ -46,7 +50,8 @@ export async function generateStaticParams() {
 }
 
 export default async function NewsPostPage({ params }: { params: { slug: string } }) {
-  const post = await getSinglePost(params.slug);
+  const blogPost = await getBlogPostBySlug(params.slug);
+  const post = blogPost ? blogPostToGhostPost(blogPost) : null;
   
   if (!post) {
     notFound();
@@ -56,7 +61,7 @@ export default async function NewsPostPage({ params }: { params: { slug: string 
     <>
       <main className="flex min-h-screen flex-col items-center p-6">
         <div className="w-full max-w-[75%] mx-auto py-8">
-          <PostContent post={post} />
+          <PostContentMDX post={post} />
         </div>
       </main>
     </>

@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { getPosts } from '../../lib/ghost/client';
+// import { getPosts } from '../../lib/ghost/client';
+import { getAllBlogPosts } from '@/lib/blog';
+import { blogPostToGhostPost } from '@/lib/blog/adapter';
 import PostCard from '../../components/news/PostCard';
 
 export const runtime = 'edge';
@@ -12,8 +14,10 @@ export const metadata: Metadata = {
 };
 
 export default async function NewsPage() {
-  // Fetch posts
-  const posts = await getPosts({ limit: 9 });
+  // Fetch posts from MDX
+  const blogPosts = await getAllBlogPosts();
+  // Convert to Ghost format for compatibility
+  const posts = blogPosts.map(blogPostToGhostPost);
 
   if (!posts || posts.length === 0) {
     return (
