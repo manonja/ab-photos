@@ -36,6 +36,9 @@ export async function generateStaticParams() {
   }));
 }
 
+// Required for Cloudflare Pages with dynamic routes
+export const dynamicParams = false;
+
 export default async function TagPage({ params }: { params: { slug: string } }) {
   const blogPosts = await getBlogPostsByTag(params.slug);
   

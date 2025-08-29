@@ -122,6 +122,10 @@ Remember to set \`published: true\` when you're ready to publish!
     // Write file
     await fs.writeFile(filepath, template)
     
+    // Run compile scripts
+    console.log(chalk.yellow(`\n⚙️  Updating compiled data...`))
+    execSync('node scripts/compile-mdx.js && node scripts/update-mdx-imports.js', { stdio: 'inherit' })
+    
     console.log(chalk.green(`✓ Created: ${filepath}`))
     console.log(chalk.blue(`\n📝 Opening in VS Code...`))
     
