@@ -11,7 +11,6 @@ export interface BlogFrontmatter {
 export interface BlogPost extends BlogFrontmatter {
   slug: string
   content: React.ComponentType
-  readingTime: string
 }
 
 export interface BlogImageProps {

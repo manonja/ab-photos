@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
-import readingTime from 'reading-time'
 import { BlogPost, BlogFrontmatter } from './types'
 
 const BLOG_DIR = path.join(process.cwd(), 'content/blog')
@@ -16,7 +15,8 @@ async function loadMDXFile(filename: string): Promise<React.ComponentType> {
   }
 
   try {
-    const module = await import(`@/content/blog/${filename}`)
+    // Use relative path from src directory for edge runtime compatibility
+    const module = await import(`../../../content/blog/${filename}`)
     const component = module.default
     mdxCache.set(filename, component)
     return component
@@ -57,7 +57,6 @@ export async function getAllBlogPosts(): Promise<BlogPost[]> {
           ...frontmatter,
           slug,
           content: MDXContent,
-          readingTime: readingTime(content).text,
         } as BlogPost
       } catch (error) {
         console.error(`[Blog] Error processing file ${file}:`, error)
@@ -100,7 +99,6 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
       ...frontmatter,
       slug,
       content: MDXContent,
-      readingTime: readingTime(content).text,
     } as BlogPost
 
     console.log('[Blog] Found post:', post.title)
