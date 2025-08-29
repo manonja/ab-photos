@@ -63,6 +63,8 @@ function markdownToHtml(markdown) {
 
 // Process custom components
 function processCustomComponents(content) {
+  // Remove import statements
+  content = content.replace(/^import\s+.*$/gm, '');
   // Convert Quote component
   content = content.replace(
     /<Quote author="([^"]+)">\s*([^<]+)\s*<\/Quote>/g,
