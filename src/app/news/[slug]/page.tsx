@@ -4,9 +4,10 @@ import { notFound } from 'next/navigation';
 import { getAllBlogPosts, getBlogPostBySlug } from '@/lib/blog';
 import { blogPostToGhostPost } from '@/lib/blog/adapter';
 // import PostContent from '../../../components/news/PostContent';
-import PostContentMDX from '../../../components/news/PostContentMDX';
+import PostContent from '../../../components/news/PostContent';
 
-// Removed edge runtime to allow filesystem access for MDX blog
+// Use edge runtime for Cloudflare Pages compatibility
+export const runtime = 'edge';
 export const revalidate = 3600; // Revalidate every hour
 
 // Generate metadata for this page
@@ -40,23 +41,18 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-// Generate static paths for all posts
-export async function generateStaticParams() {
-  const posts = await getAllBlogPosts();
-  
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
-}
-
-// Required for Cloudflare Pages with dynamic routes
-export const dynamicParams = false;
+// For Cloudflare Pages, we can't use generateStaticParams with edge runtime
+// Instead, we'll handle dynamic routing at runtime
+export const dynamicParams = true;
 
 export default async function NewsPostPage({ params }: { params: { slug: string } }) {
+  console.log('[NewsPostPage] Rendering with slug:', params.slug);
   const blogPost = await getBlogPostBySlug(params.slug);
+  console.log('[NewsPostPage] Found blog post:', blogPost ? 'yes' : 'no');
   const post = blogPost ? blogPostToGhostPost(blogPost) : null;
   
   if (!post) {
+    console.log('[NewsPostPage] Post not found, calling notFound()');
     notFound();
   }
   
@@ -64,7 +60,7 @@ export default async function NewsPostPage({ params }: { params: { slug: string 
     <>
       <main className="flex min-h-screen flex-col items-center p-6">
         <div className="w-full max-w-[75%] mx-auto py-8">
-          <PostContentMDX post={post} />
+          <PostContent post={post} />
         </div>
       </main>
     </>

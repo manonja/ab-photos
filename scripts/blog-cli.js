@@ -3,7 +3,12 @@ const { program } = require('commander')
 const fs = require('fs-extra')
 const path = require('path')
 const { execSync } = require('child_process')
-const chalk = require('chalk')
+
+// Import chalk dynamically due to ESM
+let chalk;
+(async () => {
+  chalk = (await import('chalk')).default;
+})();
 
 const BLOG_DIR = path.join(process.cwd(), 'content/blog')
 const IMAGES_DIR = path.join(process.cwd(), 'public/images/blog')
@@ -11,6 +16,16 @@ const IMAGES_DIR = path.join(process.cwd(), 'public/images/blog')
 // Ensure directories exist
 fs.ensureDirSync(BLOG_DIR)
 fs.ensureDirSync(IMAGES_DIR)
+
+// Simple console colors as fallback
+const colors = {
+  green: (text) => chalk ? chalk.green(text) : `✓ ${text}`,
+  red: (text) => chalk ? chalk.red(text) : `✗ ${text}`,
+  blue: (text) => chalk ? chalk.blue(text) : `ℹ ${text}`,
+  yellow: (text) => chalk ? chalk.yellow(text) : `⚠ ${text}`,
+  gray: (text) => chalk ? chalk.gray(text) : text,
+  white: (text) => chalk ? chalk.white(text) : text
+}
 
 program
   .name('blog')
@@ -31,108 +46,81 @@ program
     
     // Check if file already exists
     if (await fs.pathExists(filepath)) {
-      console.error(chalk.red(`Error: ${filename} already exists!`))
+      console.error(colors.red(`Error: ${filename} already exists!`))
       process.exit(1)
     }
     
-    // Template content
+    // Get current year
+    const year = new Date().getFullYear()
+    
+    // Simple template
     const template = `---
 title: "${title}"
-slug: "${slug}"
 date: "${date}"
 author: "Anton Bossenbroek"
-excerpt: "A brief description of your post that will appear in listings (max 160 characters)"
-featuredImage: "/images/blog/2024/featured.jpg"
-tags: ["photography", "event"]
+excerpt: "A brief description of your post that appears in the listing."
+featuredImage: "/images/blog/${year}/placeholder.jpg"
+tags: ["photography"]
 published: ${!options.draft}
 ---
 
+Write your introduction paragraph here.
 
-Write your opening paragraph here. This will grab the reader's attention and set the tone for your post.
+## First Section
 
-## Adding a Single Image
+Your content goes here. You can use **bold text** and *italic text* for emphasis.
 
-![Description of the image](/images/blog/2024/your-image.jpg)
+## Adding Images
 
-## Creating an Image Gallery
+To add an image:
+![Description of the image](/images/blog/${year}/your-image.jpg)
 
-Use this for multiple related images:
+## Creating Lists
 
-<ImageGallery
-  columns={2}
-  images={[
-    { src: "/images/blog/2024/photo-1.jpg", alt: "First photo description" },
-    { src: "/images/blog/2024/photo-2.jpg", alt: "Second photo description" },
-    { src: "/images/blog/2024/photo-3.jpg", alt: "Third photo description" },
-    { src: "/images/blog/2024/photo-4.jpg", alt: "Fourth photo description" }
-  ]}
-/>
+For bullet points:
+- First item
+- Second item
+- Third item
 
-## Before/After Comparison
+For numbered lists:
+1. First step
+2. Second step
+3. Third step
 
-Perfect for showing editing or transformation:
+## Adding a Quote
 
-<PhotoComparison
-  before="/images/blog/2024/before.jpg"
-  after="/images/blog/2024/after.jpg"
-  beforeLabel="Original"
-  afterLabel="Edited"
-/>
-
-## Adding Quotes
-
-<Quote author="Ansel Adams">
-  A photograph is usually looked at - seldom looked into.
+<Quote author="Author Name">
+This is an inspiring quote.
 </Quote>
 
-## Embedding Videos
+## Conclusion
 
-<VideoEmbed url="https://vimeo.com/123456789" />
+Wrap up your blog post with a conclusion.
 
-## Text Formatting
+---
 
-You can use standard markdown:
-
-- **Bold text** using double asterisks
-- *Italic text* using single asterisks
-- [Links](https://example.com) using square brackets
-- \`inline code\` using backticks
-
-### Lists
-
-1. Numbered lists
-2. Like this one
-3. Are automatically formatted
-
-- Bullet points
-- Work the same way
-- With hyphens
-
-## Tips for Great Blog Posts
-
-1. Start with a compelling opening
-2. Use images to break up text
-3. Keep paragraphs short and readable
-4. End with a call to action or conclusion
-
-Remember to set \`published: true\` when you're ready to publish!
+*Remember to:*
+1. Add your images to \`public/images/blog/${year}/\`
+2. Update the excerpt
+3. Change \`published: ${!options.draft}\` to \`published: true\` when ready
+4. Run \`npm run dev\` to see your post locally
 `
     
     // Write file
     await fs.writeFile(filepath, template)
     
     // Run compile script
-    console.log(chalk.yellow(`\n⚙️  Updating compiled data...`))
+    console.log(colors.yellow(`\n⚙️  Updating compiled data...`))
     execSync('node scripts/compile-html.js', { stdio: 'inherit' })
     
-    console.log(chalk.green(`✓ Created: ${filepath}`))
-    console.log(chalk.blue(`\n📝 Opening in VS Code...`))
+    console.log(colors.green(`✓ Created: ${filepath}`))
+    console.log(colors.blue(`\n📝 Opening in VS Code...`))
     
     // Open in VS Code
     try {
       execSync(`code ${filepath}`)
     } catch (e) {
-      console.log(chalk.yellow('Could not open VS Code. Please open manually.'))
+      console.log(colors.yellow('Could not open VS Code. Please open manually.'))
     }
   })
 
@@ -163,18 +151,18 @@ program
       // Generate markdown reference
       const mdPath = `/images/blog/${year}/${filename}`
       
-      console.log(chalk.green(`✓ Image added: ${destination}`))
-      console.log(chalk.blue(`\n📋 Markdown reference:`))
-      console.log(chalk.white(`![Alt text](${mdPath})`))
+      console.log(colors.green(`✓ Image added: ${destination}`))
+      console.log(colors.blue(`\n📋 Markdown reference:`))
+      console.log(colors.white(`![Alt text](${mdPath})`))
       
       // Copy to clipboard if possible (macOS)
       try {
         execSync(`echo "![Alt text](${mdPath})" | pbcopy`)
-        console.log(chalk.gray('\n(Copied to clipboard)'))
+        console.log(colors.gray('\n(Copied to clipboard)'))
       } catch {}
       
     } catch (error) {
-      console.error(chalk.red(`Error: ${error.message}`))
+      console.error(colors.red(`Error: ${error.message}`))
       process.exit(1)
     }
   })
@@ -192,11 +180,11 @@ program
       .reverse()
     
     if (posts.length === 0) {
-      console.log(chalk.yellow('No blog posts found.'))
+      console.log(colors.yellow('No blog posts found.'))
       return
     }
     
-    console.log(chalk.blue('\n📝 Blog Posts:\n'))
+    console.log(colors.blue('\n📝 Blog Posts:\n'))
     
     for (const file of posts) {
       const content = await fs.readFile(path.join(BLOG_DIR, file), 'utf-8')
@@ -207,7 +195,7 @@ program
       
       if (isDraft && !options.drafts) continue
       
-      const status = isDraft ? chalk.yellow('[DRAFT]') : chalk.green('[PUBLISHED]')
+      const status = isDraft ? colors.yellow('[DRAFT]') : colors.green('[PUBLISHED]')
       console.log(`${status} ${file} - ${title}`)
     }
   })
@@ -216,7 +204,7 @@ program
   .command('preview')
   .description('Preview your blog locally')
   .action(() => {
-    console.log(chalk.blue('🚀 Starting development server...\n'))
+    console.log(colors.blue('🚀 Starting development server...\n'))
     execSync('npm run dev', { stdio: 'inherit' })
   })
 
@@ -225,21 +213,24 @@ program
   .description('Commit and push your blog changes')
   .action((message = 'feat: update blog content') => {
     try {
-      console.log(chalk.blue('📦 Staging blog files...'))
+      console.log(colors.blue('📦 Staging blog files...'))
       execSync('git add content/blog public/images/blog')
       
-      console.log(chalk.blue('💾 Committing changes...'))
+      console.log(colors.blue('💾 Committing changes...'))
       execSync(`git commit -m "${message}"`)
       
-      console.log(chalk.blue('🚀 Pushing to remote...'))
+      console.log(colors.blue('🚀 Pushing to remote...'))
       execSync('git push')
       
-      console.log(chalk.green('\n✓ Blog published successfully!'))
-      console.log(chalk.gray('Changes will be live in ~2 minutes.'))
+      console.log(colors.green('\n✓ Blog published successfully!'))
+      console.log(colors.gray('Changes will be live in ~2 minutes.'))
     } catch (error) {
-      console.error(chalk.red('Error publishing:'), error.message)
+      console.error(colors.red('Error publishing:'), error.message)
       process.exit(1)
     }
   })
 
-program.parse(process.argv)
+// Ensure chalk is loaded before parsing
+setTimeout(() => {
+  program.parse(process.argv)
+}, 100)

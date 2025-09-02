@@ -69,7 +69,7 @@ export function blogPostToGhostPost(post: BlogPost): GhostPost {
     meta_title: post.title,
     meta_description: post.excerpt,
     
-    // Keep reference to HTML content
+    // Keep reference to HTML content (renamed from mdxContent for clarity)
     mdxContent: post.content
   } as GhostPost & { mdxContent: string };
   

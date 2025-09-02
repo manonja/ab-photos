@@ -10,7 +10,7 @@ npm run blog:new "My Amazing Post Title"
 npm run blog:image ~/Desktop/photo.jpg
 
 # Preview locally
-npm run blog:preview
+npm run dev
 
 # Publish to live site
 npm run blog:publish
@@ -47,7 +47,7 @@ alias blist='cd ~/Documents_local/Websites/ab-photos && npm run blog:list'
    - Option B: Manually copy to: `public/images/blog/2024/`
    - The CLI will show you the markdown to paste
 
-4. **Write your content using Markdown and components**
+4. **Write your content using simple Markdown**
 
 5. **Preview your post:**
    ```bash
@@ -65,46 +65,25 @@ alias blist='cd ~/Documents_local/Websites/ab-photos && npm run blog:list'
 
 ## Available Components
 
-### Image Gallery
-```mdx
-<ImageGallery
-  columns={3}
-  spacing="normal"
-  images={[
-    { src: "/images/blog/2024/photo1.jpg", alt: "Description" },
-    { src: "/images/blog/2024/photo2.jpg", alt: "Description" },
-    { src: "/images/blog/2024/photo3.jpg", alt: "Description" }
-  ]}
-/>
-```
-
 ### Quote
-```mdx
+```markdown
 <Quote author="Person Name">
-  This is an inspiring quote about photography.
+This is an inspiring quote about photography.
 </Quote>
 ```
 
-### Video Embed
-```mdx
-<VideoEmbed url="https://vimeo.com/123456789" />
-<VideoEmbed url="https://www.youtube.com/watch?v=abc123" />
-```
-
-### Photo Grid
-```mdx
-<PhotoGrid spacing="tight">
-  ![Photo 1](/images/blog/2024/grid-1.jpg)
-  ![Photo 2](/images/blog/2024/grid-2.jpg)
-  ![Photo 3](/images/blog/2024/grid-3.jpg)
-</PhotoGrid>
+### Image Gallery
+```markdown
+<ImageGallery columns={2} images={[
+  { src: "/images/blog/2024/photo1.jpg", alt: "Description" },
+  { src: "/images/blog/2024/photo2.jpg", alt: "Description" }
+]} />
 ```
 
 ## Markdown Basics
 
 ### Headings
 ```markdown
-# Main Title (Don't use - title is in frontmatter)
 ## Section Heading
 ### Subsection
 ```
@@ -131,7 +110,6 @@ alias blist='cd ~/Documents_local/Websites/ab-photos && npm run blog:list'
 ```markdown
 - Bullet point
 - Another point
-  - Nested point
 
 1. Numbered item
 2. Another item
@@ -148,21 +126,21 @@ alias blist='cd ~/Documents_local/Websites/ab-photos && npm run blog:list'
 ### SEO Tips
 - Write compelling excerpts (they appear in search results and social shares)
 - Use 3-5 relevant tags
-- Choose descriptive slugs (they become the URL)
-- Include your main keyword in the title
+- Choose descriptive titles
+- Keep excerpts under 160 characters
 
 ### File Naming
 - Always use lowercase
 - Replace spaces with hyphens
-- Include dates for posts: `2024-01-15-post-title.mdx`
+- Files are named automatically with date: `2024-01-15-post-title.mdx`
 
 ## Troubleshooting
 
 ### Post Not Appearing?
 - Check `published: true` is set
 - Save the file
+- Run `npm run dev` and check for compilation
 - Refresh your browser
-- Check the console for errors with `npm run dev`
 
 ### Images Not Loading?
 - Check file path is correct (starts with `/`)
@@ -194,10 +172,18 @@ done
 code content/blog/$(ls -t content/blog/*.mdx | head -1)
 ```
 
+## Zero-Cost Blog Benefits
+
+- **No monthly fees** - Unlike Ghost ($100/month), this costs $0
+- **Full control** - All content stored in your repository
+- **Version control** - Every change is tracked in Git
+- **Fast performance** - Static HTML generation
+- **Simple workflow** - Write in Markdown, publish with Git
+
 ## Support
 
 If you encounter any issues:
 1. Check the terminal for error messages
 2. Verify all files are saved
 3. Try `npm run dev` to see detailed errors
-4. Contact support with error details
+4. The blog automatically compiles when you run dev or build

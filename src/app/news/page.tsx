@@ -5,7 +5,8 @@ import { getAllBlogPosts } from '@/lib/blog';
 import { blogPostToGhostPost } from '@/lib/blog/adapter';
 import PostCard from '../../components/news/PostCard';
 
-// Removed edge runtime to allow filesystem access for MDX blog
+// Use edge runtime for Cloudflare Pages compatibility
+export const runtime = 'edge';
 export const revalidate = 3600; // Revalidate every hour
 
 export const metadata: Metadata = {

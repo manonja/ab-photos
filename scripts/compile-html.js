@@ -9,56 +9,147 @@ const OUTPUT_DIR = path.join(process.cwd(), 'src/lib/blog/compiled');
 
 // Simple markdown to HTML converter
 function markdownToHtml(markdown) {
-  let html = markdown;
+  // Split content into lines for easier processing
+  const lines = markdown.split('\n');
+  const htmlLines = [];
+  let inList = false;
+  let listType = null;
+  let inParagraph = false;
   
-  // Convert headers
-  html = html.replace(/^### (.*$)/gim, '<h3 class="text-2xl font-semibold mt-6 mb-3 text-gray-900">$1</h3>');
-  html = html.replace(/^## (.*$)/gim, '<h2 class="text-3xl font-bold mt-8 mb-4 text-gray-900">$1</h2>');
-  html = html.replace(/^# (.*$)/gim, '<h1 class="text-4xl font-bold mt-8 mb-4 text-gray-900">$1</h1>');
-  
-  // Convert bold and italic
-  html = html.replace(/\*\*\*(.*)\*\*\*/g, '<strong><em>$1</em></strong>');
-  html = html.replace(/\*\*(.*)\*\*/g, '<strong>$1</strong>');
-  html = html.replace(/\*(.*)\*/g, '<em>$1</em>');
-  
-  // Convert links
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-600 hover:text-blue-800 underline">$1</a>');
-  
-  // Convert images
-  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, 
-    '<figure class="my-8">' +
-    '<img src="$2" alt="$1" class="w-full rounded-lg" />' +
-    '<figcaption class="text-sm text-gray-600 text-center mt-2">$1</figcaption>' +
-    '</figure>'
-  );
-  
-  // Convert line breaks
-  html = html.replace(/\n\n/g, '</p><p class="text-gray-700 leading-relaxed mb-4">');
-  
-  // Convert lists
-  html = html.replace(/^\- (.+)$/gm, '<li>$1</li>');
-  html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul class="list-disc list-inside mb-4 space-y-2">$&</ul>');
-  
-  html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
-  html = html.replace(/(<li>.*<\/li>\n?)+/g, function(match) {
-    if (!match.includes('<ul')) {
-      return '<ol class="list-decimal list-inside mb-4 space-y-2">' + match + '</ol>';
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i].trim();
+    
+    // Skip empty lines but close paragraph if needed
+    if (line === '') {
+      if (inParagraph) {
+        htmlLines.push('</p>');
+        inParagraph = false;
+      }
+      if (inList) {
+        htmlLines.push(listType === 'ul' ? '</ul>' : '</ol>');
+        inList = false;
+        listType = null;
+      }
+      continue;
     }
-    return match;
-  });
+    
+    // Headers
+    if (line.startsWith('# ')) {
+      if (inParagraph) {
+        htmlLines.push('</p>');
+        inParagraph = false;
+      }
+      htmlLines.push(`<h1 class="text-4xl font-bold mt-8 mb-4 text-gray-900">${processInlineMarkdown(line.substring(2))}</h1>`);
+      continue;
+    }
+    if (line.startsWith('## ')) {
+      if (inParagraph) {
+        htmlLines.push('</p>');
+        inParagraph = false;
+      }
+      htmlLines.push(`<h2 class="text-3xl font-bold mt-8 mb-4 text-gray-900">${processInlineMarkdown(line.substring(3))}</h2>`);
+      continue;
+    }
+    if (line.startsWith('### ')) {
+      if (inParagraph) {
+        htmlLines.push('</p>');
+        inParagraph = false;
+      }
+      htmlLines.push(`<h3 class="text-2xl font-semibold mt-6 mb-3 text-gray-900">${processInlineMarkdown(line.substring(4))}</h3>`);
+      continue;
+    }
+    
+    // Lists
+    if (line.match(/^\- /)) {
+      if (inParagraph) {
+        htmlLines.push('</p>');
+        inParagraph = false;
+      }
+      if (!inList || listType !== 'ul') {
+        if (inList && listType === 'ol') htmlLines.push('</ol>');
+        htmlLines.push('<ul class="list-disc list-inside mb-4 space-y-2">');
+        inList = true;
+        listType = 'ul';
+      }
+      htmlLines.push(`<li>${processInlineMarkdown(line.substring(2))}</li>`);
+      continue;
+    }
+    
+    if (line.match(/^\d+\. /)) {
+      if (inParagraph) {
+        htmlLines.push('</p>');
+        inParagraph = false;
+      }
+      if (!inList || listType !== 'ol') {
+        if (inList && listType === 'ul') htmlLines.push('</ul>');
+        htmlLines.push('<ol class="list-decimal list-inside mb-4 space-y-2">');
+        inList = true;
+        listType = 'ol';
+      }
+      htmlLines.push(`<li>${processInlineMarkdown(line.replace(/^\d+\. /, ''))}</li>`);
+      continue;
+    }
+    
+    // Close lists if not in list anymore
+    if (inList) {
+      htmlLines.push(listType === 'ul' ? '</ul>' : '</ol>');
+      inList = false;
+      listType = null;
+    }
+    
+    // Images
+    if (line.match(/^!\[/)) {
+      if (inParagraph) {
+        htmlLines.push('</p>');
+        inParagraph = false;
+      }
+      const match = line.match(/!\[([^\]]*)\]\(([^)]+)\)/);
+      if (match) {
+        htmlLines.push(`<figure class="my-8">`);
+        htmlLines.push(`  <img src="${match[2]}" alt="${match[1]}" class="w-full rounded-lg" />`);
+        if (match[1]) {
+          htmlLines.push(`  <figcaption class="text-sm text-gray-600 text-center mt-2">${match[1]}</figcaption>`);
+        }
+        htmlLines.push(`</figure>`);
+      }
+      continue;
+    }
+    
+    // Regular paragraph text
+    if (!inParagraph) {
+      htmlLines.push('<p class="text-gray-700 leading-relaxed mb-4">');
+      inParagraph = true;
+    }
+    htmlLines.push(processInlineMarkdown(line));
+  }
   
-  // Convert code blocks
-  html = html.replace(/`([^`]+)`/g, '<code class="px-1 py-0.5 bg-gray-100 rounded text-sm font-mono">$1</code>');
+  // Close any open paragraph
+  if (inParagraph) {
+    htmlLines.push('</p>');
+  }
   
-  // Wrap in paragraphs
-  html = '<p class="text-gray-700 leading-relaxed mb-4">' + html + '</p>';
+  // Close any open list
+  if (inList) {
+    htmlLines.push(listType === 'ul' ? '</ul>' : '</ol>');
+  }
   
-  // Clean up empty paragraphs
-  html = html.replace(/<p class="text-gray-700 leading-relaxed mb-4"><\/p>/g, '');
-  html = html.replace(/<p class="text-gray-700 leading-relaxed mb-4">(<h[1-3]|<ul|<ol|<figure)/g, '$1');
-  html = html.replace(/(<\/h[1-3]>|<\/ul>|<\/ol>|<\/figure>)<\/p>/g, '$1');
+  return htmlLines.join('\n');
+}
+
+// Process inline markdown (bold, italic, links, code)
+function processInlineMarkdown(text) {
+  // Bold and italic
+  text = text.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
   
-  return html;
+  // Links
+  text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-600 hover:text-blue-800 underline">$1</a>');
+  
+  // Inline code
+  text = text.replace(/`([^`]+)`/g, '<code class="px-1 py-0.5 bg-gray-100 rounded text-sm font-mono">$1</code>');
+  
+  return text;
 }
 
 // Process custom components
