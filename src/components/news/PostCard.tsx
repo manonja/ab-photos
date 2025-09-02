@@ -23,7 +23,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
       <div className="lg:w-[30%] flex-shrink-0">
         <Link href={`/news/${post.slug}`}>
           {post.feature_image ? (
-            <div className="relative w-full h-48 lg:h-56">
+            <div className="relative w-full aspect-[3/4] overflow-hidden rounded-lg">
               <Image
                 src={post.feature_image}
                 alt={post.title}
@@ -36,7 +36,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
             </div>
           ) : (
             // Gray placeholder rectangle when no image is available
-            <div className="w-full h-48 lg:h-56 bg-gray-200 flex items-center justify-center">
+            <div className="w-full aspect-[3/4] bg-gray-200 flex items-center justify-center rounded-lg">
               <span className="text-gray-400">No image</span>
             </div>
           )}

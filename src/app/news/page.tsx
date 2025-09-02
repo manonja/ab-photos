@@ -30,7 +30,7 @@ export default async function NewsPage() {
 
   return (
     <>
-      <main className="flex min-h-screen flex-col items-center p-6">
+      <div className="flex min-h-screen flex-col items-center p-6">
         <div className="w-full max-w-[75%] mx-auto py-8">
           <div className="space-y-16">
             {posts.map(post => (
@@ -49,7 +49,7 @@ export default async function NewsPage() {
             </div>
           )}
         </div>
-      </main>
+      </div>
     </>
   );
 } 

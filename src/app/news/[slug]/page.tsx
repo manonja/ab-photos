@@ -58,11 +58,11 @@ export default async function NewsPostPage({ params }: { params: { slug: string 
   
   return (
     <>
-      <main className="flex min-h-screen flex-col items-center p-6">
+      <div className="flex min-h-screen flex-col items-center p-6">
         <div className="w-full max-w-[75%] mx-auto py-8">
           <PostContent post={post} />
         </div>
-      </main>
+      </div>
     </>
   );
 } 

@@ -18,6 +18,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const runtime = 'edge';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -36,10 +38,10 @@ export default function RootLayout({
         <script defer data-domain="bossenbroek.photo" src="https://plausible.io/js/script.js"/>
       </head>
       <body className={lexend.className}>
-        <div className="flex min-h-screen flex-col items-center justify-between p-6">
+        <main className="flex min-h-screen flex-col items-center justify-between p-6">
           <Navbar/>
           {children}
-        </div>
+        </main>
       </body>
     </html>
   );
