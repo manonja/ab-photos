@@ -2,208 +2,56 @@
 
 const fs = require('fs');
 const path = require('path');
-const matter = require('gray-matter');
 
 const BLOG_DIR = path.join(process.cwd(), 'content/blog');
 const OUTPUT_DIR = path.join(process.cwd(), 'src/lib/blog/compiled');
 
-// Simple markdown to HTML converter
-function markdownToHtml(markdown) {
-  // Split content into lines for easier processing
-  const lines = markdown.split('\n');
-  const htmlLines = [];
-  let inList = false;
-  let listType = null;
-  let inParagraph = false;
+// Extract frontmatter from HTML comments
+function extractFrontmatter(htmlContent) {
+  const frontmatterRegex = /<!--\s*([\s\S]*?)\s*-->/;
+  const match = htmlContent.match(frontmatterRegex);
   
-  for (let i = 0; i < lines.length; i++) {
-    let line = lines[i].trim();
-    
-    // Skip empty lines but close paragraph if needed
-    if (line === '') {
-      if (inParagraph) {
-        htmlLines.push('</p>');
-        inParagraph = false;
-      }
-      if (inList) {
-        htmlLines.push(listType === 'ul' ? '</ul>' : '</ol>');
-        inList = false;
-        listType = null;
-      }
-      continue;
-    }
-    
-    // Headers
-    if (line.startsWith('# ')) {
-      if (inParagraph) {
-        htmlLines.push('</p>');
-        inParagraph = false;
-      }
-      htmlLines.push(`<h1 class="text-4xl font-bold mt-8 mb-4 text-gray-900">${processInlineMarkdown(line.substring(2))}</h1>`);
-      continue;
-    }
-    if (line.startsWith('## ')) {
-      if (inParagraph) {
-        htmlLines.push('</p>');
-        inParagraph = false;
-      }
-      htmlLines.push(`<h2 class="text-3xl font-bold mt-8 mb-4 text-gray-900">${processInlineMarkdown(line.substring(3))}</h2>`);
-      continue;
-    }
-    if (line.startsWith('### ')) {
-      if (inParagraph) {
-        htmlLines.push('</p>');
-        inParagraph = false;
-      }
-      htmlLines.push(`<h3 class="text-2xl font-semibold mt-6 mb-3 text-gray-900">${processInlineMarkdown(line.substring(4))}</h3>`);
-      continue;
-    }
-    
-    // Lists
-    if (line.match(/^\- /)) {
-      if (inParagraph) {
-        htmlLines.push('</p>');
-        inParagraph = false;
-      }
-      if (!inList || listType !== 'ul') {
-        if (inList && listType === 'ol') htmlLines.push('</ol>');
-        htmlLines.push('<ul class="list-disc list-inside mb-4 space-y-2">');
-        inList = true;
-        listType = 'ul';
-      }
-      htmlLines.push(`<li>${processInlineMarkdown(line.substring(2))}</li>`);
-      continue;
-    }
-    
-    if (line.match(/^\d+\. /)) {
-      if (inParagraph) {
-        htmlLines.push('</p>');
-        inParagraph = false;
-      }
-      if (!inList || listType !== 'ol') {
-        if (inList && listType === 'ul') htmlLines.push('</ul>');
-        htmlLines.push('<ol class="list-decimal list-inside mb-4 space-y-2">');
-        inList = true;
-        listType = 'ol';
-      }
-      htmlLines.push(`<li>${processInlineMarkdown(line.replace(/^\d+\. /, ''))}</li>`);
-      continue;
-    }
-    
-    // Close lists if not in list anymore
-    if (inList) {
-      htmlLines.push(listType === 'ul' ? '</ul>' : '</ol>');
-      inList = false;
-      listType = null;
-    }
-    
-    // Images
-    if (line.match(/^!\[/)) {
-      if (inParagraph) {
-        htmlLines.push('</p>');
-        inParagraph = false;
-      }
-      const match = line.match(/!\[([^\]]*)\]\(([^)]+)\)/);
-      if (match) {
-        htmlLines.push(`<figure class="my-8">`);
-        htmlLines.push(`  <img src="${match[2]}" alt="${match[1]}" class="w-full rounded-lg" />`);
-        if (match[1]) {
-          htmlLines.push(`  <figcaption class="text-sm text-gray-600 text-center mt-2">${match[1]}</figcaption>`);
-        }
-        htmlLines.push(`</figure>`);
-      }
-      continue;
-    }
-    
-    // Regular paragraph text
-    if (!inParagraph) {
-      htmlLines.push('<p class="text-gray-700 leading-relaxed mb-4">');
-      inParagraph = true;
-    }
-    htmlLines.push(processInlineMarkdown(line));
+  if (!match) {
+    throw new Error('No frontmatter found in HTML file');
   }
   
-  // Close any open paragraph
-  if (inParagraph) {
-    htmlLines.push('</p>');
-  }
+  const frontmatterText = match[1];
+  const content = htmlContent.replace(frontmatterRegex, '').trim();
   
-  // Close any open list
-  if (inList) {
-    htmlLines.push(listType === 'ul' ? '</ul>' : '</ol>');
-  }
+  // Parse frontmatter
+  const frontmatter = {};
+  const lines = frontmatterText.split('\n');
   
-  return htmlLines.join('\n');
-}
-
-// Process inline markdown (bold, italic, links, code)
-function processInlineMarkdown(text) {
-  // Bold and italic
-  text = text.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
-  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  
-  // Links
-  text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-600 hover:text-blue-800 underline">$1</a>');
-  
-  // Inline code
-  text = text.replace(/`([^`]+)`/g, '<code class="px-1 py-0.5 bg-gray-100 rounded text-sm font-mono">$1</code>');
-  
-  return text;
-}
-
-// Process custom components
-function processCustomComponents(content) {
-  // Remove import statements
-  content = content.replace(/^import\s+.*$/gm, '');
-  // Convert Quote component
-  content = content.replace(
-    /<Quote author="([^"]+)">\s*([^<]+)\s*<\/Quote>/g,
-    '<blockquote class="relative my-8 px-8 py-6 bg-gray-50 rounded-lg">' +
-    '<div class="absolute top-4 left-4 text-6xl text-gray-200 leading-none">&ldquo;</div>' +
-    '<div class="relative z-10">' +
-    '<p class="text-lg italic text-gray-700 leading-relaxed mb-3">$2</p>' +
-    '<cite class="text-sm text-gray-600 not-italic">— $1</cite>' +
-    '</div>' +
-    '</blockquote>'
-  );
-  
-  // Convert ImageGallery component
-  content = content.replace(
-    /<ImageGallery[^>]*columns={(\d+)}[^>]*images={\[([\s\S]*?)\]}\s*\/>/g,
-    function(match, columns, images) {
-      const imageArray = images.match(/{\s*src:\s*"([^"]+)"[^}]*alt:\s*"([^"]+)"[^}]*}/g) || [];
-      const cols = parseInt(columns);
-      const gridClass = cols === 2 ? 'grid-cols-1 md:grid-cols-2' : 
-                       cols === 3 ? 'grid-cols-1 md:grid-cols-3' : 
-                       'grid-cols-1 md:grid-cols-4';
+  for (const line of lines) {
+    const colonIndex = line.indexOf(':');
+    if (colonIndex > 0) {
+      const key = line.substring(0, colonIndex).trim();
+      let value = line.substring(colonIndex + 1).trim();
       
-      let galleryHtml = '<div class="grid ' + gridClass + ' gap-4 my-8">';
+      // Remove quotes if present
+      if (value.startsWith('"') && value.endsWith('"')) {
+        value = value.slice(1, -1);
+      }
       
-      imageArray.forEach(img => {
-        const srcMatch = img.match(/src:\s*"([^"]+)"/);
-        const altMatch = img.match(/alt:\s*"([^"]+)"/);
-        if (srcMatch && altMatch) {
-          galleryHtml += '<figure>' +
-            '<img src="' + srcMatch[1] + '" alt="' + altMatch[1] + '" class="w-full h-full object-cover rounded-lg" />' +
-            '</figure>';
-        }
-      });
+      // Parse arrays (for tags)
+      if (value.startsWith('[') && value.endsWith(']')) {
+        value = value.slice(1, -1).split(',').map(v => v.trim().replace(/['"]/g, ''));
+      }
       
-      galleryHtml += '</div>';
-      return galleryHtml;
+      // Parse booleans
+      if (value === 'true') value = true;
+      if (value === 'false') value = false;
+      
+      frontmatter[key] = value;
     }
-  );
+  }
   
-  // Convert VideoEmbed component
-  content = content.replace(
-    /<VideoEmbed url="([^"]+)"[^/]*\/>/g,
-    '<div class="relative aspect-video my-8">' +
-    '<iframe src="$1" class="absolute inset-0 w-full h-full rounded-lg" frameborder="0" allowfullscreen></iframe>' +
-    '</div>'
-  );
+  // Set default layout if not specified
+  if (!frontmatter.layout) {
+    frontmatter.layout = 'single';
+  }
   
-  return content;
+  return { frontmatter, content };
 }
 
 // Ensure output directory exists
@@ -220,7 +68,7 @@ function getAllBlogFiles() {
   }
 
   const files = fs.readdirSync(BLOG_DIR);
-  return files.filter(file => (file.endsWith('.mdx') || file.endsWith('.md')) && !file.startsWith('_'));
+  return files.filter(file => file.endsWith('.html') && !file.startsWith('_'));
 }
 
 // Compile blog files to JSON with HTML content
@@ -234,22 +82,25 @@ function compileBlogFiles() {
     try {
       const filePath = path.join(BLOG_DIR, file);
       const fileContent = fs.readFileSync(filePath, 'utf-8');
-      const { data, content } = matter(fileContent);
+      const { frontmatter, content } = extractFrontmatter(fileContent);
       
-      const slug = file.replace(/\.(mdx?|md)$/, '');
-      
-      // Process custom components first
-      let htmlContent = processCustomComponents(content);
-      
-      // Convert markdown to HTML
-      htmlContent = markdownToHtml(htmlContent);
+      // Extract slug from filename or use frontmatter slug
+      const fileSlug = file.replace(/\.html$/, '').replace(/^\d{4}-\d{2}-\d{2}-/, '');
+      const slug = frontmatter.slug || fileSlug;
       
       // Only include published posts
-      if (data.published !== false) {
+      if (frontmatter.published !== false) {
         posts.push({
-          ...data,
+          title: frontmatter.title || 'Untitled',
           slug,
-          content: htmlContent,
+          date: frontmatter.date || new Date().toISOString().split('T')[0],
+          author: frontmatter.author || 'Anton Bossenbroek',
+          excerpt: frontmatter.excerpt || '',
+          featuredImage: frontmatter.featuredImage || null,
+          tags: frontmatter.tags || [],
+          published: frontmatter.published !== false,
+          layout: frontmatter.layout || 'single',
+          content: content,
           fileName: file
         });
       }
@@ -258,7 +109,7 @@ function compileBlogFiles() {
     }
   });
 
-  // Sort by date
+  // Sort by date (newest first)
   posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   // Write compiled data

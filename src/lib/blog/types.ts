@@ -6,6 +6,7 @@ export interface BlogFrontmatter {
   featuredImage: string
   tags: string[]
   published?: boolean
+  layout?: 'single' | 'two-column' | 'mixed'
 }
 
 export interface BlogPost extends BlogFrontmatter {

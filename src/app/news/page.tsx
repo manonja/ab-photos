@@ -22,15 +22,39 @@ export default async function NewsPage() {
 
   if (!posts || posts.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <p>No posts found. Check back soon for new content!</p>
-      </div>
+      <>
+        {/* Background image with responsive classes */}
+        <div className="fixed inset-0 -z-10 bg-black">
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-70"
+            style={{ backgroundImage: "url('https://assets.bossenbroek.photo/industry/2.jpg')" }}
+          />
+          {/* Semi-transparent overlay for better text contrast */}
+          <div className="absolute inset-0 bg-black/30" />
+        </div>
+        <main className="flex min-h-screen flex-col lg:w-[90%] justify-between items-center lg:p-6 p-2">
+          <div className="mt-40 lg:pt-0 h-px bg-white w-full"/>
+          <div className="w-full max-w-[75%] mx-auto py-8">
+            <p>No posts found. Check back soon for new content!</p>
+          </div>
+        </main>
+      </>
     );
   }
 
   return (
     <>
-      <div className="flex min-h-screen flex-col items-center p-6">
+      {/* Background image with responsive classes */}
+      <div className="fixed inset-0 -z-10 bg-black">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-70 lg:opacity-80"
+          style={{ backgroundImage: "url('https://assets.bossenbroek.photo/industry/2.jpg')" }}
+        />
+        {/* Semi-transparent overlay for better text contrast */}
+        <div className="absolute inset-0 bg-black/30" />
+      </div>
+      <main className="flex min-h-screen flex-col lg:w-[90%] justify-between items-center lg:p-6 p-2">
+        <div className="mt-40 lg:pt-0 h-px bg-white w-full"/>
         <div className="w-full max-w-[75%] mx-auto py-8">
           <div className="space-y-16">
             {posts.map(post => (
@@ -49,7 +73,7 @@ export default async function NewsPage() {
             </div>
           )}
         </div>
-      </div>
+      </main>
     </>
   );
 } 
