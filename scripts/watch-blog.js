@@ -13,7 +13,7 @@ execSync('node scripts/compile-html.js', { stdio: 'inherit' });
 
 // Watch for changes
 fs.watch(BLOG_DIR, { recursive: true }, (eventType, filename) => {
-  if (filename && (filename.endsWith('.mdx') || filename.endsWith('.md'))) {
+  if (filename && filename.endsWith('.html')) {
     console.log(`[Watch Blog] Detected ${eventType} in ${filename}`);
     try {
       execSync('node scripts/compile-html.js', { stdio: 'inherit' });
