@@ -45,7 +45,7 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
         <div className="lg:w-2/3">
           {/* Title and meta */}
           <header className="mb-8">
-            {/* Tags */}
+            {/* Tags - uncomment when we have tags defined
             {post.tags && post.tags.length > 0 && (
               <div className="mb-4 flex flex-wrap gap-2">
                 {post.tags.map(tag => (
@@ -58,7 +58,7 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
                   </Link>
                 ))}
               </div>
-            )}
+            )} */}
 
             {/* Title */}
             <h1 className="mb-4 text-4xl font-bold">{post.title}</h1>
