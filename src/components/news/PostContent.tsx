@@ -1,23 +1,11 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { GhostPost } from '../../lib/ghost/types';
-
-// Extract images from HTML
-const extractImagesFromHTML = (html: string): string[] => {
-  const imgRegex = /<img[^>]+src="([^">]+)"/g;
-  const images: string[] = [];
-  let match;
-  
-  while ((match = imgRegex.exec(html)) !== null) {
-    images.push(match[1]);
-  }
-  
-  return images;
-};
+// Using HTML content
+import { BlogPostDisplay } from '../../lib/blog/types';
 
 interface PostContentProps {
-  post: GhostPost;
+  post: BlogPostDisplay & { htmlContent?: string };
 }
 
 const PostContent: React.FC<PostContentProps> = ({ post }) => {
@@ -27,13 +15,12 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
     month: 'long',
     day: 'numeric',
   });
-  
-  // Extract images from content for potential use
-  const contentImages = extractImagesFromHTML(post.html);
-  console.log('[PostContent] Images in post content:', contentImages);
+
+  // Get the HTML content
+  const HTMLContent = post.htmlContent;
 
   return (
-    <article className="mx-auto max-w-5xl">
+    <article className="mx-auto lg:max-w-7xl max-w-5xl">
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Featured Image - Left Side Panel */}
         {post.feature_image && (
@@ -50,22 +37,6 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw"
                 />
               </div>
-              
-              {/* Optional: Display additional images from the content */}
-              {contentImages.length > 1 && (
-                <div className="mt-4 grid grid-cols-2 gap-2">
-                  {contentImages.slice(0, 4).map((img, index) => (
-                    <div key={index} className="relative aspect-square overflow-hidden rounded">
-                      <Image
-                        src={img}
-                        alt={`Image ${index + 1} from article`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
           </div>
         )}
@@ -74,7 +45,7 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
         <div className="lg:w-2/3">
           {/* Title and meta */}
           <header className="mb-8">
-            {/* Tags */}
+            {/* Tags - uncomment when we have tags defined
             {post.tags && post.tags.length > 0 && (
               <div className="mb-4 flex flex-wrap gap-2">
                 {post.tags.map(tag => (
@@ -87,7 +58,7 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
                   </Link>
                 ))}
               </div>
-            )}
+            )} */}
 
             {/* Title */}
             <h1 className="mb-4 text-4xl font-bold">{post.title}</h1>
@@ -108,17 +79,14 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
                 {post.primary_author && (
                   <p className="font-medium">{post.primary_author.name}</p>
                 )}
-                <p className="text-sm text-gray-600">
-                  {formattedDate} • {post.reading_time} min read
-                </p>
               </div>
             </div>
           </header>
 
-          {/* Enhanced Post Content styling with Ghost-specific classes */}
+          {/* HTML Content */}
           <div 
-            className="ghost-content prose prose-lg max-w-none mb-8 prose-hr:my-8 prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-8 prose-h2:mb-4 prose-p:mb-4 prose-img:rounded-lg prose-a:text-blue-600 hover:prose-a:text-blue-800 prose-a:no-underline hover:prose-a:underline"
-            dangerouslySetInnerHTML={{ __html: post.html }} 
+            className="blog-content prose prose-lg max-w-none mb-8"
+            dangerouslySetInnerHTML={{ __html: HTMLContent || '' }}
           />
 
           {/* Footer */}
@@ -164,4 +132,4 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
   );
 };
 
-export default PostContent; 
+export default PostContent;

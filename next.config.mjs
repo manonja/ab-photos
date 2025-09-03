@@ -18,11 +18,11 @@ console.log('[Config] environment: Build configuration', {
 });
 
 // UNCOMMENT line 21-25 when developing locally
-// const isDev = process.env.npm_lifecycle_event === 'dev';
-// console.log('isDev', isDev);
-// console.log('process.env.npm_lifecycle_event', process.env.npm_lifecycle_event);
-// // For regular NextJS dev, use port 3000, otherwise use port 8788 for wrangler
-// process.env.NEXT_PUBLIC_API_URL = isDev ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8788';
+const isDev = process.env.npm_lifecycle_event === 'dev';
+console.log('isDev', isDev);
+console.log('process.env.npm_lifecycle_event', process.env.npm_lifecycle_event);
+// For regular NextJS dev, use port 3000, otherwise use port 8788 for wrangler
+process.env.NEXT_PUBLIC_API_URL = isDev ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8788';
 
 if (process.env.NODE_ENV === 'development' || process.argv.includes('pages:dev')) {
   console.log('[Config] setupDevPlatform: Starting platform setup', {
@@ -34,20 +34,12 @@ if (process.env.NODE_ENV === 'development' || process.argv.includes('pages:dev')
   console.log('[Config] setupDevPlatform: Platform setup completed');
 }
 
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  pageExtensions: ['ts', 'tsx', 'js', 'jsx'],
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'static.ghost.org',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'anton-photography.ghost.io',
-        pathname: '/**',
-      },
       {
         protocol: 'https',
         hostname: 'assets.bossenbroek.photo',

@@ -1,14 +1,17 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getPosts, getSinglePost } from '../../../lib/ghost/client';
+import { getBlogPostBySlug } from '@/lib/blog';
+import { prepareBlogPostForDisplay } from '@/lib/blog/adapter';
 import PostContent from '../../../components/news/PostContent';
 
+// Use edge runtime for Cloudflare Pages compatibility
 export const runtime = 'edge';
 export const revalidate = 3600; // Revalidate every hour
 
 // Generate metadata for this page
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const post = await getSinglePost(params.slug);
+  const blogPost = await getBlogPostBySlug(params.slug);
+  const post = blogPost ? prepareBlogPostForDisplay(blogPost) : null;
   
   if (!post) {
     return {
@@ -36,29 +39,28 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-// Generate static paths for all posts
-export async function generateStaticParams() {
-  const posts = await getPosts();
-  
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
-}
+// For Cloudflare Pages, we can't use generateStaticParams with edge runtime
+// Instead, we'll handle dynamic routing at runtime
+export const dynamicParams = true;
 
 export default async function NewsPostPage({ params }: { params: { slug: string } }) {
-  const post = await getSinglePost(params.slug);
+  console.log('[NewsPostPage] Rendering with slug:', params.slug);
+  const blogPost = await getBlogPostBySlug(params.slug);
+  console.log('[NewsPostPage] Found blog post:', blogPost ? 'yes' : 'no');
+  const post = blogPost ? prepareBlogPostForDisplay(blogPost) : null;
   
   if (!post) {
+    console.log('[NewsPostPage] Post not found, calling notFound()');
     notFound();
   }
   
   return (
     <>
-      <main className="flex min-h-screen flex-col items-center p-6">
+      <div className="flex min-h-screen flex-col items-center p-6">
         <div className="w-full max-w-[75%] mx-auto py-8">
           <PostContent post={post} />
         </div>
-      </main>
+      </div>
     </>
   );
 } 
