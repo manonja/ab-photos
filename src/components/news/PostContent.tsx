@@ -1,11 +1,11 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-// Removed MDX imports - now using HTML content
+// Using HTML content
 import { GhostPost } from '../../lib/ghost/types';
 
 interface PostContentProps {
-  post: GhostPost & { mdxContent?: string };
+  post: GhostPost & { htmlContent?: string };
 }
 
 const PostContent: React.FC<PostContentProps> = ({ post }) => {
@@ -17,7 +17,7 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
   });
 
   // Get the HTML content
-  const HTMLContent = post.mdxContent;
+  const HTMLContent = post.htmlContent;
 
   return (
     <article className="mx-auto max-w-5xl">

@@ -5,7 +5,7 @@ import { getBlogPostsByTag, getBlogTags } from '@/lib/blog';
 import { blogPostToGhostPost } from '@/lib/blog/adapter';
 import PostCard from '../../../../components/news/PostCard';
 
-// Removed edge runtime to allow filesystem access for MDX blog
+// Edge runtime for HTML blog
 export const revalidate = 3600; // Revalidate every hour
 
 // Generate metadata for this page

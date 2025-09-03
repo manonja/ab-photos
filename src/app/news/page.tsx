@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function NewsPage() {
-  // Fetch posts from MDX
+  // Fetch posts from HTML blog
   const blogPosts = await getAllBlogPosts();
   // Convert to Ghost format for compatibility
   const posts = blogPosts.map(blogPostToGhostPost);
