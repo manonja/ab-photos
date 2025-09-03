@@ -36,12 +36,13 @@ program
   .command('new <title>')
   .description('Create a new blog post')
   .option('-d, --draft', 'Create as draft (unpublished)')
+  .option('-l, --layout <layout>', 'Layout type: single, two-column, or mixed', 'single')
   .action(async (title, options) => {
     const date = new Date().toISOString().split('T')[0]
     const slug = title.toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '')
-    const filename = `${date}-${slug}.mdx`
+    const filename = `${date}-${slug}.html`
     const filepath = path.join(BLOG_DIR, filename)
     
     // Check if file already exists
@@ -53,58 +54,77 @@ program
     // Get current year
     const year = new Date().getFullYear()
     
-    // Simple template
-    const template = `---
+    // Format date for display
+    const displayDate = new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+    
+    // Get appropriate template based on layout
+    let contentTemplate = ''
+    
+    if (options.layout === 'two-column') {
+      contentTemplate = `  <!-- Two column layout -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+    <div class="space-y-6 text-base leading-normal">
+      <h3 class="text-xl font-normal mb-3">Left Column Title</h3>
+      <p>Left column content starts here. Replace this with your actual content.</p>
+      <p>Add more paragraphs as needed.</p>
+    </div>
+    
+    <div class="space-y-6 text-base leading-normal">
+      <h3 class="text-xl font-normal mb-3">Right Column Title</h3>
+      <p>Right column content starts here. Replace this with your actual content.</p>
+      <p>Add more paragraphs as needed.</p>
+    </div>
+  </div>`
+    } else {
+      // Default single column
+      contentTemplate = `  <div class="space-y-6 text-base leading-normal">
+    <p>Write your introduction paragraph here. This is your chance to hook the reader and give them a reason to continue reading.</p>
+    
+    <p>Continue with your main content. Each paragraph should be wrapped in p tags with proper spacing.</p>
+    
+    <h2 class="text-2xl font-normal mt-8 mb-4">First Section Title</h2>
+    
+    <p>Your section content goes here. You can use <strong class="font-semibold">bold text</strong> and <em class="italic">italic text</em> for emphasis.</p>
+    
+    <h2 class="text-2xl font-normal mt-8 mb-4">Second Section Title</h2>
+    
+    <p>More content here. To create a list:</p>
+    
+    <ul class="list-disc list-inside space-y-2 ml-4">
+      <li>First item in your list</li>
+      <li>Second item in your list</li>
+      <li>Third item in your list</li>
+    </ul>
+    
+    <h2 class="text-2xl font-normal mt-8 mb-4">Conclusion</h2>
+    
+    <p>Wrap up your blog post with a strong conclusion that reinforces your main points.</p>
+  </div>`
+    }
+    
+    const template = `<!-- 
 title: "${title}"
+slug: "${slug}"
 date: "${date}"
 author: "Anton Bossenbroek"
 excerpt: "A brief description of your post that appears in the listing."
-featuredImage: "/images/blog/${year}/placeholder.jpg"
 tags: ["photography"]
 published: ${!options.draft}
----
+layout: "${options.layout}"
+-->
 
-Write your introduction paragraph here.
-
-## First Section
-
-Your content goes here. You can use **bold text** and *italic text* for emphasis.
-
-## Adding Images
-
-To add an image:
-![Description of the image](/images/blog/${year}/your-image.jpg)
-
-## Creating Lists
-
-For bullet points:
-- First item
-- Second item
-- Third item
-
-For numbered lists:
-1. First step
-2. Second step
-3. Third step
-
-## Adding a Quote
-
-<Quote author="Author Name">
-This is an inspiring quote.
-</Quote>
-
-## Conclusion
-
-Wrap up your blog post with a conclusion.
-
----
-
-*Remember to:*
-1. Add your images to \`public/images/blog/${year}/\`
-2. Update the excerpt
-3. Change \`published: ${!options.draft}\` to \`published: true\` when ready
-4. Run \`npm run dev\` to see your post locally
-`
+<article class="text-white">
+  <h1 class="text-4xl font-normal uppercase mb-2">${title}</h1>
+  <div class="font-light italic text-gray-400 mb-8">${displayDate}</div>
+  
+  <div class="my-8 h-px bg-gray-300 w-full${options.layout === 'single' ? ' max-w-[80%]' : ''}"></div>
+  
+${contentTemplate}
+</article>`
     
     // Write file
     await fs.writeFile(filepath, template)
@@ -175,7 +195,7 @@ program
   .action(async (options) => {
     const files = await fs.readdir(BLOG_DIR)
     const posts = files
-      .filter(f => f.endsWith('.mdx') && !f.startsWith('_'))
+      .filter(f => f.endsWith('.html') && !f.startsWith('_'))
       .sort()
       .reverse()
     
@@ -188,15 +208,18 @@ program
     
     for (const file of posts) {
       const content = await fs.readFile(path.join(BLOG_DIR, file), 'utf-8')
-      const match = content.match(/title:\s*"(.+)"/)
+      const titleMatch = content.match(/title:\s*"(.+)"/)
       const publishedMatch = content.match(/published:\s*(true|false)/)
-      const title = match ? match[1] : 'Untitled'
+      const layoutMatch = content.match(/layout:\s*"(.+)"/)
+      const title = titleMatch ? titleMatch[1] : 'Untitled'
       const isDraft = publishedMatch && publishedMatch[1] === 'false'
+      const layout = layoutMatch ? layoutMatch[1] : 'single'
       
       if (isDraft && !options.drafts) continue
       
       const status = isDraft ? colors.yellow('[DRAFT]') : colors.green('[PUBLISHED]')
-      console.log(`${status} ${file} - ${title}`)
+      const layoutTag = colors.gray(`[${layout}]`)
+      console.log(`${status} ${layoutTag} ${file} - ${title}`)
     }
   })
 
