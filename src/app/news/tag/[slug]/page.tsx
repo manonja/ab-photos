@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getBlogPostsByTag, getBlogTags } from '@/lib/blog';
-import { blogPostToGhostPost } from '@/lib/blog/adapter';
+import { prepareBlogPostForDisplay } from '@/lib/blog/adapter';
 import PostCard from '../../../../components/news/PostCard';
 
 // Edge runtime for HTML blog
@@ -46,8 +46,8 @@ export default async function TagPage({ params }: { params: { slug: string } }) 
     notFound();
   }
   
-  // Convert to Ghost format for compatibility
-  const posts = blogPosts.map(blogPostToGhostPost);
+  // Prepare posts for display
+  const posts = blogPosts.map(prepareBlogPostForDisplay);
   
   // Format tag name for display
   const tagName = params.slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());

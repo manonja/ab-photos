@@ -2,10 +2,10 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 // Using HTML content
-import { GhostPost } from '../../lib/ghost/types';
+import { BlogPostDisplay } from '../../lib/blog/types';
 
 interface PostContentProps {
-  post: GhostPost & { htmlContent?: string };
+  post: BlogPostDisplay & { htmlContent?: string };
 }
 
 const PostContent: React.FC<PostContentProps> = ({ post }) => {
@@ -88,7 +88,7 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
 
           {/* HTML Content */}
           <div 
-            className="ghost-content prose prose-lg max-w-none mb-8"
+            className="blog-content prose prose-lg max-w-none mb-8"
             dangerouslySetInnerHTML={{ __html: HTMLContent || '' }}
           />
 

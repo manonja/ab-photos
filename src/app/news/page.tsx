@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-// import { getPosts } from '../../lib/ghost/client';
 import { getAllBlogPosts } from '@/lib/blog';
-import { blogPostToGhostPost } from '@/lib/blog/adapter';
+import { prepareBlogPostForDisplay } from '@/lib/blog/adapter';
 import PostCard from '../../components/news/PostCard';
 
 // Use edge runtime for Cloudflare Pages compatibility
@@ -17,8 +16,8 @@ export const metadata: Metadata = {
 export default async function NewsPage() {
   // Fetch posts from HTML blog
   const blogPosts = await getAllBlogPosts();
-  // Convert to Ghost format for compatibility
-  const posts = blogPosts.map(blogPostToGhostPost);
+  // Prepare posts for display
+  const posts = blogPosts.map(prepareBlogPostForDisplay);
 
   if (!posts || posts.length === 0) {
     return (
@@ -32,9 +31,9 @@ export default async function NewsPage() {
           {/* Semi-transparent overlay for better text contrast */}
           <div className="absolute inset-0 bg-black/30" />
         </div>
-        <main className="flex min-h-screen flex-col lg:w-[90%] justify-between items-center lg:p-6 p-2">
+        <main className="flex min-h-screen flex-col lg:w-[90%] lg:p-6 p-2">
           <div className="mt-40 lg:pt-0 h-px bg-white w-full"/>
-          <div className="w-full max-w-[75%] mx-auto py-8">
+          <div className="w-full max-w-[50%] py-8">
             <p>No posts found. Check back soon for new content!</p>
           </div>
         </main>
@@ -53,9 +52,9 @@ export default async function NewsPage() {
         {/* Semi-transparent overlay for better text contrast */}
         <div className="absolute inset-0 bg-black/30" />
       </div>
-      <main className="flex min-h-screen flex-col lg:w-[90%] justify-between items-center lg:p-6 p-2">
+      <main className="flex min-h-screen flex-col lg:w-[90%] lg:p-6 p-2">
         <div className="mt-40 lg:pt-0 h-px bg-white w-full"/>
-        <div className="w-full max-w-[75%] mx-auto py-8">
+        <div className="w-full max-w-[50%] lg:mx-0 mx-auto py-8">
           <div className="space-y-16">
             {posts.map(post => (
               <PostCard key={post.id} post={post} />

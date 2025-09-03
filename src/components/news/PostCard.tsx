@@ -1,9 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
-import { GhostPost } from '../../lib/ghost/types';
+import { BlogPostDisplay } from '../../lib/blog/types';
 
 interface PostCardProps {
-  post: GhostPost;
+  post: BlogPostDisplay;
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post }) => {

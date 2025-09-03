@@ -1,11 +1,10 @@
-import { BlogPost } from './types';
-import { GhostPost, GhostTag, GhostAuthor } from '../ghost/types';
+import { BlogPost, BlogPostDisplay, BlogTag, BlogAuthor } from './types';
 
 /**
- * Adapts BlogPost to GhostPost format for compatibility with existing components
+ * Prepares BlogPost for display in components
  */
-export function blogPostToGhostPost(post: BlogPost): GhostPost {
-  const ghostPost: GhostPost = {
+export function prepareBlogPostForDisplay(post: BlogPost): BlogPostDisplay {
+  const displayPost: BlogPostDisplay = {
     id: post.slug,
     uuid: post.slug,
     title: post.title,
@@ -29,7 +28,7 @@ export function blogPostToGhostPost(post: BlogPost): GhostPost {
       slug: tag.toLowerCase().replace(/\s+/g, '-'),
       visibility: 'public',
       url: `/news/tag/${tag.toLowerCase().replace(/\s+/g, '-')}`
-    } as GhostTag)),
+    } as BlogTag)),
     
     // Map author
     primary_author: {
@@ -37,14 +36,14 @@ export function blogPostToGhostPost(post: BlogPost): GhostPost {
       name: post.author,
       slug: 'anton-bossenbroek',
       url: '/about'
-    } as GhostAuthor,
+    } as BlogAuthor,
     
     authors: [{
       id: 'anton',
       name: post.author,
       slug: 'anton-bossenbroek',
       url: '/about'
-    } as GhostAuthor],
+    } as BlogAuthor],
     
     // Optional fields
     codeinjection_head: undefined,
@@ -57,7 +56,7 @@ export function blogPostToGhostPost(post: BlogPost): GhostPost {
       slug: post.tags[0].toLowerCase().replace(/\s+/g, '-'),
       visibility: 'public',
       url: `/news/tag/${post.tags[0].toLowerCase().replace(/\s+/g, '-')}`
-    } as GhostTag : undefined,
+    } as BlogTag : undefined,
     
     // Additional fields that might be expected
     og_image: post.featuredImage,
@@ -71,7 +70,7 @@ export function blogPostToGhostPost(post: BlogPost): GhostPost {
     
     // Keep reference to HTML content
     htmlContent: post.content
-  } as GhostPost & { htmlContent: string };
+  } as BlogPostDisplay & { htmlContent: string };
   
-  return ghostPost;
+  return displayPost;
 }

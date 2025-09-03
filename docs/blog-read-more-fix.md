@@ -53,7 +53,7 @@ npm run dev
 ## Note for Production
 
 The blog system now works correctly on Cloudflare Pages with:
-- Zero monthly cost (no Ghost CMS fees)
+- Zero monthly cost (no external CMS fees)
 - Dynamic routing for blog posts
 - Fast edge runtime performance
 - Simple content management via markdown files

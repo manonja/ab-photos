@@ -1,9 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-// import { getPosts, getSinglePost } from '../../../lib/ghost/client';
-import { getAllBlogPosts, getBlogPostBySlug } from '@/lib/blog';
-import { blogPostToGhostPost } from '@/lib/blog/adapter';
-// import PostContent from '../../../components/news/PostContent';
+import { getBlogPostBySlug } from '@/lib/blog';
+import { prepareBlogPostForDisplay } from '@/lib/blog/adapter';
 import PostContent from '../../../components/news/PostContent';
 
 // Use edge runtime for Cloudflare Pages compatibility
@@ -13,7 +11,7 @@ export const revalidate = 3600; // Revalidate every hour
 // Generate metadata for this page
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const blogPost = await getBlogPostBySlug(params.slug);
-  const post = blogPost ? blogPostToGhostPost(blogPost) : null;
+  const post = blogPost ? prepareBlogPostForDisplay(blogPost) : null;
   
   if (!post) {
     return {
@@ -49,7 +47,7 @@ export default async function NewsPostPage({ params }: { params: { slug: string 
   console.log('[NewsPostPage] Rendering with slug:', params.slug);
   const blogPost = await getBlogPostBySlug(params.slug);
   console.log('[NewsPostPage] Found blog post:', blogPost ? 'yes' : 'no');
-  const post = blogPost ? blogPostToGhostPost(blogPost) : null;
+  const post = blogPost ? prepareBlogPostForDisplay(blogPost) : null;
   
   if (!post) {
     console.log('[NewsPostPage] Post not found, calling notFound()');
