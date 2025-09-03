@@ -20,7 +20,7 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
   const HTMLContent = post.htmlContent;
 
   return (
-    <article className="mx-auto max-w-5xl">
+    <article className="mx-auto lg:max-w-7xl max-w-5xl">
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Featured Image - Left Side Panel */}
         {post.feature_image && (
@@ -79,9 +79,6 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
                 {post.primary_author && (
                   <p className="font-medium">{post.primary_author.name}</p>
                 )}
-                <p className="text-sm text-gray-600">
-                  {formattedDate} • {post.reading_time} min read
-                </p>
               </div>
             </div>
           </header>
