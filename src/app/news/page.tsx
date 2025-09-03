@@ -1,8 +1,10 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { getPosts } from '../../lib/ghost/client';
+import { getAllBlogPosts } from '@/lib/blog';
+import { prepareBlogPostForDisplay } from '@/lib/blog/adapter';
 import PostCard from '../../components/news/PostCard';
 
+// Use edge runtime for Cloudflare Pages compatibility
 export const runtime = 'edge';
 export const revalidate = 3600; // Revalidate every hour
 
@@ -12,39 +14,43 @@ export const metadata: Metadata = {
 };
 
 export default async function NewsPage() {
-  // Fetch posts
-  const posts = await getPosts({ limit: 9 });
+  // Fetch posts from HTML blog
+  const blogPosts = await getAllBlogPosts();
+  // Prepare posts for display
+  const posts = blogPosts.map(prepareBlogPostForDisplay);
 
   if (!posts || posts.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <p>No posts found. Check back soon for new content!</p>
-      </div>
+      <main className="flex min-h-screen flex-col lg:w-[90%] lg:p-6 p-2">
+        <div className="w-full max-w-[50%] lg:mx-0 mx-auto py-8">
+          <p>No posts found. Check back soon for new content!</p>
+        </div>
+      </main>
     );
   }
 
   return (
-    <>
-      <main className="flex min-h-screen flex-col items-center p-6">
-        <div className="w-full max-w-[75%] mx-auto py-8">
-          <div className="space-y-16">
-            {posts.map(post => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
-
-          {posts.length >= 9 && (
-            <div className="mt-16 text-center">
-              <Link
-                href="/news/page/2"
-                className="inline-block rounded-md bg-pink-600 px-6 py-3 text-white hover:bg-pink-600"
-              >
-                Load more posts
-              </Link>
-            </div>
-          )}
+    <main className="flex min-h-screen flex-col lg:w-[90%] lg:p-6 p-2">
+      <div className="w-full max-w-[50%] lg:mx-0 mx-auto py-8">
+        <h2 className="uppercase text-2xl font-light mb-8">Articles</h2>
+        <div className="my-8 h-px bg-white w-full"/>
+        <div className="space-y-16">
+          {posts.map(post => (
+            <PostCard key={post.id} post={post} />
+          ))}
         </div>
-      </main>
-    </>
+
+        {posts.length >= 9 && (
+          <div className="mt-16 text-center">
+            <Link
+              href="/news/page/2"
+              className="inline-block rounded-md bg-pink-600 px-6 py-3 text-white hover:bg-pink-600"
+            >
+              Load more posts
+            </Link>
+          </div>
+        )}
+      </div>
+    </main>
   );
 } 

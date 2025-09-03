@@ -38,51 +38,51 @@ body {
   }
 }
 
-/* Ghost Content Styling */
-.ghost-content h2 {
+/* Blog Content Styling */
+.blog-content h2 {
   font-size: 1.75rem;
   font-weight: 700;
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
 
-.ghost-content h3 {
+.blog-content h3 {
   font-size: 1.5rem;
   font-weight: 600;
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
 }
 
-.ghost-content p {
+.blog-content p {
   margin-bottom: 1.25rem;
   line-height: 1.7;
 }
 
-.ghost-content figure {
+.blog-content figure {
   margin: 2rem 0;
 }
 
-.ghost-content figure img {
+.blog-content figure img {
   border-radius: 0.375rem;
   width: 100%;
   height: auto;
 }
 
-.ghost-content figcaption {
+.blog-content figcaption {
   text-align: center;
   font-size: 0.875rem;
   color: #6b7280;
   margin-top: 0.5rem;
 }
 
-.ghost-content hr {
+.blog-content hr {
   margin: 2.5rem 0;
   border: 0;
   height: 1px;
   background-color: #e5e7eb;
 }
 
-.ghost-content blockquote {
+.blog-content blockquote {
   border-left: 4px solid #3b82f6;
   padding-left: 1rem;
   margin-left: 0;
@@ -91,7 +91,7 @@ body {
   color: #4b5563;
 }
 
-.ghost-content pre {
+.blog-content pre {
   background-color: #1f2937;
   border-radius: 0.375rem;
   padding: 1rem;
@@ -99,7 +99,7 @@ body {
   margin: 1.5rem 0;
 }
 
-.ghost-content code {
+.blog-content code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 0.875rem;
   padding: 0.125rem 0.25rem;
@@ -107,43 +107,43 @@ body {
   border-radius: 0.25rem;
 }
 
-.ghost-content pre code {
+.blog-content pre code {
   background-color: transparent;
   padding: 0;
   border-radius: 0;
   color: #f3f4f6;
 }
 
-.ghost-content ul, .ghost-content ol {
+.blog-content ul, .blog-content ol {
   margin-left: 1.5rem;
   margin-bottom: 1.25rem;
 }
 
-.ghost-content li {
+.blog-content li {
   margin-bottom: 0.5rem;
 }
 
-.ghost-content a {
+.blog-content a {
   color: #3b82f6;
   text-decoration: none;
 }
 
-.ghost-content a:hover {
+.blog-content a:hover {
   text-decoration: underline;
 }
 
-.ghost-content table {
+.blog-content table {
   width: 100%;
   border-collapse: collapse;
   margin: 1.5rem 0;
 }
 
-.ghost-content th, .ghost-content td {
+.blog-content th, .blog-content td {
   border: 1px solid #e5e7eb;
   padding: 0.5rem;
 }
 
-.ghost-content th {
+.blog-content th {
   background-color: #f9fafb;
   font-weight: 600;
 }
