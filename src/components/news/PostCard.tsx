@@ -22,12 +22,12 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
       </h2>
 
       {/* Date and Meta */}
-      <div className="mb-3 text-sm text-gray-500">
+      <div className="mb-3 text-sm text-gray-400">
         {formattedDate}
         {post.primary_tag && (
           <>
             {' • '}
-            <span className="uppercase text-gray-500">
+            <span className="uppercase text-gray-400">
               {post.primary_tag.name}
             </span>
           </>
@@ -35,7 +35,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
       </div>
 
       {/* Excerpt */}
-      <p className="mb-4 text-base text-gray-500">
+      <p className="mb-4 text-base text-gray-300">
         {post.excerpt?.substring(0, 200) || ''}
         {post.excerpt && post.excerpt.length > 200 ? '...' : ''}
       </p>
@@ -43,7 +43,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
       {/* Read More - only clickable element */}
       <Link 
         href={`/news/${post.slug}`} 
-        className="inline-block text-gray-400 hover:text-white hover:underline"
+        className="inline-block text-gray-300 hover:text-white hover:underline"
       >
         Read More
       </Link>

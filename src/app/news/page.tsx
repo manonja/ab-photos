@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { getAllBlogPosts } from '@/lib/blog';
 import { prepareBlogPostForDisplay } from '@/lib/blog/adapter';
-import PostCard from '../../components/news/PostCard';
+import PostCard from '@/components/news/PostCard';
 
 // Use edge runtime for Cloudflare Pages compatibility
 export const runtime = 'edge';
@@ -31,25 +31,27 @@ export default async function NewsPage() {
 
   return (
     <main className="flex min-h-screen flex-col lg:w-[90%] lg:p-6 p-2">
-      <div className="w-full max-w-[50%] lg:mx-0 mx-auto py-8">
-        <h2 className="uppercase text-2xl font-light mb-8">Articles</h2>
-        <div className="my-8 h-px bg-white w-full"/>
-        <div className="space-y-16">
-          {posts.map(post => (
-            <PostCard key={post.id} post={post} />
-          ))}
-        </div>
-
-        {posts.length >= 9 && (
-          <div className="mt-16 text-center">
-            <Link
-              href="/news/page/2"
-              className="inline-block rounded-md bg-pink-600 px-6 py-3 text-white hover:bg-pink-600"
-            >
-              Load more posts
-            </Link>
+      <div className="w-full py-8">
+        <div className="w-full max-w-4xl">
+          <h1 className="uppercase text-2xl font-light mb-8">Articles</h1>
+          <div className="my-8 h-px bg-white w-full"/>
+          <div className="space-y-16">
+            {posts.map(post => (
+              <PostCard key={post.id} post={post} />
+            ))}
           </div>
-        )}
+
+          {posts.length >= 9 && (
+            <div className="mt-16 text-center">
+              <Link
+                href="/news/page/2"
+                className="inline-block rounded-md bg-pink-600 px-6 py-3 text-white hover:bg-pink-600"
+              >
+                Load more posts
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </main>
   );
