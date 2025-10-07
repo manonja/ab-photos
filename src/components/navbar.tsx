@@ -21,6 +21,13 @@ export default function Navbar() {
                     </Suspense>
                     <a
                         className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 hover:border-b"
+                        href="/exhibitions"
+                        rel="noopener noreferrer"
+                    >
+                        Exhibitions
+                    </a>
+                    <a
+                        className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 hover:border-b"
                         href="/news"
                         rel="noopener noreferrer"
                     >

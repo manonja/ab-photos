@@ -1,0 +1,38 @@
+{
+  "exhibits": [
+    {
+      "id": "exhibit-1",
+      "title": "AFMP 2024-25 Exhibition",
+      "date": "July 5 – August 17, 2025",
+      "location": "FOTOFILMIC Space, 103-555 Prometheus Pl, Bowen Island, BC V0N 1G2",
+      "description": "Inaugural group exhibition",
+      "featuredImage": "/images/exhibits/Fotofilmic-FullResolution.jpg",
+      "startDate": "2025-07-05",
+      "endDate": "2025-08-17",
+      "isActive": false,
+      "link": "https://fotofilmic.com/afmp-exhibition-2024-2025/"
+    },
+    {
+      "id": "exhibit-2",
+      "title": "KLPA2025 - CRITICAL EYE - PORTRAITS FROM THE STREET",
+      "date": "Sept. 6 – Sept 21, 2025",
+      "location": "Exhibition space, Kuala Lumpur, Malaysia",
+      "description": "Finalist of the Critical Eye Photography Awards 2025 with the portrait 'Lady in onesie Pyjama, Embalenhle'. The exhibition showcase the finalists' portraits from the street.",
+      "featuredImage": "/images/exhibits/exhibit_2.jpeg",
+      "startDate": "2025-09-06",
+      "endDate": "2025-09-21",
+      "isActive": false
+    },
+    {
+      "id": "exhibit-3",
+      "title": "2024-25 AFMP Exhibition Paris Remount",
+      "date": "Nov. 11 – Nov. 15, 2025",
+      "location": "43 Rue Charlot, Paris 75003",
+      "description": "Description of the second exhibition...",
+      "featuredImage": "/images/exhibits/sasol.jpg",
+      "startDate": "2025-11-11",
+      "endDate": "2025-11-15",
+      "isActive": false
+    }
+  ]
+}
