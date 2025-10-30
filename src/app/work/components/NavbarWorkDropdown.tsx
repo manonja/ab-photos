@@ -23,19 +23,19 @@ export default async function NavbarWorkDropdown() {
         <div className="lg:hidden">
           {defaultProjectId ? (
             <Link
-              className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto hover:border-b"
+              className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto hover:border-b uppercase"
               href={`/work/${defaultProjectId}`}
               rel="noopener noreferrer"
             >
               Work
             </Link>
           ) : (
-            <span className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto cursor-default">
+            <span className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto cursor-default uppercase">
               Work
             </span>
           )}
         </div>
-        
+
         {/* For desktop screens */}
         <div className="hidden lg:block">
           <WorkDropdown projects={projectsData} />
@@ -46,8 +46,8 @@ export default async function NavbarWorkDropdown() {
     console.error('Error loading projects for dropdown:', error);
     // If we fail to load projects, show non-clickable Work
     return (
-      <span 
-        className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 cursor-default"
+      <span
+        className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 cursor-default uppercase"
       >
         Work
       </span>

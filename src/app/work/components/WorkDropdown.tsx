@@ -73,17 +73,17 @@ export default function WorkDropdown({ projects }: WorkDropdownProps) {
     >
       {/* Work header that toggles dropdown but is not clickable as a link */}
       <div className="p-0">
-        <span 
-          className={`cursor-pointer ${isOpen ? 'border-b' : 'hover:border-b'}`}
+        <span
+          className={`cursor-pointer uppercase ${isOpen ? 'border-b' : 'hover:border-b'}`}
           onClick={toggleDropdown}
           onMouseEnter={() => setIsOpen(true)}
         >
           Work
         </span>
       </div>
-      
+
       {/* Dropdown menu */}
-      <div 
+      <div
         className={`absolute top-full left-0 mt-1
                   z-20 transition-all duration-200 ease-in-out transform
                   ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
@@ -91,11 +91,11 @@ export default function WorkDropdown({ projects }: WorkDropdownProps) {
       >
         {projects.map((project) => (
           <div key={project.id} className="py-2">
-            <Link 
+            <Link
               href={`/work/${project.id}`}
               onClick={() => setIsOpen(false)}
             >
-              <span className="border-b border-transparent hover:border-black dark:hover:border-white font-light">
+              <span className="border-b border-transparent hover:border-black dark:hover:border-white font-light uppercase">
                 {project.title}
               </span>
             </Link>
