@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default async function NavbarWorkDropdown() {
   try {
-    const projects = await getProjectsDetails();
+    const projects = await getProjectsDetails({ useStatic: true });
 
     // Filter published projects and provide only necessary data
     const projectsData = projects
