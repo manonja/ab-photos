@@ -47,3 +47,10 @@ next-env.d.ts
 
 # compiled blog data
 src/lib/blog/compiled/
+
+# Payload CMS local database
+payload.db
+
+# Claude Code
+.claude/
+.mcp.json
