@@ -5,53 +5,47 @@ import { getBlogPostsByTag, getBlogTags } from '@/lib/blog';
 import { prepareBlogPostForDisplay } from '@/lib/blog/adapter';
 import PostCard from '../../../../components/news/PostCard';
 
-// Edge runtime for HTML blog
-export const revalidate = 3600; // Revalidate every hour
+export const revalidate = 3600;
 
-// Generate metadata for this page
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const blogPosts = await getBlogPostsByTag(params.slug);
-  
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const blogPosts = await getBlogPostsByTag(slug);
+
   if (!blogPosts || blogPosts.length === 0) {
     return {
       title: 'Tag Not Found | Anton Bossenbroek Photography',
     };
   }
-  
-  // Format tag name for display
-  const tagName = params.slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-  
+
+  const tagName = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
   return {
     title: `${tagName} | Anton Bossenbroek Photography`,
     description: `Photography articles and stories about ${tagName.toLowerCase()}`,
   };
 }
 
-// Generate static paths for all tags
 export async function generateStaticParams() {
   const tags = await getBlogTags();
-  
+
   return tags.map(tag => ({
     slug: tag.toLowerCase().replace(/\s+/g, '-'),
   }));
 }
 
-// Required for Cloudflare Pages with dynamic routes
 export const dynamicParams = false;
 
-export default async function TagPage({ params }: { params: { slug: string } }) {
-  const blogPosts = await getBlogPostsByTag(params.slug);
-  
+export default async function TagPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const blogPosts = await getBlogPostsByTag(slug);
+
   if (!blogPosts || blogPosts.length === 0) {
     notFound();
   }
-  
-  // Prepare posts for display
+
   const posts = blogPosts.map(prepareBlogPostForDisplay);
-  
-  // Format tag name for display
-  const tagName = params.slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-  
+  const tagName = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
   return (
     <>
       <main className="flex min-h-screen flex-col items-center p-6">
@@ -77,4 +71,4 @@ export default async function TagPage({ params }: { params: { slug: string } }) 
       </main>
     </>
   );
-} 
+}
