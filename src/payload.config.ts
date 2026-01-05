@@ -39,8 +39,16 @@ if (process.env.R2_ACCESS_KEY_ID && process.env.R2_SECRET_ACCESS_KEY && process.
 
 export default buildConfig({
   serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
-  cors: ['http://localhost:3000', 'https://bossenbroek.photo'],
-  csrf: ['http://localhost:3000', 'https://bossenbroek.photo'],
+  cors: [
+    'http://localhost:3000',
+    'https://bossenbroek.photo',
+    'https://ab-photo.pages.dev',
+  ],
+  csrf: [
+    'http://localhost:3000',
+    'https://bossenbroek.photo',
+    'https://ab-photo.pages.dev',
+  ],
   admin: {
     user: Users.slug,
     meta: {
@@ -60,6 +68,8 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
+  // Uses file-based SQLite for local dev.
+  // For production D1, see docs/payload-integration-plan.md
   db: sqliteAdapter({
     client: {
       url: process.env.PAYLOAD_DATABASE_URL || 'file:./payload.db',
