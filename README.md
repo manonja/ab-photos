@@ -1,4 +1,14 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`c3`](https://developers.cloudflare.com/pages/get-started/c3).
+# AB Photos
+
+A Next.js 15 photography portfolio website with Payload CMS, deployed on Cloudflare Workers.
+
+## Features
+
+- **Payload CMS** - Admin panel at `/admin` for content management
+- **Block-based layouts** - Flexible page building with Hero, Gallery, Text, and more
+- **Cloudflare Workers** - Edge deployment via OpenNext
+- **SQLite/D1 database** - Payload CMS data storage
+- **R2 media storage** - Image uploads and optimization
 
 ## Getting Started
 
@@ -11,6 +21,33 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+Access the admin panel at [http://localhost:3000/admin](http://localhost:3000/admin).
+
+## Payload CMS
+
+### Admin Panel
+
+The admin panel is available at `/admin`. On first visit, you'll be prompted to create an admin user.
+
+### Collections
+
+| Collection | Description |
+|------------|-------------|
+| Users | Admin users with authentication |
+| Media | Uploaded images with auto-resizing |
+| Projects | Photography projects with block layouts |
+| Posts | Blog articles (essays and shorts) |
+| Exhibits | Exhibition listings |
+
+### Payload Commands
+
+```bash
+npm run payload                  # Run Payload CLI
+npm run payload:migrate          # Run database migrations
+npm run payload:migrate:create   # Create new migration
+npm run generate:types           # Generate TypeScript types
+```
+
 ## Development
 
 ### Prerequisites
@@ -18,7 +55,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - Node.js 18.x or later
 - npm 10.x or later
 - A Cloudflare account
-- Wrangler CLI installed globally (`npm install -g wrangler`)
+- Wrangler CLI v4+ installed
 
 ## Environment Setup
 
@@ -139,9 +176,29 @@ npm run test
 
 4. Use the appropriate environment variables for local development vs production
 
-## Cloudflare integration
+## Cloudflare Integration
 
-Besides the `dev` script mentioned above `c3` has added a few extra scripts that allow you to integrate the application with the [Cloudflare Pages](https://pages.cloudflare.com/) environment, these are:
+This project uses [OpenNext](https://opennext.js.org/cloudflare) to deploy Next.js on Cloudflare Workers.
+
+### Deployment Commands
+
+```bash
+npm run preview    # Build and preview locally with OpenNext
+npm run deploy     # Deploy to Cloudflare Workers
+```
+
+### Bindings (wrangler.jsonc)
+
+- **D1** - SQLite database for Payload CMS
+- **R2** - Object storage for media uploads
+
+See [docs/payload-integration-plan.md](docs/payload-integration-plan.md) for full deployment checklist.
+
+---
+
+> **Legacy documentation below (for reference):**
+
+Besides the `dev` script mentioned above, there are extra scripts that allow you to integrate the application with [Cloudflare Workers](https://workers.cloudflare.com/):
   - `pages:build` to build the application for Pages using the [`@cloudflare/next-on-pages`](https://github.com/cloudflare/next-on-pages) CLI
   - `preview` to locally preview your Pages application using the [Wrangler](https://developers.cloudflare.com/workers/wrangler/) CLI
   - `deploy` to deploy your Pages application using the [Wrangler](https://developers.cloudflare.com/workers/wrangler/) CLI
