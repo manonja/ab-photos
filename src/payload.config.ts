@@ -1,9 +1,11 @@
+import type { Plugin } from 'payload'
 import { buildConfig } from 'payload'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { r2Storage } from '@payloadcms/storage-r2'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import sharp from 'sharp'
 
 import { Users } from './collections/Users/index.ts'
 import { Media } from './collections/Media/index.ts'
@@ -14,7 +16,31 @@ import { Exhibits } from './collections/Exhibits/index.ts'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+// Only enable R2 storage when credentials are configured
+const plugins: Plugin[] = []
+if (process.env.R2_ACCESS_KEY_ID && process.env.R2_SECRET_ACCESS_KEY && process.env.R2_ENDPOINT) {
+  plugins.push(
+    r2Storage({
+      collections: {
+        media: true,
+      },
+      bucket: process.env.R2_BUCKET || 'ab-photos-media',
+      config: {
+        endpoint: process.env.R2_ENDPOINT,
+        credentials: {
+          accessKeyId: process.env.R2_ACCESS_KEY_ID,
+          secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+        },
+        region: 'auto',
+      },
+    }),
+  )
+}
+
 export default buildConfig({
+  serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
+  cors: ['http://localhost:3000', 'https://bossenbroek.photo'],
+  csrf: ['http://localhost:3000', 'https://bossenbroek.photo'],
   admin: {
     user: Users.slug,
     meta: {
@@ -39,20 +65,6 @@ export default buildConfig({
       url: process.env.PAYLOAD_DATABASE_URL || 'file:./payload.db',
     },
   }),
-  plugins: [
-    r2Storage({
-      collections: {
-        media: true,
-      },
-      bucket: process.env.R2_BUCKET || 'ab-photos-media',
-      config: {
-        endpoint: process.env.R2_ENDPOINT,
-        credentials: {
-          accessKeyId: process.env.R2_ACCESS_KEY_ID || '',
-          secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
-        },
-        region: 'auto',
-      },
-    }),
-  ],
+  sharp,
+  plugins,
 })
