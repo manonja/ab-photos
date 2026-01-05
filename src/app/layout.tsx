@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { Lexend } from "next/font/google";
-import { getProjectsDetails } from '@/actions/getProjectsDetails';
-import { getPhotoDetails } from '@/actions/getPhotoDetails';
 
 import "./globals.css";
-import Navbar from "@/components/navbar";
 
 const lexend = Lexend({ subsets: ["latin"] });
 
@@ -36,10 +33,7 @@ export default function RootLayout({
         <script defer data-domain="bossenbroek.photo" src="https://plausible.io/js/script.js"/>
       </head>
       <body className={lexend.className}>
-        <main className="flex min-h-screen flex-col items-center justify-between p-6">
-          <Navbar/>
-          {children}
-        </main>
+        {children}
       </body>
     </html>
   );
