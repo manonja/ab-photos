@@ -68,42 +68,19 @@ src/app/
 
 ### Prerequisites
 
-- [ ] Cloudflare account with Workers paid plan (for D1)
-- [ ] Wrangler CLI v4+ installed
-- [ ] R2 bucket created for media storage
+- [x] Cloudflare account with Workers paid plan (for D1)
+- [x] Wrangler CLI v4+ installed
+- [x] D1 database created (`ab-photos-cms`)
+- [x] R2 bucket created (`ab-photos-media`)
+- [x] `@payloadcms/db-d1-sqlite` package installed
 
-### Step 1: Create D1 Database
+### Current Infrastructure
 
-```bash
-# Create the production database
-wrangler d1 create ab-photos-payload
+**wrangler.jsonc is already configured with:**
+- D1 Database: `ab-photos-cms` (binding: `DB`)
+- R2 Bucket: `ab-photos-media` (binding: `MEDIA_BUCKET`)
 
-# Note the database_id returned
-```
-
-### Step 2: Update wrangler.jsonc
-
-Add the D1 database ID to `wrangler.jsonc`:
-
-```jsonc
-{
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "ab-photos-payload",
-      "database_id": "<YOUR_DATABASE_ID>"
-    }
-  ]
-}
-```
-
-### Step 3: Create R2 Bucket
-
-```bash
-wrangler r2 bucket create ab-photos-media
-```
-
-### Step 4: Set Production Secrets
+### Step 1: Set Production Secrets
 
 ```bash
 # Payload secret (generate a secure 32+ char string)
@@ -112,45 +89,78 @@ wrangler secret put PAYLOAD_SECRET
 # Neon database URL (for legacy photos)
 wrangler secret put DATABASE_URL
 
-# R2 credentials (if using R2 storage adapter)
+# R2 credentials (for storage adapter)
 wrangler secret put R2_ACCESS_KEY_ID
 wrangler secret put R2_SECRET_ACCESS_KEY
 wrangler secret put R2_ENDPOINT
 wrangler secret put R2_BUCKET
 ```
 
-### Step 5: Update payload.config.ts for D1
+### Step 2: Update payload.config.ts for D1
 
-For production, the SQLite adapter needs to use D1 binding:
+**Important:** For production deployment to Cloudflare Workers, you must update `payload.config.ts` to use the D1 adapter:
 
 ```typescript
-// In production, use D1 binding from Cloudflare environment
-db: sqliteAdapter({
-  client: {
-    url: process.env.PAYLOAD_DATABASE_URL || 'file:./payload.db',
-    // D1 uses the DB binding from wrangler.jsonc
-  },
-}),
+import { sqliteD1Adapter } from '@payloadcms/db-d1-sqlite'
+import { getCloudflareContext } from '@opennextjs/cloudflare'
+
+// Get D1 binding from Cloudflare context
+const ctx = await getCloudflareContext({ async: true })
+
+export default buildConfig({
+  // ...
+  db: sqliteD1Adapter({
+    binding: ctx.env.DB, // D1 binding from wrangler.jsonc
+  }),
+  // ...
+})
 ```
 
-### Step 6: Run Migrations on D1
+**Note:** The current setup uses file-based SQLite for local development. For production deployment, you'll need to either:
+1. Update the config to conditionally use D1 (recommended for advanced users)
+2. Create a separate production config
+3. Use `npm run preview` (wrangler) for local development which provides D1 bindings
+
+### Step 3: Run Migrations on D1
 
 ```bash
-# Apply migrations to production D1
-wrangler d1 execute ab-photos-payload --file=./migrations/0001_initial.sql
+# Push schema to production D1
+npm run payload:migrate
+
+# Or manually execute migration files
+wrangler d1 execute ab-photos-cms --remote --file=./src/migrations/XXXX_migration.sql
 ```
 
-### Step 7: Deploy
+### Step 4: Deploy
 
 ```bash
 npm run deploy
 ```
 
-### Step 8: Create First Admin User
+### Step 5: Create First Admin User
 
-1. Visit `https://yourdomain.com/admin`
+1. Visit `https://bossenbroek.photo/admin`
 2. Create the first admin user
 3. Start adding content
+
+---
+
+## Database Strategy
+
+### Local Development (`npm run dev`)
+- Uses file-based SQLite (`payload.db`)
+- No Cloudflare bindings required
+- Faster iteration for development
+
+### Wrangler Preview (`npm run preview`)
+- Uses D1 via wrangler's local proxy
+- Simulates production environment
+- Useful for testing before deployment
+
+### Production (Cloudflare Workers)
+- Uses D1 database via bindings
+- Uses R2 for media storage
+- Full production environment
 
 ---
 
