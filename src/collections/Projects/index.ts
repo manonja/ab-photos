@@ -1,10 +1,10 @@
 import type { CollectionConfig } from 'payload'
-import { HeroBlock } from '../blocks/Hero/config'
-import { GalleryBlock } from '../blocks/Gallery/config'
-import { TextBlock } from '../blocks/Text/config'
-import { ImageTextBlock } from '../blocks/ImageText/config'
-import { QuoteBlock } from '../blocks/Quote/config'
-import { SpacerBlock } from '../blocks/Spacer/config'
+import { HeroBlock } from '../../blocks/Hero/config.ts'
+import { GalleryBlock } from '../../blocks/Gallery/config.ts'
+import { TextBlock } from '../../blocks/Text/config.ts'
+import { ImageTextBlock } from '../../blocks/ImageText/config.ts'
+import { QuoteBlock } from '../../blocks/Quote/config.ts'
+import { SpacerBlock } from '../../blocks/Spacer/config.ts'
 
 export const Projects: CollectionConfig = {
   slug: 'projects',
