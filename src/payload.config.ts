@@ -5,11 +5,11 @@ import { r2Storage } from '@payloadcms/storage-r2'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-import { Users } from './collections/Users'
-import { Media } from './collections/Media'
-import { Projects } from './collections/Projects'
-import { Posts } from './collections/Posts'
-import { Exhibits } from './collections/Exhibits'
+import { Users } from './collections/Users/index.ts'
+import { Media } from './collections/Media/index.ts'
+import { Projects } from './collections/Projects/index.ts'
+import { Posts } from './collections/Posts/index.ts'
+import { Exhibits } from './collections/Exhibits/index.ts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -36,7 +36,7 @@ export default buildConfig({
   },
   db: sqliteAdapter({
     client: {
-      url: process.env.DATABASE_URL || 'file:./payload.db',
+      url: process.env.PAYLOAD_DATABASE_URL || 'file:./payload.db',
     },
   }),
   plugins: [
