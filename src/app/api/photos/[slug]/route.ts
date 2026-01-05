@@ -2,15 +2,15 @@ import { NextResponse } from 'next/server';
 import { findPhotosByProjectId } from '@/db/operations';
 import { DatabaseError } from '@/db/types';
 
-export const runtime = 'edge';
-
 export async function GET(
     request: Request,
-    { params }: { params: { slug: string } }
+    { params }: { params: Promise<{ slug: string }> }
 ) {
+    const { slug } = await params;
+
     try {
-        const photos = await findPhotosByProjectId(params.slug);
-        
+        const photos = await findPhotosByProjectId(slug);
+
         if (!photos.length) {
             return NextResponse.json(
                 { error: 'No photos found for this project' },
