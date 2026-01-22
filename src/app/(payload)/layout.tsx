@@ -5,7 +5,6 @@ import config from '@payload-config'
 import { importMap } from './admin/importMap.js'
 import React from 'react'
 import '@payloadcms/next/css'
-import './payload-overrides.css'
 
 export const metadata: Metadata = {
   title: 'AB Photos Admin',
