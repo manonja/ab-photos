@@ -1,0 +1,5 @@
+/* Override global site styles for Payload admin */
+body {
+  background: var(--theme-elevation-0) !important;
+  color: var(--theme-elevation-1000) !important;
+}
