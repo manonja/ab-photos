@@ -1,4 +1,4 @@
-import NewsletterSubscribe from "@/app/subscribe/components/NewsletterSubscribe";
+import NewsletterSubscribe from "@/app/(site)/subscribe/components/NewsletterSubscribe";
 
 export default function Subscribe() {
     return (
