@@ -27,10 +27,7 @@
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: #171717;
-}
+/* Site body styles are applied via layout, not globally, to avoid affecting Payload admin */
 
 @layer utilities {
   .text-balance {
