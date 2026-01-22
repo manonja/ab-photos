@@ -41,8 +41,16 @@ next-env.d.ts
 # wrangler files
 .wrangler
 .dev.vars*
+.open-next
 
 .idea
 
 # compiled blog data
 src/lib/blog/compiled/
+
+# Payload CMS local database
+payload.db
+
+# Claude Code
+.claude/
+.mcp.json

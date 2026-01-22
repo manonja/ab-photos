@@ -1,9 +1,3 @@
-import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev';
-
-// Here we use the @cloudflare/next-on-pages next-dev module to allow us to use bindings during local development
-// (when running the application with `next dev`), for more information see:
-// https://github.com/cloudflare/next-on-pages/blob/5712c57ea7/internal-packages/next-dev/README.md
-
 // Set the API URL based on the execution context
 if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_API_URL?.includes('bossenbroek.photo')) {
   // For production builds, use the production domain
@@ -17,23 +11,11 @@ console.log('[Config] environment: Build configuration', {
   npm_lifecycle_event: process.env.npm_lifecycle_event
 });
 
-// UNCOMMENT line 21-25 when developing locally
+// For regular NextJS dev, use port 3000
 const isDev = process.env.npm_lifecycle_event === 'dev';
-console.log('isDev', isDev);
-console.log('process.env.npm_lifecycle_event', process.env.npm_lifecycle_event);
-// For regular NextJS dev, use port 3000, otherwise use port 8788 for wrangler
-process.env.NEXT_PUBLIC_API_URL = isDev ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8788';
-
-if (process.env.NODE_ENV === 'development' || process.argv.includes('pages:dev')) {
-  console.log('[Config] setupDevPlatform: Starting platform setup', {
-    NODE_ENV: process.env.NODE_ENV,
-    argv: process.argv,
-    condition: `NODE_ENV=${process.env.NODE_ENV} || pages:dev in argv`
-  });
-  await setupDevPlatform();
-  console.log('[Config] setupDevPlatform: Platform setup completed');
+if (isDev) {
+  process.env.NEXT_PUBLIC_API_URL = 'http://localhost:3000';
 }
-
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -57,7 +39,7 @@ const nextConfig = {
       },
       {
         // For local development
-        protocol: 'http', 
+        protocol: 'http',
         hostname: 'localhost',
         pathname: '/**',
         port: '3000',
@@ -67,10 +49,10 @@ const nextConfig = {
         protocol: 'http',
         hostname: 'localhost',
         pathname: '/**',
-        port: '8788',
+        port: '8787',
       }
     ],
-    unoptimized: process.env.NODE_ENV === 'development', // Unoptimized images during development for faster builds
+    unoptimized: process.env.NODE_ENV === 'development',
   },
   typescript: {
     // !! WARN !!
@@ -81,9 +63,9 @@ const nextConfig = {
   experimental: {
     serverActions: {
       allowedOrigins: [
-        'bossenbroek.photo', 
-        'localhost:8788', 
-        'localhost:3000', 
+        'bossenbroek.photo',
+        'localhost:8787',
+        'localhost:3000',
         'ab-photo.pages.dev',
         'ab-photos.pages.dev',
         '*.ab-photos.pages.dev'

@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server';
 import { findAllProjects } from '@/db/operations';
 import { DatabaseError } from '@/db/types';
 
-export const runtime = 'edge';
-
 export async function GET() {
     try {
         const projects = await findAllProjects();

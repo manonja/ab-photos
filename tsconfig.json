@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@payload-config": ["./src/payload.config.ts"]
     },
     "types": ["jest", "@testing-library/jest-dom"]
   },

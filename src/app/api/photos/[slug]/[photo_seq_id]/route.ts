@@ -2,39 +2,30 @@ import { NextResponse } from 'next/server';
 import { findPhotoByProjectIdAndSeq } from '@/db/operations';
 import { DatabaseError } from '@/db/types';
 
-export const runtime = 'edge';
-
 export async function GET(
     request: Request,
-    { params }: { params: { slug: string; photo_seq_id: string } }
+    { params }: { params: Promise<{ slug: string; photo_seq_id: string }> }
 ) {
-    console.log('[API] getPhoto: Starting request', { params });
+    const { slug, photo_seq_id } = await params;
+    console.log('[API] getPhoto: Starting request', { slug, photo_seq_id });
 
     try {
-        const sequence = parseInt(params.photo_seq_id, 10);
-        
+        const sequence = parseInt(photo_seq_id, 10);
+
         if (isNaN(sequence)) {
-            console.warn('[API] getPhoto: Invalid sequence ID', { 
-                photo_seq_id: params.photo_seq_id 
-            });
+            console.warn('[API] getPhoto: Invalid sequence ID', { photo_seq_id });
             return NextResponse.json(
                 { error: 'Invalid sequence ID' },
                 { status: 400 }
             );
         }
 
-        console.log('[API] getPhoto: Fetching photo', { 
-            projectId: params.slug, 
-            sequence 
-        });
+        console.log('[API] getPhoto: Fetching photo', { projectId: slug, sequence });
 
-        const photo = await findPhotoByProjectIdAndSeq(params.slug, sequence);
-        
+        const photo = await findPhotoByProjectIdAndSeq(slug, sequence);
+
         if (!photo) {
-            console.warn('[API] getPhoto: Photo not found', {
-                projectId: params.slug,
-                sequence
-            });
+            console.warn('[API] getPhoto: Photo not found', { projectId: slug, sequence });
             return NextResponse.json(
                 { error: 'Photo not found' },
                 { status: 404 }
@@ -42,7 +33,7 @@ export async function GET(
         }
 
         console.log('[API] getPhoto: Successfully retrieved photo', {
-            projectId: params.slug,
+            projectId: slug,
             sequence,
             photoId: photo.id
         });
@@ -51,7 +42,8 @@ export async function GET(
     } catch (error) {
         console.error('[API] getPhoto: Error occurred', {
             error,
-            params,
+            slug,
+            photo_seq_id,
             errorCode: (error as DatabaseError).code
         });
         const dbError = error as DatabaseError;
@@ -60,4 +52,4 @@ export async function GET(
             { status: 500 }
         );
     }
-} 
+}
