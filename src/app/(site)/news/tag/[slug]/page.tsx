@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getBlogPostsByTag, getBlogTags } from '@/lib/blog';
 import { prepareBlogPostForDisplay } from '@/lib/blog/adapter';
-import PostCard from '../../../../components/news/PostCard';
+import PostCard from '@/components/news/PostCard';
 
 export const revalidate = 3600;
 

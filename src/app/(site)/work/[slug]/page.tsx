@@ -1,6 +1,6 @@
-import ProjectDetails from "@/app/work/components/projectDetails";
-import ProjectPhotos from "@/app/work/components/projectPhotos";
-import BackgroundImage from "@/app/work/components/backgroundImage";
+import ProjectDetails from "@/app/(site)/work/components/projectDetails";
+import ProjectPhotos from "@/app/(site)/work/components/projectPhotos";
+import BackgroundImage from "@/app/(site)/work/components/backgroundImage";
 import BlockRenderer from "@/components/BlockRenderer";
 import { getPayload } from 'payload'
 import config from '@payload-config'

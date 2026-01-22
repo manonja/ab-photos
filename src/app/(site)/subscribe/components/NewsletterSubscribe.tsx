@@ -1,6 +1,6 @@
 'use client'
 import MailchimpSubscribe, { EmailFormFields } from 'react-mailchimp-subscribe';
-import NewsletterForm from "@/app/subscribe/components/newsletterForm";
+import NewsletterForm from "@/app/(site)/subscribe/components/newsletterForm";
 
 const NewsletterSubscribe = () => {
 

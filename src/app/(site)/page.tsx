@@ -3,7 +3,7 @@ import { getPhotoDetails } from "@/actions/getPhotoDetails";
 import { Suspense } from "react";
 import RotatingBackground from "@/components/RotatingBackground";
 import { CurrentProjectProvider } from "@/context/CurrentProjectContext";
-import WorkListWrapper from "@/app/work/components/workListWrapper";
+import WorkListWrapper from "@/app/(site)/work/components/workListWrapper";
 import type { Metadata } from "next";
 
 /**
