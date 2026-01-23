@@ -1,9 +1,11 @@
 import type { NextRequest } from 'next/server'
 import { getRequestContext } from '@cloudflare/next-on-pages'
+import { log } from '@/lib/logger'
 
 export const runtime = 'edge'
 
 export async function GET(request: NextRequest) {
+  log.withMetadata({ route: 'api/hello' }).info('Hello endpoint called');
   let responseText = 'Hello World'
 
   // In the edge runtime you can use Bindings that are available in your application

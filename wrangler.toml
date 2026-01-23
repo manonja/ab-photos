@@ -9,8 +9,8 @@ NEXT_PUBLIC_API_URL = "https://ab-photo.pages.dev"
 
 # Production environment config
 [env.production]
-vars = { }  # Production vars will be set in Cloudflare dashboard
+vars = { LOG_LEVEL = "warn" }  # Production: only warnings and errors
 
 # Preview environment config
 [env.preview]
-vars = { }  # Preview environment vars
+vars = { LOG_LEVEL = "info" }  # Preview: info level for debugging
