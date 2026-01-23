@@ -43,19 +43,21 @@ describe('ProjectPhotos', () => {
         expect(images[0]).toHaveAttribute('src', 'https://example.com/photo1.jpg');
         expect(images[1]).toHaveAttribute('src', 'https://example.com/photo2.jpg');
 
-        const captions = screen.getAllByText(/photo/);
-        expect(captions).toHaveLength(2);
-        expect(captions[0]).toHaveTextContent('First photo');
-        expect(captions[1]).toHaveTextContent('Second photo');
+        // Verify alt text contains captions
+        expect(images[0]).toHaveAttribute('alt', 'First photo');
+        expect(images[1]).toHaveAttribute('alt', 'Second photo');
     });
 
-    it('should render no photos message when project has no photos', async () => {
+    it('should render coming soon message when project has no photos', async () => {
         mockedGetPhotoDetails.mockResolvedValueOnce([]);
 
         render(await ProjectPhotos({ slug: 'test-project' }));
 
-        const message = screen.getByText('No photos available for this project.');
+        const message = screen.getByText('Coming soon');
         expect(message).toBeInTheDocument();
+
+        const description = screen.getByText(/Photos for this project are currently being prepared/);
+        expect(description).toBeInTheDocument();
     });
 
     it('should render error message when photo fetch fails', async () => {
@@ -63,7 +65,10 @@ describe('ProjectPhotos', () => {
 
         render(await ProjectPhotos({ slug: 'test-project' }));
 
-        const message = screen.getByText('Error loading photos. Please try again later.');
+        const message = screen.getByText('Unable to load photos');
         expect(message).toBeInTheDocument();
+
+        const description = screen.getByText(/There was an issue retrieving photos/);
+        expect(description).toBeInTheDocument();
     });
-}); 
+});

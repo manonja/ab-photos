@@ -54,7 +54,7 @@ describe('Database Client', () => {
 
         it('should create clients successfully when DATABASE_URL is set', async () => {
             // Set a mock DATABASE_URL
-            process.env.DATABASE_URL = 'postgres://fake:url@test.com';
+            process.env.DATABASE_URL = 'postgres://test:test@localhost:5432/testdb';
             
             // Import the module
             await import('../client');
@@ -63,7 +63,7 @@ describe('Database Client', () => {
             expect(mockNeon).toHaveBeenCalled();
             // Verify Pool was created with correct config
             expect(mockPool).toHaveBeenCalledWith({
-                connectionString: 'postgres://fake:url@test.com',
+                connectionString: 'postgres://test:test@localhost:5432/testdb',
                 max: 10,
                 connectionTimeoutMillis: 5000,
                 idleTimeoutMillis: 60000
@@ -73,7 +73,7 @@ describe('Database Client', () => {
 
     describe('SQL Client Creation', () => {
         it('should handle neon client creation error', async () => {
-            process.env.DATABASE_URL = 'postgres://fake:url@test.com';
+            process.env.DATABASE_URL = 'postgres://test:test@localhost:5432/testdb';
             const mockError = new Error('Connection failed');
             
             // Mock neon to throw error
@@ -97,7 +97,7 @@ describe('Database Client', () => {
 
     describe('Pool Creation', () => {
         it('should handle pool creation error', async () => {
-            process.env.DATABASE_URL = 'postgres://fake:url@test.com';
+            process.env.DATABASE_URL = 'postgres://test:test@localhost:5432/testdb';
             const mockError = new Error('Pool creation failed');
             
             // Mock Pool to throw error

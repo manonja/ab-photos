@@ -15,7 +15,7 @@ const config: PlaywrightTestConfig = {
     },
   ],
   webServer: {
-    command: 'npx wrangler dev --no-bundle --no-watch',
+    command: 'npx wrangler pages dev .vercel/output/static --port 8788 --compatibility-flag=nodejs_compat',
     port: 8788,
     timeout: 120000,
     reuseExistingServer: !process.env.CI,

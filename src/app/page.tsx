@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
  * Home page with rotating background images that change every 4 seconds
  * Uses context to highlight the work list item corresponding to the current background
  */
-export const dynamic = 'force-static';
+export const runtime = 'edge';
 
 export default async function Home() {
   // Prefetch projects for all components to share

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Suspense } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import NavbarWorkDropdown from "@/app/work/components/NavbarWorkDropdown";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
@@ -16,14 +17,13 @@ export default function Navbar() {
 
     return (
         <div className="z-10 w-full px-6 items-center justify-between text-sm lg:flex">
-            <a
+            <Link
                 className="text-6xl font-[anton] left-0 top-0 flex w-full justify-center p-6 lg:static lg:w-auto"
                 href="/"
-                rel="noopener noreferrer"
                 aria-label="Anton Bossenbroek Photography - Home"
             >
                 ANTON BOSSENBROEK
-            </a>
+            </Link>
             <div
                 className={`fixed items-center lg:pb-6 pb-3 bottom-0 lg:gap-4 left-0 flex flex-col lg:flex-row h-auto w-full lg:items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none transition-transform duration-300 ease-in-out ${
                     shouldHideNav ? 'translate-y-full' : 'translate-y-0'
@@ -43,50 +43,45 @@ export default function Navbar() {
                     </Suspense>
 
                     {/* Mobile navigation - Exhibitions, News, About only */}
-                    <a
+                    <Link
                         className="flex place-items-center gap-2 px-3 py-3 pointer-events-auto lg:px-0 lg:py-0 hover:border-b focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white lg:focus-visible:ring-offset-2 uppercase"
                         href="/exhibitions"
-                        rel="noopener noreferrer"
                         aria-label="View exhibitions"
                     >
                         Exhibitions
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                         className="flex place-items-center gap-2 px-3 py-3 pointer-events-auto lg:px-0 lg:py-0 hover:border-b focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white lg:focus-visible:ring-offset-2 uppercase"
                         href="/news"
-                        rel="noopener noreferrer"
                         aria-label="Read news"
                     >
                         News
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                         className="flex place-items-center gap-2 px-3 py-3 pointer-events-auto lg:px-0 lg:py-0 hover:border-b focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white lg:focus-visible:ring-offset-2 uppercase"
                         href="/about"
-                        rel="noopener noreferrer"
                         aria-label="About Anton Bossenbroek"
                     >
                         About
-                    </a>
+                    </Link>
 
                     {/* Contact - Desktop only */}
-                    <a
+                    <Link
                         className="hidden lg:flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 hover:border-b focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 uppercase"
                         href="/contact"
-                        rel="noopener noreferrer"
                         aria-label="Contact"
                     >
                         Contact
-                    </a>
+                    </Link>
 
                     {/* Subscribe - Desktop only */}
-                    <a
+                    <Link
                         className="hidden lg:flex place-items-center gap-2 pr-4 p-2 pointer-events-auto lg:p-0 hover:border-b focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 uppercase"
                         href="/subscribe"
-                        rel="noopener noreferrer"
                         aria-label="Subscribe to newsletter"
                     >
                         Subscribe
-                    </a>
+                    </Link>
                 </div>
                 <div className='flex flex-row lg:pl-6 gap-4'>
                     <a

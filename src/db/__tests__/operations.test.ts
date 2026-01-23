@@ -11,7 +11,6 @@ jest.mock('../client', () => ({
     }
 }));
 
-process.env.DATABASE_URL = 'postgres://fake:fake@fake.neon.tech/neondb';
 
 const mockedSql = sql as unknown as jest.Mock;
 
@@ -117,12 +116,9 @@ describe('Database Integration Tests', () => {
         })
     };
 
-    const mockSql = jest.fn().mockResolvedValue([{ test: 1 }]);
-
     beforeEach(() => {
         jest.clearAllMocks();
         (pool as any).connect = mockPool.connect;
-        (sql as any) = mockSql;
     });
 
     it('should connect to the database', async () => {
@@ -132,9 +128,13 @@ describe('Database Integration Tests', () => {
         await client.release();
     });
 
-    it('should query the database', async () => {
+    it('should query the database using mocked sql', async () => {
+        // Set up the mock to return test data for a tagged template literal call
+        mockedSql.mockResolvedValueOnce([{ test: 1 }]);
+
+        // The sql mock is called as a function with template literal parts
         const result = await sql`SELECT 1 as test`;
-        expect(result[0].test).toBe(1);
-        expect(mockSql).toHaveBeenCalled();
+        expect(result).toEqual([{ test: 1 }]);
+        expect(mockedSql).toHaveBeenCalled();
     });
 }); 
