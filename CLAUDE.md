@@ -63,6 +63,12 @@ content/blog/      # HTML blog posts with Tailwind
 - Use semantic queries: `getByRole()`, `getByLabelText()`
 - Use `data-testid` for stable selectors
 
+## Workflow
+
+- Commit and push frequently to trigger CI and catch issues early
+- Keep commits small and focused on single logical changes
+- Always verify CI passes before moving on to the next task
+
 ## Environment
 
 Required in `.env.local` (see `.env.example`):
