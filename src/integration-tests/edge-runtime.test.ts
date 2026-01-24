@@ -11,8 +11,8 @@ test.describe('Edge Runtime Smoke Tests', () => {
     const response = await request.get('/api/hello')
     expect(response.ok()).toBeTruthy()
 
-    const data = await response.json()
-    expect(data).toHaveProperty('message')
+    const text = await response.text()
+    expect(text).toBe('Hello World')
   })
 
   test('projects API returns valid data', async ({ request }) => {
@@ -65,9 +65,10 @@ test.describe('Edge Runtime Smoke Tests', () => {
 
   test('edge runtime returns proper headers', async ({ request }) => {
     const response = await request.get('/api/hello')
+    expect(response.ok()).toBeTruthy()
 
     // Verify response headers
     const headers = response.headers()
-    expect(headers['content-type']).toContain('application/json')
+    expect(headers['content-type']).toContain('text/plain')
   })
 })

@@ -105,6 +105,8 @@ jobs:
         run: npx playwright test
         env:
           CI: '1'
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4
