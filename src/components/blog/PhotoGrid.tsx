@@ -7,7 +7,7 @@ export function PhotoGrid({ spacing = 'normal', children }: PhotoGridProps) {
   const gapClass = {
     tight: 'gap-2',
     normal: 'gap-4',
-    loose: 'gap-8'
+    loose: 'gap-8',
   }[spacing]
 
   return (

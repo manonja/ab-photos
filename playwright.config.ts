@@ -3,6 +3,12 @@ import { PlaywrightTestConfig } from '@playwright/test';
 const config: PlaywrightTestConfig = {
   testDir: './src/integration-tests',
   timeout: 60000,
+  snapshotDir: './src/integration-tests/__snapshots__',
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.1,
+    },
+  },
   use: {
     baseURL: 'http://localhost:8788',
     trace: 'on-first-retry',

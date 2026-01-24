@@ -1,76 +1,74 @@
-'use client';
+'use client'
 
-import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
+import Link from 'next/link'
+import { useEffect, useRef, useState } from 'react'
 
 interface WorkDropdownProps {
   projects: {
-    id: string;
-    title: string;
-  }[];
+    id: string
+    title: string
+  }[]
 }
 
 export default function WorkDropdown({ projects }: WorkDropdownProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
   // Toggle dropdown open/closed
   const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
+    setIsOpen(!isOpen)
+  }
 
   // Set up a global click handler to close the dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
+        setIsOpen(false)
       }
-    };
+    }
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside)
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
   // Set up event listeners for other navbar items
   useEffect(() => {
     // Find all navbar links except our own
     const findNavbarLinks = () => {
-      const allNavLinks = document.querySelectorAll('a[href="/news"], a[href="/about"], a[href="/contact"], a[href="/subscribe"]');
-      return Array.from(allNavLinks);
-    };
+      const allNavLinks = document.querySelectorAll(
+        'a[href="/news"], a[href="/about"], a[href="/contact"], a[href="/subscribe"]',
+      )
+      return Array.from(allNavLinks)
+    }
 
     // When hovering any other navbar item, close our dropdown
     const handleNavLinkHover = () => {
       if (isOpen) {
-        setIsOpen(false);
+        setIsOpen(false)
       }
-    };
+    }
 
     // Attach listeners to all other nav links
-    const navLinks = findNavbarLinks();
-    navLinks.forEach(link => {
-      link.addEventListener('mouseenter', handleNavLinkHover);
-    });
+    const navLinks = findNavbarLinks()
+    navLinks.forEach((link) => {
+      link.addEventListener('mouseenter', handleNavLinkHover)
+    })
 
     return () => {
       // Clean up listeners
-      navLinks.forEach(link => {
-        link.removeEventListener('mouseenter', handleNavLinkHover);
-      });
-    };
-  }, [isOpen]);
+      navLinks.forEach((link) => {
+        link.removeEventListener('mouseenter', handleNavLinkHover)
+      })
+    }
+  }, [isOpen])
 
   // If there are projects, show the first one to preview
-  const firstProject = projects.length > 0 ? projects[0] : null;
+  const _firstProject = projects.length > 0 ? projects[0] : null
 
   return (
-    <div 
-      ref={dropdownRef}
-      className="relative"
-      onClick={(e) => e.stopPropagation()}
-    >
+    <div ref={dropdownRef} className="relative" onClick={(e) => e.stopPropagation()}>
       {/* Work header that toggles dropdown but is not clickable as a link */}
       <div className="p-0">
         <span
@@ -91,10 +89,7 @@ export default function WorkDropdown({ projects }: WorkDropdownProps) {
       >
         {projects.map((project) => (
           <div key={project.id} className="py-2">
-            <Link
-              href={`/work/${project.id}`}
-              onClick={() => setIsOpen(false)}
-            >
+            <Link href={`/work/${project.id}`} onClick={() => setIsOpen(false)}>
               <span className="border-b border-transparent hover:border-black dark:hover:border-white font-light uppercase">
                 {project.title}
               </span>
@@ -103,5 +98,5 @@ export default function WorkDropdown({ projects }: WorkDropdownProps) {
         ))}
       </div>
     </div>
-  );
-} 
+  )
+}

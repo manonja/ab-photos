@@ -1,15 +1,15 @@
-import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { Exhibit } from '@/types/exhibit';
+import Image from 'next/image'
+import Link from 'next/link'
+import type React from 'react'
+import type { Exhibit } from '@/types/exhibit'
 
 interface ExhibitCardProps {
-  exhibit: Exhibit;
+  exhibit: Exhibit
 }
 
 const ExhibitCard: React.FC<ExhibitCardProps> = ({ exhibit }) => {
-  const isExternal = exhibit.link?.startsWith('http');
-  
+  const isExternal = exhibit.link?.startsWith('http')
+
   return (
     <div className="flex flex-col md:flex-row gap-4 md:gap-6">
       {/* Image Section */}
@@ -29,14 +29,13 @@ const ExhibitCard: React.FC<ExhibitCardProps> = ({ exhibit }) => {
 
       {/* Content Section */}
       <div className="flex flex-col justify-start">
-      
         <h2 className="mb-2 text-2xl text-font-bold leading-tight">
           {exhibit.link ? (
             <Link
               href={exhibit.link}
               className="hover:text-gray-400 transition-colors"
-              target={isExternal ? "_blank" : undefined}
-              rel={isExternal ? "noopener noreferrer" : undefined}
+              target={isExternal ? '_blank' : undefined}
+              rel={isExternal ? 'noopener noreferrer' : undefined}
             >
               {exhibit.title}
             </Link>
@@ -45,20 +44,14 @@ const ExhibitCard: React.FC<ExhibitCardProps> = ({ exhibit }) => {
           )}
         </h2>
 
-        <div className="mb-1 text-sm uppercase text-gray-300">
-          {exhibit.date}
-        </div>
+        <div className="mb-1 text-sm uppercase text-gray-300">{exhibit.date}</div>
 
-        <div className="mb-3 text-sm text-gray-300">
-          {exhibit.location}
-        </div>
+        <div className="mb-3 text-sm text-gray-300">{exhibit.location}</div>
 
-        <p className="mb-4 text-base text-gray-200">
-          {exhibit.description}
-        </p>
+        <p className="mb-4 text-base text-gray-200">{exhibit.description}</p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ExhibitCard;
+export default ExhibitCard
