@@ -29,7 +29,10 @@ const config: PlaywrightTestConfig = {
       CI: '1',
       FORCE_COLOR: '0',
       NO_WRANGLER_ANALYTICS: '1',
-      BROWSER: 'none'
+      BROWSER: 'none',
+      // Pass database URLs to wrangler for API tests
+      ...(process.env.DATABASE_URL && { DATABASE_URL: process.env.DATABASE_URL }),
+      ...(process.env.DIRECT_URL && { DIRECT_URL: process.env.DIRECT_URL }),
     },
   },
 };
