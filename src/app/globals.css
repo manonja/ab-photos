@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -6,7 +6,7 @@
 
 @layer base {
   @font-face {
-    font-family: 'Lexend';
+    font-family: "Lexend";
     font-style: normal;
     font-weight: 400;
     font-display: swap;
@@ -92,7 +92,9 @@ body {
 }
 
 .blog-content code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+    monospace;
   font-size: 0.875rem;
   padding: 0.125rem 0.25rem;
   background-color: #f3f4f6;
@@ -106,7 +108,8 @@ body {
   color: #f3f4f6;
 }
 
-.blog-content ul, .blog-content ol {
+.blog-content ul,
+.blog-content ol {
   margin-left: 1.5rem;
   margin-bottom: 1.25rem;
 }
@@ -130,7 +133,8 @@ body {
   margin: 1.5rem 0;
 }
 
-.blog-content th, .blog-content td {
+.blog-content th,
+.blog-content td {
   border: 1px solid #e5e7eb;
   padding: 0.5rem;
 }

@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
 export default function BlogNotFound() {
   return (
@@ -9,5 +9,5 @@ export default function BlogNotFound() {
         Return to News
       </Link>
     </div>
-  );
-} 
+  )
+}

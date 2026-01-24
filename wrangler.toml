@@ -13,4 +13,4 @@ vars = { LOG_LEVEL = "warn" }  # Production: only warnings and errors
 
 # Preview environment config
 [env.preview]
-vars = { LOG_LEVEL = "info" }  # Preview: info level for debugging
+vars = { LOG_LEVEL = "info", NEXT_PUBLIC_API_URL = "https://ab-photo.pages.dev" }  # Preview: info level for debugging

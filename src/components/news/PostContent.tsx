@@ -1,23 +1,23 @@
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from 'next/image'
+import Link from 'next/link'
+import type React from 'react'
 // Using HTML content
-import { BlogPostDisplay } from '../../lib/blog/types';
+import type { BlogPostDisplay } from '../../lib/blog/types'
 
 interface PostContentProps {
-  post: BlogPostDisplay & { htmlContent?: string };
+  post: BlogPostDisplay & { htmlContent?: string }
 }
 
 const PostContent: React.FC<PostContentProps> = ({ post }) => {
   // Format date: "May 8, 2023"
-  const formattedDate = new Date(post.published_at).toLocaleDateString('en-US', {
+  const _formattedDate = new Date(post.published_at).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  });
+  })
 
   // Get the HTML content
-  const HTMLContent = post.htmlContent;
+  const HTMLContent = post.htmlContent
 
   return (
     <article className="mx-auto lg:max-w-7xl max-w-5xl">
@@ -76,15 +76,13 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
                 </div>
               )}
               <div>
-                {post.primary_author && (
-                  <p className="font-medium">{post.primary_author.name}</p>
-                )}
+                {post.primary_author && <p className="font-medium">{post.primary_author.name}</p>}
               </div>
             </div>
           </header>
 
           {/* HTML Content */}
-          <div 
+          <div
             className="blog-content prose prose-lg max-w-none mb-8"
             dangerouslySetInnerHTML={{ __html: HTMLContent || '' }}
           />
@@ -95,25 +93,25 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
               <div className="mb-4">
                 <h3 className="text-lg font-bold">Share this post</h3>
                 <div className="mt-2 flex space-x-4">
-                  <a 
-                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.slug}`)}`} 
-                    target="_blank" 
+                  <a
+                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.slug}`)}`}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-500 hover:text-pink-600"
                   >
                     Twitter
                   </a>
-                  <a 
-                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.slug}`)}`} 
-                    target="_blank" 
+                  <a
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.slug}`)}`}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-500 hover:text-pink-600"
                   >
                     Facebook
                   </a>
-                  <a 
-                    href={`https://www.instagram.com/?url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.slug}`)}`} 
-                    target="_blank" 
+                  <a
+                    href={`https://www.instagram.com/?url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.slug}`)}`}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-500 hover:text-pink-600"
                   >
@@ -129,7 +127,7 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
         </div>
       </div>
     </article>
-  );
-};
+  )
+}
 
-export default PostContent;
+export default PostContent

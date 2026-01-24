@@ -1,5 +1,14 @@
 import '@testing-library/jest-dom';
 
+// Mock React's cache function for server components
+jest.mock('react', () => {
+    const actualReact = jest.requireActual('react');
+    return {
+        ...actualReact,
+        cache: (fn) => fn, // cache just returns the function as-is in tests
+    };
+});
+
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
     useRouter() {
