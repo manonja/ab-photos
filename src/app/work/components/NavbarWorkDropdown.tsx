@@ -1,21 +1,21 @@
-import { getProjectsDetails } from "@/actions/getProjectsDetails";
-import WorkDropdown from "./WorkDropdown";
-import Link from "next/link";
+import Link from 'next/link'
+import { getProjectsDetails } from '@/actions/getProjectsDetails'
+import WorkDropdown from './WorkDropdown'
 
 export default async function NavbarWorkDropdown() {
   try {
-    const projects = await getProjectsDetails({ useStatic: true });
+    const projects = await getProjectsDetails({ useStatic: true })
 
     // Filter published projects and provide only necessary data
     const projectsData = projects
-      .filter(project => project.isPublished)
-      .map(project => ({
+      .filter((project) => project.isPublished)
+      .map((project) => ({
         id: project.id,
-        title: project.title
-      }));
+        title: project.title,
+      }))
 
     // If there are projects, show the first one as default on mobile
-    const defaultProjectId = projectsData.length > 0 ? projectsData[0].id : '';
+    const defaultProjectId = projectsData.length > 0 ? projectsData[0].id : ''
 
     return (
       <>
@@ -41,16 +41,14 @@ export default async function NavbarWorkDropdown() {
           <WorkDropdown projects={projectsData} />
         </div>
       </>
-    );
+    )
   } catch (error) {
-    console.error('Error loading projects for dropdown:', error);
+    console.error('Error loading projects for dropdown:', error)
     // If we fail to load projects, show non-clickable Work
     return (
-      <span
-        className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 cursor-default uppercase"
-      >
+      <span className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 cursor-default uppercase">
         Work
       </span>
-    );
+    )
   }
-} 
+}

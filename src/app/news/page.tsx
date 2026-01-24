@@ -1,23 +1,23 @@
-import { Metadata } from 'next';
-import Link from 'next/link';
-import { getAllBlogPosts } from '@/lib/blog';
-import { prepareBlogPostForDisplay } from '@/lib/blog/adapter';
-import PostCard from '@/components/news/PostCard';
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import PostCard from '@/components/news/PostCard'
+import { getAllBlogPosts } from '@/lib/blog'
+import { prepareBlogPostForDisplay } from '@/lib/blog/adapter'
 
 // Use edge runtime for Cloudflare Pages compatibility
-export const runtime = 'edge';
-export const revalidate = 3600; // Revalidate every hour
+export const runtime = 'edge'
+export const revalidate = 3600 // Revalidate every hour
 
 export const metadata: Metadata = {
   title: 'News | Anton Bossenbroek Photography',
   description: 'Photography News, stories, and adventures from Anton Bossenbroek.',
-};
+}
 
 export default async function NewsPage() {
   // Fetch posts from HTML blog
-  const blogPosts = await getAllBlogPosts();
+  const blogPosts = await getAllBlogPosts()
   // Prepare posts for display
-  const posts = blogPosts.map(prepareBlogPostForDisplay);
+  const posts = blogPosts.map(prepareBlogPostForDisplay)
 
   if (!posts || posts.length === 0) {
     return (
@@ -26,7 +26,7 @@ export default async function NewsPage() {
           <p>No posts found. Check back soon for new content!</p>
         </div>
       </main>
-    );
+    )
   }
 
   return (
@@ -34,9 +34,9 @@ export default async function NewsPage() {
       <div className="w-full py-8">
         <div className="w-full max-w-4xl">
           <h1 className="uppercase text-2xl font-light mb-8">Articles</h1>
-          <div className="my-8 h-px bg-white w-full"/>
+          <div className="my-8 h-px bg-white w-full" />
           <div className="space-y-16">
-            {posts.map(post => (
+            {posts.map((post) => (
               <PostCard key={post.id} post={post} />
             ))}
           </div>
@@ -54,5 +54,5 @@ export default async function NewsPage() {
         </div>
       </div>
     </main>
-  );
-} 
+  )
+}

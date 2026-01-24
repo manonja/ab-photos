@@ -1,22 +1,18 @@
 import Image from 'next/image'
-import { ImageGalleryProps } from '@/lib/blog/types'
+import type { ImageGalleryProps } from '@/lib/blog/types'
 
-export function ImageGallery({ 
-  images, 
-  columns = 3, 
-  spacing = 'normal' 
-}: ImageGalleryProps) {
+export function ImageGallery({ images, columns = 3, spacing = 'normal' }: ImageGalleryProps) {
   const gapClass = {
     tight: 'gap-2',
     normal: 'gap-4',
-    loose: 'gap-8'
+    loose: 'gap-8',
   }[spacing]
 
   const gridColsClass = {
     1: 'grid-cols-1',
     2: 'grid-cols-1 md:grid-cols-2',
     3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
-    4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+    4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
   }[columns]
 
   return (
@@ -29,7 +25,7 @@ export function ImageGallery({
               alt={image.alt}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes={`(max-width: 768px) 100vw, ${100/columns}vw`}
+              sizes={`(max-width: 768px) 100vw, ${100 / columns}vw`}
             />
           </div>
           {image.caption && (

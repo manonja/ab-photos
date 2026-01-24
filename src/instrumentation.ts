@@ -11,30 +11,37 @@ export async function register() {
   // Only run on the server (Node.js runtime or edge)
   if (typeof window === 'undefined') {
     // Dynamically import to avoid bundling issues
-    const { log } = await import('@/lib/logger');
+    const { log } = await import('@/lib/logger')
 
-    log.withMetadata({
-      event: 'server_startup',
-      nodeEnv: process.env.NODE_ENV,
-      cfPages: process.env.CF_PAGES,
-      cfPagesBranch: process.env.CF_PAGES_BRANCH,
-    }).info('Next.js server instrumentation registered');
+    log
+      .withMetadata({
+        event: 'server_startup',
+        nodeEnv: process.env.NODE_ENV,
+        cfPages: process.env.CF_PAGES,
+        cfPagesBranch: process.env.CF_PAGES_BRANCH,
+      })
+      .info('Next.js server instrumentation registered')
 
     // Set up global unhandled rejection handler
-    process.on('unhandledRejection', (reason, promise) => {
-      log.withMetadata({
-        event: 'unhandled_rejection',
-        reason: reason instanceof Error ? reason.message : String(reason),
-        stack: reason instanceof Error ? reason.stack : undefined,
-      }).error('Unhandled Promise Rejection');
-    });
+    process.on('unhandledRejection', (reason, _promise) => {
+      log
+        .withMetadata({
+          event: 'unhandled_rejection',
+          reason: reason instanceof Error ? reason.message : String(reason),
+          stack: reason instanceof Error ? reason.stack : undefined,
+        })
+        .error('Unhandled Promise Rejection')
+    })
 
     // Set up global uncaught exception handler
     process.on('uncaughtException', (error) => {
-      log.withError(error).withMetadata({
-        event: 'uncaught_exception',
-      }).fatal('Uncaught Exception');
-    });
+      log
+        .withError(error)
+        .withMetadata({
+          event: 'uncaught_exception',
+        })
+        .fatal('Uncaught Exception')
+    })
   }
 }
 
@@ -47,21 +54,24 @@ export function onRequestError({
   request,
   context,
 }: {
-  err: Error;
-  request: Request;
-  context: { routerKind: 'Pages Router' | 'App Router'; routePath: string };
+  err: Error
+  request: Request
+  context: { routerKind: 'Pages Router' | 'App Router'; routePath: string }
 }) {
   // This function is called for errors that occur during request handling
   // Note: This requires Next.js 14.1+ and experimental.instrumentationHook enabled
 
   // Dynamically import to avoid issues
   import('@/lib/logger').then(({ log }) => {
-    log.withError(err).withMetadata({
-      event: 'request_error',
-      routerKind: context.routerKind,
-      routePath: context.routePath,
-      url: request.url,
-      method: request.method,
-    }).error('Request error occurred');
-  });
+    log
+      .withError(err)
+      .withMetadata({
+        event: 'request_error',
+        routerKind: context.routerKind,
+        routePath: context.routePath,
+        url: request.url,
+        method: request.method,
+      })
+      .error('Request error occurred')
+  })
 }

@@ -17,7 +17,9 @@ const customJestConfig = {
         '<rootDir>/.next/',
         '<rootDir>/e2e-tests/',
         '<rootDir>/src/integration-tests/',
-        '<rootDir>/src/db/__tests__/mocks.ts'
+        '<rootDir>/src/db/__tests__/mocks.ts',
+        '<rootDir>/home.test.ts',
+        '.*\\.e2e\\..*'
     ],
 }
 

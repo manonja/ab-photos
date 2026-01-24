@@ -1,5 +1,5 @@
 export interface Project {
-    id: string;
-    title: string;
-    slug: string
+  id: string
+  title: string
+  slug: string
 }

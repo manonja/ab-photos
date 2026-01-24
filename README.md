@@ -139,6 +139,19 @@ npm run test
 
 4. Use the appropriate environment variables for local development vs production
 
+## CI/CD Secrets
+
+The following GitHub secrets are required for the CI workflow to run successfully:
+
+| Secret | Description | Required For |
+|--------|-------------|--------------|
+| `DATABASE_URL` | Neon PostgreSQL pooled connection string | Build step |
+| `DIRECT_URL` | Neon PostgreSQL direct connection string | Build step |
+
+To configure these secrets:
+1. Go to your repository Settings > Secrets and variables > Actions
+2. Add each secret with the appropriate value from your Neon dashboard
+
 ## Cloudflare integration
 
 Besides the `dev` script mentioned above `c3` has added a few extra scripts that allow you to integrate the application with the [Cloudflare Pages](https://pages.cloudflare.com/) environment, these are:

@@ -1,4 +1,4 @@
-import { LogLayer, ConsoleTransport, LogLevel } from 'loglayer';
+import { ConsoleTransport, LogLayer, LogLevel } from 'loglayer'
 
 /**
  * Get the log level from environment variable or default based on environment.
@@ -7,7 +7,7 @@ import { LogLayer, ConsoleTransport, LogLevel } from 'loglayer';
  */
 function getLogLevel(): LogLevel {
   // Check for explicit LOG_LEVEL environment variable
-  const envLogLevel = process.env.LOG_LEVEL?.toLowerCase();
+  const envLogLevel = process.env.LOG_LEVEL?.toLowerCase()
 
   const levelMap: Record<string, LogLevel> = {
     trace: LogLevel.trace,
@@ -16,18 +16,18 @@ function getLogLevel(): LogLevel {
     warn: LogLevel.warn,
     error: LogLevel.error,
     fatal: LogLevel.fatal,
-  };
+  }
 
   if (envLogLevel && envLogLevel in levelMap) {
-    return levelMap[envLogLevel];
+    return levelMap[envLogLevel]
   }
 
   // Default based on NODE_ENV
   if (process.env.NODE_ENV === 'production') {
-    return LogLevel.warn;
+    return LogLevel.warn
   }
 
-  return LogLevel.info;
+  return LogLevel.info
 }
 
 /**
@@ -35,9 +35,11 @@ function getLogLevel(): LogLevel {
  * Used to decide between JSON output (production) and pretty output (development).
  */
 function isProductionLike(): boolean {
-  return process.env.NODE_ENV === 'production' ||
-         process.env.CF_PAGES === '1' ||
-         !!process.env.CF_PAGES_BRANCH;
+  return (
+    process.env.NODE_ENV === 'production' ||
+    process.env.CF_PAGES === '1' ||
+    !!process.env.CF_PAGES_BRANCH
+  )
 }
 
 /**
@@ -46,7 +48,7 @@ function isProductionLike(): boolean {
  * - In development: Structured but readable output
  */
 function createLogger(): LogLayer {
-  const shouldStringify = isProductionLike();
+  const shouldStringify = isProductionLike()
 
   return new LogLayer({
     transport: new ConsoleTransport({
@@ -57,7 +59,7 @@ function createLogger(): LogLayer {
       dateField: 'timestamp',
       stringify: shouldStringify,
     }),
-  });
+  })
 }
 
 /**
@@ -82,7 +84,7 @@ function createLogger(): LogLayer {
  *    .error('Request failed');
  * ```
  */
-export const log = createLogger();
+export const log = createLogger()
 
 /**
  * Create a child logger with pre-configured metadata.
@@ -99,7 +101,7 @@ export const log = createLogger();
  * ```
  */
 export function createChildLogger(metadata: Record<string, unknown>): LogLayer {
-  return log.child().withMetadata(metadata) as unknown as LogLayer;
+  return log.child().withMetadata(metadata) as unknown as LogLayer
 }
 
 /**
@@ -111,12 +113,12 @@ export function createChildLogger(metadata: Record<string, unknown>): LogLayer {
  */
 export function createRequestLogger(
   requestId: string,
-  additionalContext?: Record<string, unknown>
+  additionalContext?: Record<string, unknown>,
 ): LogLayer {
   return createChildLogger({
     requestId,
     ...additionalContext,
-  });
+  })
 }
 
-export type { LogLevel };
+export type { LogLevel }
