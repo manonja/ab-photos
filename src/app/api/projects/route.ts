@@ -3,7 +3,7 @@ import { findAllProjects } from '@/db/operations'
 import type { DatabaseError } from '@/db/types'
 import { log } from '@/lib/logger'
 
-export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
   const routeLogger = log.withMetadata({ route: 'api/projects' })

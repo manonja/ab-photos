@@ -3,8 +3,6 @@ import { findPhotoByProjectIdAndSeq } from '@/db/operations'
 import type { DatabaseError } from '@/db/types'
 import { log } from '@/lib/logger'
 
-export const runtime = 'edge'
-
 export async function GET(
   _request: Request,
   { params }: { params: { slug: string; photo_seq_id: string } },
