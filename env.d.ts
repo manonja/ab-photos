@@ -2,4 +2,9 @@
 // by running `wrangler types --env-interface CloudflareEnv env.d.ts`
 
 interface CloudflareEnv {
+  DB: D1Database
+  R2_IMAGES: R2Bucket
+  ASSETS: Fetcher
+  NEXT_PUBLIC_API_URL: string
+  LOG_LEVEL?: string
 }

@@ -2,7 +2,6 @@ import type React from 'react'
 import { getComplementaryText } from '@/utils/getComplementaryText'
 import { getDescription } from '@/utils/getDescription'
 import { getSubtitle } from '@/utils/getSubtitle'
-export const runtime = 'edge'
 
 interface ProjectDetailsProps {
   slug: string

@@ -1,0 +1,31 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ab-photos",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-01-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "ab-photos",
+    "database_id": "placeholder-create-with-wrangler-d1-create"
+  }],
+  "r2_buckets": [{
+    "binding": "R2_IMAGES",
+    "bucket_name": "ab-photos-images"
+  }],
+  "vars": {
+    "NEXT_PUBLIC_API_URL": "https://ab-photo.pages.dev"
+  },
+  "env": {
+    "production": {
+      "vars": { "LOG_LEVEL": "warn" }
+    },
+    "preview": {
+      "vars": { "LOG_LEVEL": "info" }
+    }
+  }
+}

@@ -1,8 +1,6 @@
 import type React from 'react'
 import { getPhotoDetails } from '@/actions/getPhotoDetails'
 
-export const runtime = 'edge'
-
 interface ProjectPhotosProps {
   slug: string
 }

@@ -16,6 +16,8 @@ export interface Project {
   isPublished: boolean
 }
 
+export type { Exhibit } from '@/types/exhibit'
+
 export interface DatabaseError extends Error {
   code?: string
   query?: string

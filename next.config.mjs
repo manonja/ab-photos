@@ -1,8 +1,8 @@
-import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev';
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare"
 
-// Here we use the @cloudflare/next-on-pages next-dev module to allow us to use bindings during local development
+// Here we use the @opennextjs/cloudflare module to allow us to use bindings during local development
 // (when running the application with `next dev`), for more information see:
-// https://github.com/cloudflare/next-on-pages/blob/5712c57ea7/internal-packages/next-dev/README.md
+// https://opennext.js.org/cloudflare
 
 // Set the API URL based on the execution context
 if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_API_URL?.includes('bossenbroek.photo')) {
@@ -17,21 +17,21 @@ console.log('[Config] environment: Build configuration', {
   npm_lifecycle_event: process.env.npm_lifecycle_event
 });
 
-// UNCOMMENT line 21-25 when developing locally
+// UNCOMMENT line 20-24 when developing locally
 const isDev = process.env.npm_lifecycle_event === 'dev';
 console.log('isDev', isDev);
 console.log('process.env.npm_lifecycle_event', process.env.npm_lifecycle_event);
 // For regular NextJS dev, use port 3000, otherwise use port 8788 for wrangler
 process.env.NEXT_PUBLIC_API_URL = isDev ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8788';
 
-if (process.env.NODE_ENV === 'development' || process.argv.includes('pages:dev')) {
-  console.log('[Config] setupDevPlatform: Starting platform setup', {
+if (process.env.NODE_ENV === 'development') {
+  console.log('[Config] initOpenNextCloudflareForDev: Starting platform setup', {
     NODE_ENV: process.env.NODE_ENV,
     argv: process.argv,
-    condition: `NODE_ENV=${process.env.NODE_ENV} || pages:dev in argv`
+    condition: `NODE_ENV=${process.env.NODE_ENV}`
   });
-  await setupDevPlatform();
-  console.log('[Config] setupDevPlatform: Platform setup completed');
+  await initOpenNextCloudflareForDev();
+  console.log('[Config] initOpenNextCloudflareForDev: Platform setup completed');
 }
 
 
@@ -56,8 +56,13 @@ const nextConfig = {
         pathname: '/**',
       },
       {
+        protocol: 'https',
+        hostname: '*.r2.dev',
+        pathname: '/**',
+      },
+      {
         // For local development
-        protocol: 'http', 
+        protocol: 'http',
         hostname: 'localhost',
         pathname: '/**',
         port: '3000',
@@ -81,9 +86,9 @@ const nextConfig = {
   experimental: {
     serverActions: {
       allowedOrigins: [
-        'bossenbroek.photo', 
-        'localhost:8788', 
-        'localhost:3000', 
+        'bossenbroek.photo',
+        'localhost:8788',
+        'localhost:3000',
         'ab-photo.pages.dev',
         'ab-photos.pages.dev',
         '*.ab-photos.pages.dev'
