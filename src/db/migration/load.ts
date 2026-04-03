@@ -16,10 +16,7 @@ export function generatePhotoInsert(photo: D1Photo): string {
   return `INSERT OR REPLACE INTO photos (id, desktop_blob, mobile_blob, gallery_blob, sequence, caption, project_id) VALUES (${escapeSql(photo.id)}, ${escapeSql(photo.desktop_blob)}, ${escapeSql(photo.mobile_blob)}, ${escapeSql(photo.gallery_blob)}, ${photo.sequence}, ${escapeSql(photo.caption)}, ${escapeSql(photo.project_id)});`
 }
 
-export function generateMigrationSql(
-  projects: D1Project[],
-  photos: D1Photo[],
-): string {
+export function generateMigrationSql(projects: D1Project[], photos: D1Photo[]): string {
   const lines: string[] = [
     '-- Auto-generated migration data from Neon PostgreSQL',
     `-- Generated at: ${new Date().toISOString()}`,

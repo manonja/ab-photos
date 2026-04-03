@@ -14,7 +14,7 @@ jest.mock('../r2-client', () => ({
   getR2: () => mockR2Bucket,
 }))
 
-import { getImage, putImage, deleteImage, listImages } from '../r2-operations'
+import { deleteImage, getImage, listImages, putImage } from '../r2-operations'
 
 describe('R2 Operations', () => {
   beforeEach(() => {

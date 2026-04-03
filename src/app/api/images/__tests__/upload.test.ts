@@ -38,9 +38,7 @@ function createMockRequest(options: {
   if (failFormData) {
     request.formData = () => Promise.reject(new Error('No form data'))
   } else {
-    const mockFile = file
-      ? createMockFile(file.name, file.type, file.size ?? 100)
-      : null
+    const mockFile = file ? createMockFile(file.name, file.type, file.size ?? 100) : null
     const pathValue = path ?? null
 
     // Create a mock FormData that returns our mock file correctly

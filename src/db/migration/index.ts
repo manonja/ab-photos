@@ -27,5 +27,5 @@ export async function migrate(connectionString: string): Promise<string> {
 
 export { extractPhotos, extractProjects } from './extract'
 export { generateMigrationSql, generatePhotoInsert, generateProjectInsert } from './load'
-export { transformPhoto, transformProject } from './transform'
 export type { D1Photo, D1Project, PgPhoto, PgProject } from './transform'
+export { transformPhoto, transformProject } from './transform'

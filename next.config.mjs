@@ -1,39 +1,43 @@
-import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare"
+import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare'
 
 // Here we use the @opennextjs/cloudflare module to allow us to use bindings during local development
 // (when running the application with `next dev`), for more information see:
 // https://opennext.js.org/cloudflare
 
 // Set the API URL based on the execution context
-if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_API_URL?.includes('bossenbroek.photo')) {
+if (
+  process.env.NODE_ENV === 'production' &&
+  !process.env.NEXT_PUBLIC_API_URL?.includes('bossenbroek.photo')
+) {
   // For production builds, use the production domain
-  process.env.NEXT_PUBLIC_API_URL = 'https://bossenbroek.photo';
-  console.log('[Config] Setting production API URL:', process.env.NEXT_PUBLIC_API_URL);
+  process.env.NEXT_PUBLIC_API_URL = 'https://bossenbroek.photo'
+  console.log('[Config] Setting production API URL:', process.env.NEXT_PUBLIC_API_URL)
 }
 
 console.log('[Config] environment: Build configuration', {
   NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   NODE_ENV: process.env.NODE_ENV,
-  npm_lifecycle_event: process.env.npm_lifecycle_event
-});
+  npm_lifecycle_event: process.env.npm_lifecycle_event,
+})
 
 // UNCOMMENT line 20-24 when developing locally
-const isDev = process.env.npm_lifecycle_event === 'dev';
-console.log('isDev', isDev);
-console.log('process.env.npm_lifecycle_event', process.env.npm_lifecycle_event);
+const isDev = process.env.npm_lifecycle_event === 'dev'
+console.log('isDev', isDev)
+console.log('process.env.npm_lifecycle_event', process.env.npm_lifecycle_event)
 // For regular NextJS dev, use port 3000, otherwise use port 8788 for wrangler
-process.env.NEXT_PUBLIC_API_URL = isDev ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8788';
+process.env.NEXT_PUBLIC_API_URL = isDev
+  ? 'http://localhost:3000'
+  : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8788'
 
 if (process.env.NODE_ENV === 'development') {
   console.log('[Config] initOpenNextCloudflareForDev: Starting platform setup', {
     NODE_ENV: process.env.NODE_ENV,
     argv: process.argv,
-    condition: `NODE_ENV=${process.env.NODE_ENV}`
-  });
-  await initOpenNextCloudflareForDev();
-  console.log('[Config] initOpenNextCloudflareForDev: Platform setup completed');
+    condition: `NODE_ENV=${process.env.NODE_ENV}`,
+  })
+  await initOpenNextCloudflareForDev()
+  console.log('[Config] initOpenNextCloudflareForDev: Platform setup completed')
 }
-
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -63,7 +67,7 @@ const nextConfig = {
         hostname: 'localhost',
         pathname: '/**',
         port: '8788',
-      }
+      },
     ],
     unoptimized: process.env.NODE_ENV === 'development', // Unoptimized images during development for faster builds
   },
@@ -75,47 +79,39 @@ const nextConfig = {
   },
   experimental: {
     serverActions: {
-      allowedOrigins: [
-        'bossenbroek.photo',
-        'localhost:8788',
-        'localhost:3000'
-      ]
-    }
+      allowedOrigins: ['bossenbroek.photo', 'localhost:8788', 'localhost:3000'],
+    },
   },
   // Add CORS headers for API routes
   async headers() {
     return [
       {
         // Apply these headers to all API routes
-        source: "/api/:path*",
+        source: '/api/:path*',
         headers: [
-          { key: "Access-Control-Allow-Origin", value: "https://bossenbroek.photo" },
-          { key: "Access-Control-Allow-Methods", value: "GET, POST, OPTIONS" },
-          { key: "Access-Control-Allow-Headers", value: "Content-Type, Authorization" },
-          { key: "Access-Control-Allow-Credentials", value: "true" }
-        ]
+          { key: 'Access-Control-Allow-Origin', value: 'https://bossenbroek.photo' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET, POST, OPTIONS' },
+          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
+        ],
       },
       {
         // Cache control for images
-        source: "/:path*.(jpg|jpeg|png|webp|avif|gif|svg)",
-        headers: [
-          { key: "Cache-Control", value: "public, max-age=31536000, immutable" }
-        ]
+        source: '/:path*.(jpg|jpeg|png|webp|avif|gif|svg)',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },
       {
         // Cache control for static assets
-        source: "/_next/static/:path*",
-        headers: [
-          { key: "Cache-Control", value: "public, max-age=31536000, immutable" }
-        ]
-      }
-    ];
-  }
-};
+        source: '/_next/static/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+    ]
+  },
+}
 
 console.log('[Config] environment: Final configuration', {
   NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-  NODE_ENV: process.env.NODE_ENV
-});
+  NODE_ENV: process.env.NODE_ENV,
+})
 
-export default nextConfig;
+export default nextConfig

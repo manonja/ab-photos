@@ -30,12 +30,18 @@ export async function POST(request: Request) {
   }
 
   if (file.size > MAX_FILE_SIZE) {
-    return Response.json({ error: `File too large (max ${MAX_FILE_SIZE / 1024 / 1024}MB)` }, { status: 413 })
+    return Response.json(
+      { error: `File too large (max ${MAX_FILE_SIZE / 1024 / 1024}MB)` },
+      { status: 413 },
+    )
   }
 
   const path = formData.get('path') as string | null
   if (path && !VALID_PATH_PATTERN.test(path)) {
-    return Response.json({ error: 'Invalid path: only alphanumeric, hyphens, and underscores allowed' }, { status: 400 })
+    return Response.json(
+      { error: 'Invalid path: only alphanumeric, hyphens, and underscores allowed' },
+      { status: 400 },
+    )
   }
 
   const filename = file.name

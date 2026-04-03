@@ -1,9 +1,5 @@
+import { generateMigrationSql, generatePhotoInsert, generateProjectInsert } from '../load'
 import type { D1Photo, D1Project } from '../transform'
-import {
-  generateMigrationSql,
-  generatePhotoInsert,
-  generateProjectInsert,
-} from '../load'
 
 describe('generateProjectInsert', () => {
   it('should generate valid INSERT for a published project', () => {
@@ -112,8 +108,8 @@ describe('generateMigrationSql', () => {
     expect(sql).toContain('-- Projects: 1, Photos: 1')
     expect(sql).toContain('-- Projects')
     expect(sql).toContain('-- Photos')
-    expect(sql).toContain("INSERT OR REPLACE INTO projects")
-    expect(sql).toContain("INSERT OR REPLACE INTO photos")
+    expect(sql).toContain('INSERT OR REPLACE INTO projects')
+    expect(sql).toContain('INSERT OR REPLACE INTO photos')
   })
 
   it('should produce no INSERT statements for empty arrays', () => {
@@ -129,9 +125,33 @@ describe('generateMigrationSql', () => {
       { id: 'p2', title: 'B', subtitle: null, description: null, isPublished: 0 },
     ]
     const photos: D1Photo[] = [
-      { id: 'ph1', desktop_blob: '/d1.jpg', mobile_blob: '/m1.jpg', gallery_blob: '/g1.jpg', sequence: 1, caption: null, project_id: 'p1' },
-      { id: 'ph2', desktop_blob: '/d2.jpg', mobile_blob: '/m2.jpg', gallery_blob: '/g2.jpg', sequence: 2, caption: null, project_id: 'p1' },
-      { id: 'ph3', desktop_blob: '/d3.jpg', mobile_blob: '/m3.jpg', gallery_blob: '/g3.jpg', sequence: 1, caption: null, project_id: 'p2' },
+      {
+        id: 'ph1',
+        desktop_blob: '/d1.jpg',
+        mobile_blob: '/m1.jpg',
+        gallery_blob: '/g1.jpg',
+        sequence: 1,
+        caption: null,
+        project_id: 'p1',
+      },
+      {
+        id: 'ph2',
+        desktop_blob: '/d2.jpg',
+        mobile_blob: '/m2.jpg',
+        gallery_blob: '/g2.jpg',
+        sequence: 2,
+        caption: null,
+        project_id: 'p1',
+      },
+      {
+        id: 'ph3',
+        desktop_blob: '/d3.jpg',
+        mobile_blob: '/m3.jpg',
+        gallery_blob: '/g3.jpg',
+        sequence: 1,
+        caption: null,
+        project_id: 'p2',
+      },
     ]
 
     const sql = generateMigrationSql(projects, photos)

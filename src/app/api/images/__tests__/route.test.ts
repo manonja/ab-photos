@@ -28,9 +28,7 @@ describe('GET /api/images/[...key]', () => {
 
     expect(response.status).toBe(200)
     expect(response.headers.get('content-type')).toBe('image/jpeg')
-    expect(response.headers.get('cache-control')).toBe(
-      'public, max-age=31536000, immutable',
-    )
+    expect(response.headers.get('cache-control')).toBe('public, max-age=31536000, immutable')
     expect(response.headers.get('etag')).toBe('"abc123"')
     expect(mockedGetImage).toHaveBeenCalledWith('industry/photo.jpg')
   })

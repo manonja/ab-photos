@@ -1,4 +1,4 @@
-import { PlaywrightTestConfig } from '@playwright/test';
+import type { PlaywrightTestConfig } from '@playwright/test'
 
 const config: PlaywrightTestConfig = {
   testDir: './src/integration-tests',
@@ -32,6 +32,6 @@ const config: PlaywrightTestConfig = {
       BROWSER: 'none',
     },
   },
-};
+}
 
-export default config; 
+export default config

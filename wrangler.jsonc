@@ -9,15 +9,19 @@
     "binding": "ASSETS"
   },
   "routes": [{ "pattern": "bossenbroek.photo", "custom_domain": true }],
-  "d1_databases": [{
-    "binding": "DB",
-    "database_name": "ab-photos",
-    "database_id": "572e0d55-e6ce-4bbb-b988-0965d51a0bcb"
-  }],
-  "r2_buckets": [{
-    "binding": "R2_IMAGES",
-    "bucket_name": "ab-photos-images"
-  }],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ab-photos",
+      "database_id": "572e0d55-e6ce-4bbb-b988-0965d51a0bcb"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "R2_IMAGES",
+      "bucket_name": "ab-photos-images"
+    }
+  ],
   "vars": {
     "NEXT_PUBLIC_API_URL": "https://bossenbroek.photo"
   },

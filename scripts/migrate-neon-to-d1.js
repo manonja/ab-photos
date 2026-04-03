@@ -35,7 +35,10 @@ function loadEnv() {
     const key = trimmed.slice(0, eqIdx)
     let value = trimmed.slice(eqIdx + 1)
     // Strip surrounding quotes
-    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
       value = value.slice(1, -1)
     }
     if (!process.env[key]) {
@@ -64,12 +67,16 @@ async function main() {
 
   try {
     // Extract projects
-    const projectsResult = await client.query('SELECT id, title, subtitle, description, "isPublished" FROM projects')
+    const projectsResult = await client.query(
+      'SELECT id, title, subtitle, description, "isPublished" FROM projects',
+    )
     const projects = projectsResult.rows
     console.log(`[Migration] Extracted ${projects.length} projects`)
 
     // Extract photos
-    const photosResult = await client.query('SELECT id, desktop_blob, mobile_blob, gallery_blob, sequence, caption, project_id FROM photos')
+    const photosResult = await client.query(
+      'SELECT id, desktop_blob, mobile_blob, gallery_blob, sequence, caption, project_id FROM photos',
+    )
     const photos = photosResult.rows
     console.log(`[Migration] Extracted ${photos.length} photos`)
 
@@ -84,14 +91,18 @@ async function main() {
 
     for (const p of projects) {
       const isPublished = p.isPublished ? 1 : 0
-      lines.push(`INSERT OR REPLACE INTO projects (id, title, subtitle, description, isPublished) VALUES (${escapeSql(p.id)}, ${escapeSql(p.title)}, ${escapeSql(p.subtitle)}, ${escapeSql(p.description)}, ${isPublished});`)
+      lines.push(
+        `INSERT OR REPLACE INTO projects (id, title, subtitle, description, isPublished) VALUES (${escapeSql(p.id)}, ${escapeSql(p.title)}, ${escapeSql(p.subtitle)}, ${escapeSql(p.description)}, ${isPublished});`,
+      )
     }
 
     lines.push('')
     lines.push('-- Photos')
 
     for (const ph of photos) {
-      lines.push(`INSERT OR REPLACE INTO photos (id, desktop_blob, mobile_blob, gallery_blob, sequence, caption, project_id) VALUES (${escapeSql(ph.id)}, ${escapeSql(ph.desktop_blob)}, ${escapeSql(ph.mobile_blob)}, ${escapeSql(ph.gallery_blob)}, ${ph.sequence}, ${escapeSql(ph.caption)}, ${escapeSql(ph.project_id)});`)
+      lines.push(
+        `INSERT OR REPLACE INTO photos (id, desktop_blob, mobile_blob, gallery_blob, sequence, caption, project_id) VALUES (${escapeSql(ph.id)}, ${escapeSql(ph.desktop_blob)}, ${escapeSql(ph.mobile_blob)}, ${escapeSql(ph.gallery_blob)}, ${ph.sequence}, ${escapeSql(ph.caption)}, ${escapeSql(ph.project_id)});`,
+      )
     }
 
     lines.push('')
@@ -102,8 +113,12 @@ async function main() {
     console.log('')
     console.log('Next steps:')
     console.log('  1. Review the generated SQL:  cat src/db/migrate-data.sql')
-    console.log('  2. Apply to D1:               npx wrangler d1 execute ab-photos --remote --file=src/db/migrate-data.sql')
-    console.log('  3. Verify:                    npx wrangler d1 execute ab-photos --remote --command="SELECT count(*) FROM projects"')
+    console.log(
+      '  2. Apply to D1:               npx wrangler d1 execute ab-photos --remote --file=src/db/migrate-data.sql',
+    )
+    console.log(
+      '  3. Verify:                    npx wrangler d1 execute ab-photos --remote --command="SELECT count(*) FROM projects"',
+    )
   } finally {
     await client.end()
   }
