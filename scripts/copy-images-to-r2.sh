@@ -28,17 +28,19 @@ trap 'rm -rf "$TMPDIR_WORK"' EXIT
 
 # --- Collect image URLs ---
 
-# Extract unique URLs from the migration SQL
-mapfile -t SQL_URLS < <(grep -o "https://assets\.bossenbroek\.photo/[^'\"]*" "$SQL_FILE" | sort -u)
+# Extract unique URLs from the migration SQL (bash 3 compatible — no mapfile)
+ALL_URLS=()
+while IFS= read -r line; do
+  ALL_URLS+=("$line")
+done < <(grep -o "https://assets\.bossenbroek\.photo/[^'\"]*" "$SQL_FILE" | sort -u)
+
+SQL_COUNT=${#ALL_URLS[@]}
 
 # Hardcoded about-page portrait
-ABOUT_IMAGE_URL="${BASE_URL}/anton_photo_resize.jpg"
-
-# Combine all URLs (SQL photos + about-page image)
-ALL_URLS=("${SQL_URLS[@]}" "$ABOUT_IMAGE_URL")
+ALL_URLS+=("${BASE_URL}/anton_photo_resize.jpg")
 
 TOTAL=${#ALL_URLS[@]}
-echo "Found $TOTAL images to migrate (${#SQL_URLS[@]} from DB + 1 about-page portrait)"
+echo "Found $TOTAL images to migrate ($SQL_COUNT from DB + 1 about-page portrait)"
 echo
 
 # --- URL-decode helper ---
