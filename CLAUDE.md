@@ -4,16 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Next.js 14 photography portfolio on Cloudflare Pages edge runtime with Neon PostgreSQL.
+Next.js 14 photography portfolio on Cloudflare Workers via OpenNext with D1 (SQLite) and R2 (images).
 
 ## Commands
 
 ```bash
 # Development
 npm run dev              # Next.js dev (port 3000)
-npm run dev:wrangler     # Cloudflare Pages local (port 8788)
-npm run pages:build      # Build for Cloudflare
-npm run deploy           # Deploy to Cloudflare
+npm run preview          # Local preview with wrangler
+npm run deploy           # Build and deploy to Cloudflare Workers
+npm run deploy:preview   # Deploy to preview environment
 
 # Testing
 npm run test             # Jest tests
@@ -33,9 +33,10 @@ npm run secrets:cf       # Get Cloudflare env from 1Password
 
 ## Architecture
 
-- **Edge runtime**: All routes use `export const runtime = 'edge'`
+- **Runtime**: Cloudflare Workers via OpenNext (`open-next.config.ts`)
 - **Server Components** by default; `'use client'` only for interactivity
-- **Database**: Neon PostgreSQL via `src/db/client.ts` (sql for queries, pool for concurrent)
+- **Database**: Cloudflare D1 (SQLite) via `src/db/client.ts`
+- **Storage**: Cloudflare R2 via `src/db/r2-client.ts`
 - **Path alias**: `@/` maps to `src/`
 
 ```
@@ -72,6 +73,6 @@ content/blog/      # HTML blog posts with Tailwind
 ## Environment
 
 Required in `.env.local` (see `.env.example`):
-- `DATABASE_URL` / `DIRECT_URL` - Neon connections
 - `NEXT_PUBLIC_API_URL` - Public API endpoint
+- `IMAGE_UPLOAD_API_KEY` - Upload API authentication
 - `NEXT_PUBLIC_MAILCHIMP_*` - Mailchimp integration

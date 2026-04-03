@@ -8,6 +8,7 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  "routes": [{ "pattern": "bossenbroek.photo", "custom_domain": true }],
   "d1_databases": [{
     "binding": "DB",
     "database_name": "ab-photos",

@@ -47,16 +47,6 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'ab-photo.pages.dev',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'ab-photos.pages.dev',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
         hostname: '*.r2.dev',
         pathname: '/**',
       },
@@ -88,10 +78,7 @@ const nextConfig = {
       allowedOrigins: [
         'bossenbroek.photo',
         'localhost:8788',
-        'localhost:3000',
-        'ab-photo.pages.dev',
-        'ab-photos.pages.dev',
-        '*.ab-photos.pages.dev'
+        'localhost:3000'
       ]
     }
   },
