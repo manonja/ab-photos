@@ -34,6 +34,9 @@ yarn-error.log*
 # opennext
 .open-next/
 
+# vercel (legacy)
+.vercel/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
@@ -46,3 +49,6 @@ next-env.d.ts
 
 # compiled blog data
 src/lib/blog/compiled/
+
+# playwright MCP screenshots
+.playwright-mcp/

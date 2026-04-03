@@ -134,6 +134,39 @@ describe('POST /api/images', () => {
     expect(data.url).toBe('https://assets.bossenbroek.photo/industry/photo.jpg')
   })
 
+  it('returns 500 when IMAGE_UPLOAD_API_KEY is not configured', async () => {
+    delete process.env.IMAGE_UPLOAD_API_KEY
+    const request = createMockRequest({ auth: 'Bearer anything' })
+    const response = await POST(request)
+    expect(response.status).toBe(500)
+    const data = await response.json()
+    expect(data.error).toBe('Server misconfigured')
+  })
+
+  it('returns 413 when file exceeds 10MB', async () => {
+    const mockResult = { key: 'uploads/huge.jpg' } as unknown as R2Object
+    mockedPutImage.mockResolvedValue(mockResult)
+
+    const request = createMockRequest({
+      auth: 'Bearer test-api-key',
+      file: { name: 'huge.jpg', type: 'image/jpeg', size: 11 * 1024 * 1024 },
+    })
+    const response = await POST(request)
+    expect(response.status).toBe(413)
+  })
+
+  it('returns 400 when path contains invalid characters', async () => {
+    const request = createMockRequest({
+      auth: 'Bearer test-api-key',
+      file: { name: 'photo.jpg', type: 'image/jpeg' },
+      path: '../etc',
+    })
+    const response = await POST(request)
+    expect(response.status).toBe(400)
+    const data = await response.json()
+    expect(data.error).toContain('Invalid path')
+  })
+
   it('defaults content type to application/octet-stream', async () => {
     const mockResult = { key: 'uploads/file.bin' } as unknown as R2Object
     mockedPutImage.mockResolvedValue(mockResult)

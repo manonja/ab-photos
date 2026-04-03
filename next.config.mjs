@@ -7,7 +7,7 @@ import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare"
 // Set the API URL based on the execution context
 if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_API_URL?.includes('bossenbroek.photo')) {
   // For production builds, use the production domain
-  process.env.NEXT_PUBLIC_API_URL = 'https://ab-photo.pages.dev';
+  process.env.NEXT_PUBLIC_API_URL = 'https://bossenbroek.photo';
   console.log('[Config] Setting production API URL:', process.env.NEXT_PUBLIC_API_URL);
 }
 

@@ -6,5 +6,6 @@ interface CloudflareEnv {
   R2_IMAGES: R2Bucket
   ASSETS: Fetcher
   NEXT_PUBLIC_API_URL: string
+  IMAGE_UPLOAD_API_KEY: string
   LOG_LEVEL?: string
 }
