@@ -76,7 +76,7 @@ for i in "${!ALL_URLS[@]}"; do
 
   if curl -sfL -o "$tmp_file" "$url"; then
     # Upload to R2
-    if wrangler r2 object put "${R2_BUCKET}/${r2_key}" \
+    if npx wrangler r2 object put "${R2_BUCKET}/${r2_key}" \
         --file="$tmp_file" \
         --content-type="image/jpeg" \
         --remote 2>/dev/null; then
