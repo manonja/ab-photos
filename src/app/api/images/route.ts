@@ -1,7 +1,5 @@
 import { putImage } from '@/db/r2-operations'
 
-export const runtime = 'edge'
-
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 const VALID_PATH_PATTERN = /^[a-zA-Z0-9_-]+$/
 

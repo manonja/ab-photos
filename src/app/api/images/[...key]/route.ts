@@ -1,7 +1,5 @@
 import { getImage } from '@/db/r2-operations'
 
-export const runtime = 'edge'
-
 export async function GET(_request: Request, { params }: { params: Promise<{ key: string[] }> }) {
   const { key } = await params
 
