@@ -12,7 +12,7 @@
     {
       "binding": "DB",
       "database_name": "ab-photos",
-      "database_id": "5a935784-1d36-4d02-821c-f339edd2efea"
+      "database_id": "572e0d55-e6ce-4bbb-b988-0965d51a0bcb"
     }
   ],
   "r2_buckets": [
@@ -34,7 +34,7 @@
         {
           "binding": "DB",
           "database_name": "ab-photos",
-          "database_id": "5a935784-1d36-4d02-821c-f339edd2efea"
+          "database_id": "572e0d55-e6ce-4bbb-b988-0965d51a0bcb"
         }
       ],
       "r2_buckets": [
@@ -54,7 +54,7 @@
         {
           "binding": "DB",
           "database_name": "ab-photos",
-          "database_id": "5a935784-1d36-4d02-821c-f339edd2efea"
+          "database_id": "572e0d55-e6ce-4bbb-b988-0965d51a0bcb"
         }
       ],
       "r2_buckets": [
