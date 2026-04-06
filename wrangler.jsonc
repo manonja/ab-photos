@@ -26,7 +26,23 @@
   },
   "env": {
     "production": {
-      "vars": { "LOG_LEVEL": "warn" },
+      "vars": {
+        "LOG_LEVEL": "warn",
+        "NEXT_PUBLIC_API_URL": "https://bossenbroek.photo"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "ab-photos",
+          "database_id": "5a935784-1d36-4d02-821c-f339edd2efea"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "R2_IMAGES",
+          "bucket_name": "ab-photos-images"
+        }
+      ],
       "routes": [{ "pattern": "bossenbroek.photo", "custom_domain": true }]
     },
     "preview": {
