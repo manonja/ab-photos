@@ -30,9 +30,9 @@ describe('R2 Operations', () => {
       }
       mockGet.mockResolvedValue(mockObject)
 
-      const result = await getImage('industry/photo.jpg')
+      const result = await getImage('7-rad/photo.jpg')
 
-      expect(mockGet).toHaveBeenCalledWith('industry/photo.jpg')
+      expect(mockGet).toHaveBeenCalledWith('7-rad/photo.jpg')
       expect(result).toBe(mockObject)
     })
 
@@ -74,14 +74,14 @@ describe('R2 Operations', () => {
   describe('listImages', () => {
     it('returns matching keys with prefix', async () => {
       const mockObjects = {
-        objects: [{ key: 'industry/a.jpg' }, { key: 'industry/b.jpg' }],
+        objects: [{ key: '7-rad/a.jpg' }, { key: '7-rad/b.jpg' }],
         truncated: false,
       }
       mockList.mockResolvedValue(mockObjects)
 
-      const result = await listImages('industry/')
+      const result = await listImages('7-rad/')
 
-      expect(mockList).toHaveBeenCalledWith({ prefix: 'industry/' })
+      expect(mockList).toHaveBeenCalledWith({ prefix: '7-rad/' })
       expect(result).toBe(mockObjects)
     })
 

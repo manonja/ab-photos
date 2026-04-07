@@ -11,7 +11,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = async ({ slug }) => {
   const subtitle = getSubtitle(slug)
   const description = getDescription(slug)
   const complementaryText = getComplementaryText(slug)
-  const date = slug === 'pyrenees' ? 'Summer 2021' : slug === '7-rad' ? '2019-2024' : '2018-present'
+  const date = slug === 'pyrenees' ? 'Summer 2021' : slug === '7-rad' ? '2019-2024' : ''
   return (
     <main className="flex flex-col items-center">
       <div className="flex w-full relative justify-center lg:py-[6%] py-[2%] mx-auto">

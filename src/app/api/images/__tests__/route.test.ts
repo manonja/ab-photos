@@ -22,15 +22,15 @@ describe('GET /api/images/[...key]', () => {
     } as unknown as R2ObjectBody
     mockedGetImage.mockResolvedValue(mockObject)
 
-    const response = await GET(new Request('http://test.com/api/images/industry/photo.jpg'), {
-      params: Promise.resolve({ key: ['industry', 'photo.jpg'] }),
+    const response = await GET(new Request('http://test.com/api/images/7-rad/photo.jpg'), {
+      params: Promise.resolve({ key: ['7-rad', 'photo.jpg'] }),
     })
 
     expect(response.status).toBe(200)
     expect(response.headers.get('content-type')).toBe('image/jpeg')
     expect(response.headers.get('cache-control')).toBe('public, max-age=31536000, immutable')
     expect(response.headers.get('etag')).toBe('"abc123"')
-    expect(mockedGetImage).toHaveBeenCalledWith('industry/photo.jpg')
+    expect(mockedGetImage).toHaveBeenCalledWith('7-rad/photo.jpg')
   })
 
   it('returns 404 when image not found', async () => {
