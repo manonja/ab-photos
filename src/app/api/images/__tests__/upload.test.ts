@@ -123,21 +123,21 @@ describe('POST /api/images', () => {
   })
 
   it('uploads file with custom key path', async () => {
-    const mockResult = { key: 'industry/photo.jpg' } as unknown as R2Object
+    const mockResult = { key: '7-rad/photo.jpg' } as unknown as R2Object
     mockedPutImage.mockResolvedValue(mockResult)
 
     const request = createMockRequest({
       auth: 'Bearer test-api-key',
       file: { name: 'photo.jpg', type: 'image/jpeg' },
-      path: 'industry',
+      path: '7-rad',
     })
 
     const response = await POST(request)
 
     expect(response.status).toBe(200)
     const data = await response.json()
-    expect(data.key).toBe('industry/photo.jpg')
-    expect(data.url).toBe('https://assets.bossenbroek.photo/industry/photo.jpg')
+    expect(data.key).toBe('7-rad/photo.jpg')
+    expect(data.url).toBe('https://assets.bossenbroek.photo/7-rad/photo.jpg')
   })
 
   it('returns 500 when IMAGE_UPLOAD_API_KEY is not configured', async () => {

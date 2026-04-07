@@ -4,7 +4,6 @@ import type { Project } from '@/types/database'
 const FALLBACK_PROJECTS: Project[] = [
   { id: '7-rad', title: '7 Rad', description: '', isPublished: true },
   { id: 'pyrenees', title: 'Pyrenees', description: '', isPublished: true },
-  { id: 'industry', title: 'Industry', description: '', isPublished: true },
   // Add more static project data as needed
 ]
 
