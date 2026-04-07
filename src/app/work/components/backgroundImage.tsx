@@ -4,14 +4,6 @@ import { getPhotoDetails } from '@/actions/getPhotoDetails'
 import type { Photo } from '@/db/types'
 import BackgroundImageClient from './backgroundImageClient'
 
-// Only use edge runtime when not in development
-export const runtime = process.env.NODE_ENV === 'development' ? 'nodejs' : 'edge'
-
-console.log('[Component] BackgroundImage: Runtime environment', {
-  environment: process.env.NODE_ENV,
-  runtime: runtime,
-})
-
 interface BackgroundImageProps {
   slug: string
   sequence?: number

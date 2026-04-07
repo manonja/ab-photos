@@ -1,8 +1,6 @@
 import type { NextRequest } from 'next/server'
 import { log } from '@/lib/logger'
 
-export const runtime = 'edge'
-
 export async function GET(_request: NextRequest) {
   log.withMetadata({ route: 'api/hello' }).info('Hello endpoint called')
   const responseText = 'Hello World'

@@ -31,8 +31,11 @@ yarn-error.log*
 .env*.local
 .env.local.backup.*
 
-# vercel
-.vercel
+# opennext
+.open-next/
+
+# vercel (legacy)
+.vercel/
 
 # typescript
 *.tsbuildinfo
@@ -46,3 +49,6 @@ next-env.d.ts
 
 # compiled blog data
 src/lib/blog/compiled/
+
+# playwright MCP screenshots
+.playwright-mcp/

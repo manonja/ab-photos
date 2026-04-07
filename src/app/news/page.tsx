@@ -4,8 +4,6 @@ import PostCard from '@/components/news/PostCard'
 import { getAllBlogPosts } from '@/lib/blog'
 import { prepareBlogPostForDisplay } from '@/lib/blog/adapter'
 
-// Use edge runtime for Cloudflare Pages compatibility
-export const runtime = 'edge'
 export const revalidate = 3600 // Revalidate every hour
 
 export const metadata: Metadata = {

@@ -71,17 +71,15 @@ jobs:
             nextjs-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-
             nextjs-${{ runner.os }}-
 
-      - name: Build for Cloudflare Pages
-        run: npm run pages:build
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+      - name: Build for Cloudflare Workers
+        run: npx opennextjs-cloudflare build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-output
-          path: .vercel/output/static
+          path: .open-next
+          include-hidden-files: true
           retention-days: 1
 
   e2e:
@@ -124,14 +122,18 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-output
-          path: .vercel/output/static
+          path: .open-next
+
+      - name: Initialize local D1
+        run: |
+          npx wrangler d1 execute ab-photos --local --file=src/db/schema.sql
+          npx wrangler d1 execute ab-photos --local --file=src/db/migrate-data.sql
+          npx wrangler d1 execute ab-photos --local --file=src/db/seed.sql
 
       - name: Run Playwright tests
         run: npx playwright test
         env:
           CI: '1'
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DIRECT_URL: ${{ secrets.DIRECT_URL }}
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4

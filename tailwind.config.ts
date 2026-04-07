@@ -1,26 +1,25 @@
-import type { Config } from "tailwindcss";
-import defaultTheme from "tailwindcss/defaultTheme";
+import type { Config } from 'tailwindcss'
+import defaultTheme from 'tailwindcss/defaultTheme'
 
 const config: Config = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx}",
-    "./src/components/**/*.{js,ts,jsx,tsx}",
-    "./src/app/**/*.{js,ts,jsx,tsx}",
+    './src/pages/**/*.{js,ts,jsx,tsx}',
+    './src/components/**/*.{js,ts,jsx,tsx}',
+    './src/app/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
       backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       fontFamily: {
         sans: ['Lexend', ...defaultTheme.fontFamily.sans],
-        anton: ['Anton', 'sans-serif' ]
+        anton: ['Anton', 'sans-serif'],
       },
       transitionProperty: {
-        'opacity': 'opacity',
-        'all': 'opacity, filter, transform',
+        opacity: 'opacity',
+        all: 'opacity, filter, transform',
       },
       transitionDuration: {
         '200': '200ms',
@@ -31,7 +30,7 @@ const config: Config = {
         '1000': '1000ms',
       },
       transitionTimingFunction: {
-        'out': 'cubic-bezier(0.0, 0, 0.2, 1)',
+        out: 'cubic-bezier(0.0, 0, 0.2, 1)',
         'in-out': 'cubic-bezier(0.4, 0, 0.2, 1)',
         'ease-out-cubic': 'cubic-bezier(0.215, 0.61, 0.355, 1)',
       },
@@ -51,5 +50,5 @@ const config: Config = {
     },
   },
   plugins: [],
-};
-export default config;
+}
+export default config

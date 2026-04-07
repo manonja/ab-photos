@@ -1,185 +1,89 @@
-import { sql } from './client'
-import type { DatabaseError, Photo, Project } from './types'
+import type { Exhibit } from '@/types/exhibit'
+import { getDb } from './client'
+import type { Photo, Project } from './types'
 
-/**
- * Database Operations Module
- *
- * This module provides database query operations for photos and projects using a SQL database.
- * It utilizes a connection pool and SQL template literals for safe query execution.
- *
- * @module db/operations
- *
- * TODO: Potential Issues
- * - Fix findProjectBySlug to use slug instead of id in WHERE clause
- * - Add input validation before query execution
- *
- * TODO: Type Safety Improvements
- * - Add zod schemas for runtime type validation
- * - Create stricter types for database results
- * - Add type guards for null checks
- *
- * TODO: General Improvements
- * - Implement input sanitization
- * - Add pagination for findAllProjects
- * - Create database indices for project_id, slug columns
- * - Implement caching layer for frequent queries
- * - Add rate limiting for database operations
- * - Set query timeouts
- * - Replace console.log with proper logging service
- */
-
-/**
- * Retrieves all photos associated with a specific project.
- *
- * @param projectId - The unique identifier of the project
- * @returns Promise<Photo[]> - Array of photo objects
- * @throws Will throw an error if the database query fails
- */
 export async function findPhotosByProjectId(projectId: string): Promise<Photo[]> {
-  try {
-    console.log('[DB] findPhotosByProjectId: Starting request', { projectId })
-
-    const result = await sql`
-            SELECT * FROM photos 
-            WHERE photos.project_id = ${projectId}
-        `
-
-    const photos = result as Photo[]
-    console.log('[DB] findPhotosByProjectId: Successfully fetched photos', {
-      projectId,
-      photoCount: photos.length,
-    })
-
-    return photos
-  } catch (error) {
-    console.error('[DB] findPhotosByProjectId: Error occurred', {
-      error,
-      code: (error as DatabaseError).code,
-      projectId,
-    })
-    throw error
-  }
+  console.log('[DB] findPhotosByProjectId: Starting request', { projectId })
+  const db = getDb()
+  const { results } = await db
+    .prepare(
+      'SELECT id, desktop_blob, mobile_blob, gallery_blob, sequence, caption, project_id AS projectId FROM photos WHERE project_id = ?',
+    )
+    .bind(projectId)
+    .all<Photo>()
+  console.log('[DB] findPhotosByProjectId: Successfully fetched photos', {
+    projectId,
+    photoCount: results.length,
+  })
+  return results
 }
 
-/**
- * Retrieves all published projects from the database.
- *
- * @returns Promise<Project[]> - Array of published project objects
- * @throws Will throw an error if the database query fails
- */
 export async function findAllProjects(): Promise<Project[]> {
-  try {
-    console.log('[DB] findAllProjects: Starting request')
-
-    const result = await sql`
-            SELECT * FROM projects
-            WHERE "isPublished" = true
-        `
-
-    const projects = result as Project[]
-    console.log('[DB] findAllProjects: Successfully fetched projects', {
-      projectCount: projects.length,
-    })
-
-    return projects
-  } catch (error) {
-    console.error('[DB] findAllProjects: Error occurred', {
-      error,
-      code: (error as DatabaseError).code,
-    })
-    throw error
-  }
+  console.log('[DB] findAllProjects: Starting request')
+  const db = getDb()
+  const { results } = await db
+    .prepare('SELECT * FROM projects WHERE isPublished = 1')
+    .all<Project>()
+  console.log('[DB] findAllProjects: Successfully fetched projects', {
+    projectCount: results.length,
+  })
+  return results.map((p) => ({ ...p, isPublished: Boolean(p.isPublished) }))
 }
 
-/**
- * Finds a single project by its slug identifier.
- *
- * @param slug - The unique slug identifier for the project
- * @returns Promise<Project | null> - Project object if found, null otherwise
- * @throws Will throw an error if the database query fails
- */
 export async function findProjectBySlug(slug: string): Promise<Project | null> {
-  try {
-    console.log('[DB] findProjectBySlug: Starting request', { slug })
-
-    const result = await sql`
-            SELECT * FROM projects
-            WHERE id = ${slug}
-            LIMIT 1
-        `
-
-    const projects = result as Project[]
-    const project = projects[0] || null
-
-    if (!project) {
-      console.warn('[DB] findProjectBySlug: Project not found', { slug })
-    } else {
-      console.log('[DB] findProjectBySlug: Successfully fetched project', {
-        slug,
-        projectId: project.id,
-      })
-    }
-
-    return project
-  } catch (error) {
-    console.error('[DB] findProjectBySlug: Error occurred', {
-      error,
-      code: (error as DatabaseError).code,
-      slug,
-    })
-    throw error
+  console.log('[DB] findProjectBySlug: Starting request', { slug })
+  const db = getDb()
+  const result = await db
+    .prepare('SELECT * FROM projects WHERE id = ? LIMIT 1')
+    .bind(slug)
+    .first<Project>()
+  if (!result) {
+    console.warn('[DB] findProjectBySlug: Project not found', { slug })
+    return null
   }
+  console.log('[DB] findProjectBySlug: Successfully fetched project', {
+    slug,
+    projectId: result.id,
+  })
+  return { ...result, isPublished: Boolean(result.isPublished) }
 }
 
-/**
- * Retrieves a specific photo by project ID and sequence number.
- *
- * @param projectId - The unique identifier of the project
- * @param sequence - The sequence number of the photo within the project
- * @returns Promise<Photo | null> - Photo object if found, null otherwise
- * @throws Will throw an error if the database query fails
- */
 export async function findPhotoByProjectIdAndSeq(
   projectId: string,
   sequence: number,
 ): Promise<Photo | null> {
-  try {
-    console.log('[DB] findPhotoByProjectIdAndSeq: Starting request', {
-      projectId,
-      sequence,
-    })
-
-    const result = await sql`
-            SELECT * FROM photos 
-            WHERE project_id = ${projectId}
-            AND sequence = ${sequence}
-            LIMIT 1
-        `
-
-    const photos = result as Photo[]
-    const photo = photos[0] || null
-
-    if (!photo) {
-      console.warn('[DB] findPhotoByProjectIdAndSeq: Photo not found', {
-        projectId,
-        sequence,
-      })
-    } else {
-      console.log('[DB] findPhotoByProjectIdAndSeq: Successfully fetched photo', {
-        projectId,
-        sequence,
-        photoId: photo.id,
-      })
-    }
-
-    return photo
-  } catch (error) {
-    console.error('[DB] findPhotoByProjectIdAndSeq: Error occurred', {
-      error,
-      code: (error as DatabaseError).code,
-      projectId,
-      sequence,
-    })
-    throw error
+  console.log('[DB] findPhotoByProjectIdAndSeq: Starting request', { projectId, sequence })
+  const db = getDb()
+  const result = await db
+    .prepare(
+      'SELECT id, desktop_blob, mobile_blob, gallery_blob, sequence, caption, project_id AS projectId FROM photos WHERE project_id = ? AND sequence = ? LIMIT 1',
+    )
+    .bind(projectId, sequence)
+    .first<Photo>()
+  if (!result) {
+    console.warn('[DB] findPhotoByProjectIdAndSeq: Photo not found', { projectId, sequence })
+    return null
   }
+  console.log('[DB] findPhotoByProjectIdAndSeq: Successfully fetched photo', {
+    projectId,
+    sequence,
+    photoId: result.id,
+  })
+  return result
+}
+
+export async function findAllExhibits(): Promise<Exhibit[]> {
+  console.log('[DB] findAllExhibits: Starting request')
+  const db = getDb()
+  const { results } = await db
+    .prepare('SELECT * FROM exhibits ORDER BY startDate DESC')
+    .all<Exhibit>()
+  console.log('[DB] findAllExhibits: Successfully fetched exhibits', {
+    exhibitCount: results.length,
+  })
+  return results.map((e) => ({
+    ...e,
+    isActive: Boolean(e.isActive),
+    isUpcoming: Boolean(e.isUpcoming),
+  }))
 }

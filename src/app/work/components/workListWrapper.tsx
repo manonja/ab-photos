@@ -2,8 +2,6 @@ import { getProjectsDetails } from '@/actions/getProjectsDetails'
 import type { Project } from '@/types/database'
 import WorkList from './workList'
 
-export const runtime = 'edge'
-
 interface WorkListWrapperProps {
   projects?: Project[]
 }

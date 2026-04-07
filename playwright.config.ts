@@ -1,22 +1,4 @@
-import { PlaywrightTestConfig } from '@playwright/test';
-
-// Build wrangler command with --binding flags for Worker runtime env vars
-// Note: webServer.env passes vars to the Node.js wrangler process, but NOT to
-// the Cloudflare Worker runtime (V8 isolate). Use --binding for Worker bindings.
-const buildWranglerCommand = (): string => {
-  const baseCmd =
-    'npx wrangler pages dev .vercel/output/static --port 8788 --compatibility-flag=nodejs_compat';
-  const bindings: string[] = [];
-
-  if (process.env.DATABASE_URL) {
-    bindings.push(`--binding DATABASE_URL=${process.env.DATABASE_URL}`);
-  }
-  if (process.env.DIRECT_URL) {
-    bindings.push(`--binding DIRECT_URL=${process.env.DIRECT_URL}`);
-  }
-
-  return bindings.length > 0 ? `${baseCmd} ${bindings.join(' ')}` : baseCmd;
-};
+import type { PlaywrightTestConfig } from '@playwright/test'
 
 const config: PlaywrightTestConfig = {
   testDir: './src/integration-tests',
@@ -39,7 +21,7 @@ const config: PlaywrightTestConfig = {
     },
   ],
   webServer: {
-    command: buildWranglerCommand(),
+    command: 'npx wrangler dev --port 8788',
     port: 8788,
     timeout: 120000,
     reuseExistingServer: !process.env.CI,
@@ -50,6 +32,6 @@ const config: PlaywrightTestConfig = {
       BROWSER: 'none',
     },
   },
-};
+}
 
-export default config; 
+export default config

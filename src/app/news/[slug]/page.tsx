@@ -4,8 +4,6 @@ import { getBlogPostBySlug } from '@/lib/blog'
 import { prepareBlogPostForDisplay } from '@/lib/blog/adapter'
 import PostContent from '../../../components/news/PostContent'
 
-// Use edge runtime for Cloudflare Pages compatibility
-export const runtime = 'edge'
 export const revalidate = 3600 // Revalidate every hour
 
 // Generate metadata for this page

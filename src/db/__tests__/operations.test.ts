@@ -1,5 +1,5 @@
-import { pool, sql } from '../client'
 import {
+  findAllExhibits,
   findAllProjects,
   findPhotoByProjectIdAndSeq,
   findPhotosByProjectId,
@@ -7,15 +7,17 @@ import {
 } from '../operations'
 import { mockPhotos, mockProjects } from './mocks'
 
-// Mock the database client and environment
-jest.mock('../client', () => ({
-  sql: jest.fn(),
-  pool: {
-    connect: jest.fn(),
-  },
-}))
+// Create mock D1 methods
+const mockFirst = jest.fn()
+const mockAll = jest.fn()
+const mockBind = jest.fn(() => ({ all: mockAll, first: mockFirst }))
+const mockPrepare = jest.fn(() => ({ bind: mockBind, all: mockAll, first: mockFirst }))
 
-const mockedSql = sql as unknown as jest.Mock
+const mockDb = { prepare: mockPrepare } as unknown as D1Database
+
+jest.mock('../client', () => ({
+  getDb: () => mockDb,
+}))
 
 describe('Database Operations', () => {
   beforeEach(() => {
@@ -26,56 +28,47 @@ describe('Database Operations', () => {
     it('should return photos for a given project ID', async () => {
       const projectId = 'nature'
       const expectedPhotos = mockPhotos.filter((p) => p.projectId === projectId)
-      mockedSql.mockResolvedValueOnce(expectedPhotos)
+      mockAll.mockResolvedValueOnce({ results: expectedPhotos })
 
       const result = await findPhotosByProjectId(projectId)
 
       expect(result).toEqual(expectedPhotos)
-      // Verify SQL parts without checking exact formatting
-      const sqlParts = mockedSql.mock.calls[0][0] as string[]
-      expect(sqlParts.some((part: string) => part.includes('SELECT * FROM photos'))).toBe(true)
-      expect(sqlParts.some((part: string) => part.includes('WHERE photos.project_id ='))).toBe(true)
-      expect(mockedSql.mock.calls[0][1]).toBe(projectId)
+      expect(mockPrepare).toHaveBeenCalledWith(expect.stringContaining('FROM photos'))
+      expect(mockBind).toHaveBeenCalledWith(projectId)
     })
   })
 
   describe('findAllProjects', () => {
     it('should return all published projects', async () => {
-      const publishedProjects = mockProjects.filter((p) => p.isPublished)
-      mockedSql.mockResolvedValueOnce(publishedProjects)
+      const publishedProjects = mockProjects
+        .filter((p) => p.isPublished)
+        .map((p) => ({ ...p, isPublished: 1 }))
+      mockAll.mockResolvedValueOnce({ results: publishedProjects })
 
       const result = await findAllProjects()
 
-      expect(result).toEqual(publishedProjects)
-      const sqlParts = mockedSql.mock.calls[0][0] as string[]
-      expect(sqlParts.some((part: string) => part.includes('SELECT * FROM projects'))).toBe(true)
-      expect(sqlParts.some((part: string) => part.includes('WHERE "isPublished" = true'))).toBe(
-        true,
-      )
+      expect(result).toEqual(publishedProjects.map((p) => ({ ...p, isPublished: true })))
+      expect(mockPrepare).toHaveBeenCalledWith(expect.stringContaining('FROM projects'))
     })
   })
 
   describe('findProjectBySlug', () => {
     it('should return a project by slug', async () => {
       const slug = 'nature'
-      const expectedProject = mockProjects.find((p) => p.id === slug)
-      mockedSql.mockResolvedValueOnce([expectedProject])
+      const expectedProject = { ...mockProjects.find((p) => p.id === slug), isPublished: 1 }
+      mockFirst.mockResolvedValueOnce(expectedProject)
 
       const result = await findProjectBySlug(slug)
 
-      expect(result).toEqual(expectedProject)
-      const sqlParts = mockedSql.mock.calls[0][0] as string[]
-      expect(sqlParts.some((part: string) => part.includes('SELECT * FROM projects'))).toBe(true)
-      expect(sqlParts.some((part: string) => part.includes('WHERE id ='))).toBe(true)
-      expect(sqlParts.some((part: string) => part.includes('LIMIT 1'))).toBe(true)
-      expect(mockedSql.mock.calls[0][1]).toBe(slug)
+      expect(result).toEqual({ ...expectedProject, isPublished: true })
+      expect(mockPrepare).toHaveBeenCalledWith(expect.stringContaining('FROM projects'))
+      expect(mockBind).toHaveBeenCalledWith(slug)
     })
 
     it('should return null when project not found', async () => {
-      const slug = 'non-existent'
-      mockedSql.mockResolvedValueOnce([])
+      mockFirst.mockResolvedValueOnce(null)
 
-      const result = await findProjectBySlug(slug)
+      const result = await findProjectBySlug('non-existent')
 
       expect(result).toBeNull()
     })
@@ -88,60 +81,34 @@ describe('Database Operations', () => {
       const expectedPhoto = mockPhotos.find(
         (p) => p.projectId === projectId && p.sequence === sequence,
       )
-      mockedSql.mockResolvedValueOnce([expectedPhoto])
+      mockFirst.mockResolvedValueOnce(expectedPhoto)
 
       const result = await findPhotoByProjectIdAndSeq(projectId, sequence)
 
       expect(result).toEqual(expectedPhoto)
-      const sqlParts = mockedSql.mock.calls[0][0] as string[]
-      expect(sqlParts.some((part: string) => part.includes('SELECT * FROM photos'))).toBe(true)
-      expect(sqlParts.some((part: string) => part.includes('WHERE project_id ='))).toBe(true)
-      expect(sqlParts.some((part: string) => part.includes('AND sequence ='))).toBe(true)
-      expect(sqlParts.some((part: string) => part.includes('LIMIT 1'))).toBe(true)
-      expect(mockedSql.mock.calls[0][1]).toBe(projectId)
-      expect(mockedSql.mock.calls[0][2]).toBe(sequence)
+      expect(mockPrepare).toHaveBeenCalledWith(expect.stringContaining('FROM photos'))
+      expect(mockBind).toHaveBeenCalledWith(projectId, sequence)
     })
 
     it('should return null when photo not found', async () => {
-      const projectId = 'nature'
-      const sequence = 999
-      mockedSql.mockResolvedValueOnce([])
+      mockFirst.mockResolvedValueOnce(null)
 
-      const result = await findPhotoByProjectIdAndSeq(projectId, sequence)
+      const result = await findPhotoByProjectIdAndSeq('nature', 999)
 
       expect(result).toBeNull()
     })
   })
-})
 
-// Integration tests
-describe('Database Integration Tests', () => {
-  // Mock the database client for integration tests
-  const mockPool = {
-    connect: jest.fn().mockResolvedValue({
-      release: jest.fn(),
-    }),
-  }
+  describe('findAllExhibits', () => {
+    it('should return exhibits with boolean conversion', async () => {
+      const dbExhibits = [{ id: 'exhibit-1', title: 'Test', isActive: 1, isUpcoming: 0 }]
+      mockAll.mockResolvedValueOnce({ results: dbExhibits })
 
-  beforeEach(() => {
-    jest.clearAllMocks()
-    ;(pool as unknown as { connect: typeof mockPool.connect }).connect = mockPool.connect
-  })
+      const result = await findAllExhibits()
 
-  it('should connect to the database', async () => {
-    const client = await pool.connect()
-    expect(client).toBeDefined()
-    expect(mockPool.connect).toHaveBeenCalled()
-    await client.release()
-  })
-
-  it('should query the database using mocked sql', async () => {
-    // Set up the mock to return test data for a tagged template literal call
-    mockedSql.mockResolvedValueOnce([{ test: 1 }])
-
-    // The sql mock is called as a function with template literal parts
-    const result = await sql`SELECT 1 as test`
-    expect(result).toEqual([{ test: 1 }])
-    expect(mockedSql).toHaveBeenCalled()
+      expect(result[0].isActive).toBe(true)
+      expect(result[0].isUpcoming).toBe(false)
+      expect(mockPrepare).toHaveBeenCalledWith(expect.stringContaining('FROM exhibits'))
+    })
   })
 })

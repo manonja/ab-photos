@@ -1,10 +1,8 @@
 import type { Metadata } from 'next'
 import ExhibitCard from '@/components/exhibits/ExhibitCard'
-import { exhibits } from '@/data/exhibits'
+import { findAllExhibits } from '@/db/operations'
 
-// Use edge runtime for Cloudflare Pages compatibility
-export const runtime = 'edge'
-export const revalidate = 3600 // Revalidate every hour
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Exhibitions | Anton Bossenbroek Photography',
@@ -12,6 +10,8 @@ export const metadata: Metadata = {
 }
 
 export default async function ExhibitionsPage() {
+  const exhibits = await findAllExhibits()
+
   if (!exhibits || exhibits.length === 0) {
     return (
       <main className="flex min-h-screen flex-col lg:w-[90%] lg:p-6 p-2">
