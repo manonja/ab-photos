@@ -1,5 +1,13 @@
 import { putImage } from '@/db/r2-operations'
 
+jest.mock('@opennextjs/cloudflare', () => ({
+  getCloudflareContext: () => ({
+    env: {
+      IMAGE_UPLOAD_API_KEY: process.env.IMAGE_UPLOAD_API_KEY ?? '',
+    },
+  }),
+}))
+
 jest.mock('@/db/r2-operations', () => ({
   putImage: jest.fn(),
 }))
