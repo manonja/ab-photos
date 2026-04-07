@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import type React from 'react'
-// Using HTML content
 import type { BlogPostDisplay } from '../../lib/blog/types'
 
 interface PostContentProps {
@@ -9,14 +8,6 @@ interface PostContentProps {
 }
 
 const PostContent: React.FC<PostContentProps> = ({ post }) => {
-  // Format date: "May 8, 2023"
-  const _formattedDate = new Date(post.published_at).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-
-  // Get the HTML content
   const HTMLContent = post.htmlContent
 
   return (
