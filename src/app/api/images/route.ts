@@ -1,10 +1,12 @@
 import { putImage } from '@/db/r2-operations'
+import { getCloudflareContext } from '@opennextjs/cloudflare'
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 const VALID_PATH_PATTERN = /^[a-zA-Z0-9_-]+$/
 
 export async function POST(request: Request) {
-  const apiKey = process.env.IMAGE_UPLOAD_API_KEY
+  const { env } = getCloudflareContext()
+  const apiKey = env.IMAGE_UPLOAD_API_KEY
   if (!apiKey) {
     console.error('[API] POST /api/images: IMAGE_UPLOAD_API_KEY is not configured')
     return Response.json({ error: 'Server misconfigured' }, { status: 500 })
