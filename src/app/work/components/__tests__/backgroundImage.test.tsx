@@ -2,6 +2,11 @@ import { render, screen } from '@testing-library/react'
 import { getPhotoDetails } from '@/actions/getPhotoDetails'
 import BackgroundImage from '../backgroundImage'
 
+// Mock Cloudflare context (required because getPhotoDetails now imports @/db/operations → @/db/client → @opennextjs/cloudflare)
+jest.mock('@opennextjs/cloudflare', () => ({
+  getCloudflareContext: () => ({ env: {} }),
+}))
+
 // Mock the getPhotoDetails function
 jest.mock('@/actions/getPhotoDetails')
 const mockedGetPhotoDetails = getPhotoDetails as jest.MockedFunction<typeof getPhotoDetails>
@@ -58,5 +63,34 @@ describe('BackgroundImage', () => {
     render(await BackgroundImage({ slug: 'test-project', sequence: 3 }))
 
     expect(mockedGetPhotoDetails).toHaveBeenCalledWith('test-project', 3)
+  })
+
+  it('should use getPhotoDetails for random photo selection instead of direct fetch', async () => {
+    const mockPhotos = [
+      {
+        id: 'photo1',
+        desktop_blob: 'https://example.com/photo1.jpg',
+        caption: 'Photo 1',
+      },
+      {
+        id: 'photo2',
+        desktop_blob: 'https://example.com/photo2.jpg',
+        caption: 'Photo 2',
+      },
+    ]
+    mockedGetPhotoDetails.mockResolvedValueOnce(mockPhotos)
+
+    // Mock global.fetch to verify the component does NOT call it directly
+    const fetchMock = jest
+      .fn()
+      .mockResolvedValue(new Response(JSON.stringify(mockPhotos), { status: 200 }))
+    global.fetch = fetchMock
+
+    render(await BackgroundImage({ slug: '7-rad', random: true }))
+
+    // The component should delegate to getPhotoDetails (no sequence = fetch all photos)
+    expect(mockedGetPhotoDetails).toHaveBeenCalledWith('7-rad')
+    // The component should NOT make a direct fetch call
+    expect(fetchMock).not.toHaveBeenCalled()
   })
 })

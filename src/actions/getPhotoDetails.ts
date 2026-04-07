@@ -1,4 +1,5 @@
 import { cache } from 'react'
+import { findPhotoByProjectIdAndSeq, findPhotosByProjectId } from '@/db/operations'
 import type { Photo } from '@/types/database'
 
 // Fallback photo data - use as emergency fallback when API fails
@@ -13,75 +14,79 @@ const FALLBACK_PHOTO: Photo = {
 }
 
 /**
- * Server action to fetch photo details from the API.
- * Can fetch either all photos for a project or a specific photo by sequence.
- * Uses ISR with 1-hour revalidation.
+ * Server action to fetch photo details.
+ * Uses direct D1 database access on Cloudflare Workers runtime.
+ * Falls back to HTTP API during next build (when D1 is unavailable).
  * Uses React cache to memoize results within a request lifecycle.
  *
  * @param projectId - The unique identifier of the project
  * @param sequence - Optional sequence number to fetch a specific photo
  * @returns Promise<Photo | Photo[] | null> - Array of photos, single photo, or null if not found
- * @throws Will throw an error if the API request fails
  */
 export const getPhotoDetails = cache(
   async (projectId: string, sequence?: number): Promise<Photo | Photo[] | null> => {
-    // Get the base URL for the API
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL
+    // Strategy 1: Direct DB access (works on Cloudflare Workers runtime)
+    try {
+      if (typeof sequence === 'number') {
+        console.log('[Action] getPhotoDetails: Direct DB fetch for specific photo', {
+          projectId,
+          sequence,
+        })
+        const photo = await findPhotoByProjectIdAndSeq(projectId, sequence)
+        if (photo) return photo
+        return null
+      }
+      console.log('[Action] getPhotoDetails: Direct DB fetch for all project photos', { projectId })
+      const photos = await findPhotosByProjectId(projectId)
+      return photos
+    } catch (dbError) {
+      console.warn(
+        '[Action] getPhotoDetails: Direct DB access failed (expected during build)',
+        dbError,
+      )
+    }
 
-    // If base URL is not available, return fallback immediately
+    // Strategy 2: HTTP fetch fallback (works during next build)
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL
     if (!baseUrl) {
       console.warn('[Action] getPhotoDetails: NEXT_PUBLIC_API_URL not defined, using fallback')
-      return { ...FALLBACK_PHOTO, projectId, id: `${projectId}-fallback` }
+      return typeof sequence === 'number'
+        ? { ...FALLBACK_PHOTO, projectId, id: `${projectId}-fallback` }
+        : [{ ...FALLBACK_PHOTO, projectId, id: `${projectId}-fallback` }]
     }
 
     try {
       if (typeof sequence === 'number') {
-        // Fetch specific photo
-        console.log('[Action] getPhotoDetails: Fetching specific photo', { projectId, sequence })
-
-        try {
-          const response = await fetch(`${baseUrl}/api/photos/${projectId}/${sequence}`, {
-            next: { revalidate: 3600 }, // Revalidate every hour
-          })
-
-          if (!response.ok) {
-            if (response.status === 404) return null
-            throw new Error(`Failed to fetch photo: ${response.statusText}`)
-          }
-
-          const photo = (await response.json()) as Photo
-          return photo
-        } catch (error) {
-          console.error('[Action] getPhotoDetails: Error fetching specific photo', error)
-          // Return fallback photo with project ID for better context
-          return { ...FALLBACK_PHOTO, projectId, id: `${projectId}-fallback` }
+        console.log('[Action] getPhotoDetails: HTTP fetch for specific photo', {
+          projectId,
+          sequence,
+        })
+        const response = await fetch(`${baseUrl}/api/photos/${projectId}/${sequence}`, {
+          next: { revalidate: 3600 },
+        })
+        if (!response.ok) {
+          if (response.status === 404) return null
+          throw new Error(`Failed to fetch photo: ${response.statusText}`)
         }
-      } else {
-        // Fetch all photos for project
-        console.log('[Action] getPhotoDetails: Fetching all project photos', { projectId })
-
-        try {
-          const response = await fetch(`${baseUrl}/api/photos/${projectId}`, {
-            next: { revalidate: 3600 }, // Revalidate every hour
-          })
-
-          if (!response.ok) {
-            if (response.status === 404) return null
-            throw new Error(`Failed to fetch photos: ${response.statusText}`)
-          }
-
-          const photos = (await response.json()) as Photo[]
-          return photos
-        } catch (error) {
-          console.error('[Action] getPhotoDetails: Error fetching project photos', error)
-          // Return array with a single fallback photo
-          return [{ ...FALLBACK_PHOTO, projectId, id: `${projectId}-fallback` }]
-        }
+        return (await response.json()) as Photo
       }
-    } catch (error) {
-      console.error('[Action] getPhotoDetails: Unexpected error', error)
-      // Final fallback
-      return { ...FALLBACK_PHOTO, projectId, id: `${projectId}-fallback` }
+      console.log('[Action] getPhotoDetails: HTTP fetch for all project photos', { projectId })
+      const response = await fetch(`${baseUrl}/api/photos/${projectId}`, {
+        next: { revalidate: 3600 },
+      })
+      if (!response.ok) {
+        if (response.status === 404) return null
+        throw new Error(`Failed to fetch photos: ${response.statusText}`)
+      }
+      return (await response.json()) as Photo[]
+    } catch (fetchError) {
+      console.error('[Action] getPhotoDetails: HTTP fetch also failed', fetchError)
     }
+
+    // Strategy 3: Static fallback
+    console.warn('[Action] getPhotoDetails: All strategies failed, returning fallback')
+    return typeof sequence === 'number'
+      ? { ...FALLBACK_PHOTO, projectId, id: `${projectId}-fallback` }
+      : [{ ...FALLBACK_PHOTO, projectId, id: `${projectId}-fallback` }]
   },
 )
