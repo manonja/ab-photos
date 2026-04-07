@@ -29,7 +29,6 @@
     "@opennextjs/cloudflare": "^1.16.1",
     "chalk": "^5.6.0",
     "commander": "^14.0.0",
-    "fs-extra": "^11.3.4",
     "gray-matter": "^4.0.3",
     "html-entities": "^2.5.2",
     "loglayer": "^8.4.0",

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const { program } = require('commander')
-const fs = require('fs-extra')
+const fs = require('node:fs')
+const fsp = require('node:fs/promises')
 const path = require('path')
 const { execSync } = require('child_process')
 
@@ -14,8 +15,8 @@ const BLOG_DIR = path.join(process.cwd(), 'content/blog')
 const IMAGES_DIR = path.join(process.cwd(), 'public/images/blog')
 
 // Ensure directories exist
-fs.ensureDirSync(BLOG_DIR)
-fs.ensureDirSync(IMAGES_DIR)
+fs.mkdirSync(BLOG_DIR, { recursive: true })
+fs.mkdirSync(IMAGES_DIR, { recursive: true })
 
 // Simple console colors as fallback
 const colors = {
@@ -44,7 +45,7 @@ program
     const filepath = path.join(BLOG_DIR, filename)
 
     // Check if file already exists
-    if (await fs.pathExists(filepath)) {
+    if (fs.existsSync(filepath)) {
       console.error(colors.red(`Error: ${filename} already exists!`))
       process.exit(1)
     }
@@ -125,7 +126,7 @@ ${contentTemplate}
 </article>`
 
     // Write file
-    await fs.writeFile(filepath, template)
+    await fsp.writeFile(filepath, template)
 
     // Run compile script
     console.log(colors.yellow(`\n⚙️  Updating compiled data...`))
@@ -152,7 +153,7 @@ program
     const destDir = path.join(IMAGES_DIR, year.toString())
 
     // Ensure year directory exists
-    await fs.ensureDir(destDir)
+    await fsp.mkdir(destDir, { recursive: true })
 
     // Determine filename
     const originalName = path.basename(imagePath)
@@ -162,7 +163,7 @@ program
 
     try {
       // Copy image
-      await fs.copy(imagePath, destination)
+      await fsp.copyFile(imagePath, destination)
 
       // Generate markdown reference
       const mdPath = `/images/blog/${year}/${filename}`
@@ -188,7 +189,7 @@ program
   .description('List all blog posts')
   .option('-d, --drafts', 'Include drafts')
   .action(async (options) => {
-    const files = await fs.readdir(BLOG_DIR)
+    const files = await fsp.readdir(BLOG_DIR)
     const posts = files
       .filter((f) => f.endsWith('.html') && !f.startsWith('_'))
       .sort()
@@ -202,7 +203,7 @@ program
     console.log(colors.blue('\n📝 Blog Posts:\n'))
 
     for (const file of posts) {
-      const content = await fs.readFile(path.join(BLOG_DIR, file), 'utf-8')
+      const content = await fsp.readFile(path.join(BLOG_DIR, file), 'utf-8')
       const titleMatch = content.match(/title:\s*"(.+)"/)
       const publishedMatch = content.match(/published:\s*(true|false)/)
       const layoutMatch = content.match(/layout:\s*"(.+)"/)
