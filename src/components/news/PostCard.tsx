@@ -7,10 +7,9 @@ interface PostCardProps {
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
-  // Format date in a compact format: "DD/MM/YYYY"
   const formattedDate = new Date(post.published_at).toLocaleDateString('en-US', {
-    day: '2-digit',
-    month: '2-digit',
+    month: 'long',
+    day: 'numeric',
     year: 'numeric',
   })
 

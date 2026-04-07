@@ -7,6 +7,22 @@ interface ExhibitCardProps {
   exhibit: Exhibit
 }
 
+function formatExhibitDate(startDate: string, endDate: string): string {
+  const start = new Date(`${startDate}T00:00:00`)
+  const end = new Date(`${endDate}T00:00:00`)
+  const opts: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric' }
+  const startStr = start.toLocaleDateString('en-US', opts)
+  const endYear = end.getFullYear()
+
+  if (start.getFullYear() !== endYear) {
+    return `${startStr}, ${start.getFullYear()} – ${end.toLocaleDateString('en-US', opts)}, ${endYear}`
+  }
+  if (start.getMonth() === end.getMonth()) {
+    return `${startStr} – ${end.getDate()}, ${endYear}`
+  }
+  return `${startStr} – ${end.toLocaleDateString('en-US', opts)}, ${endYear}`
+}
+
 const ExhibitCard: React.FC<ExhibitCardProps> = ({ exhibit }) => {
   const isExternal = exhibit.link?.startsWith('http')
 
@@ -44,7 +60,11 @@ const ExhibitCard: React.FC<ExhibitCardProps> = ({ exhibit }) => {
           )}
         </h2>
 
-        <div className="mb-1 text-sm uppercase text-gray-300">{exhibit.date}</div>
+        <div className="mb-1 text-sm uppercase text-gray-300">
+          {exhibit.startDate && exhibit.endDate
+            ? formatExhibitDate(exhibit.startDate, exhibit.endDate)
+            : exhibit.date}
+        </div>
 
         <div className="mb-3 text-sm text-gray-300">{exhibit.location}</div>
 
