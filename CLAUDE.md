@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Next.js 14 photography portfolio on Cloudflare Workers via OpenNext with D1 (SQLite) and R2 (images).
+Next.js 15 photography portfolio on Cloudflare Workers via OpenNext with D1 (SQLite) and R2 (images).
 
 ## Commands
 
@@ -18,7 +18,7 @@ npm run deploy:preview   # Deploy to preview environment
 # Testing
 npm run test             # Jest tests
 npm run test:watch       # Jest watch mode
-npm run lint             # ESLint
+npm run lint             # Biome
 npx jest path/to/file    # Single test file
 
 # Blog
@@ -41,7 +41,7 @@ npm run secrets:cf       # Get Cloudflare env from 1Password
 
 ```
 src/
-├── app/           # Pages + API routes (edge)
+├── app/           # Pages + API routes
 ├── components/    # React components + __tests__/
 ├── actions/       # Server actions
 ├── db/            # Database client + operations
@@ -49,6 +49,14 @@ src/
 └── types/         # TypeScript definitions
 content/blog/      # HTML blog posts with Tailwind
 ```
+
+## Cloudflare Workers
+
+- **Secrets**: Use `getCloudflareContext().env.SECRET_NAME` from `@opennextjs/cloudflare`, NOT `process.env`. Wrangler secrets are not bridged to `process.env` by OpenNext.
+- **Vars**: `wrangler.jsonc` vars ARE available via `process.env` at runtime.
+- **Env scoping**: Wrangler environments do NOT inherit top-level bindings. Each env (production, preview) must declare its own `d1_databases`, `r2_buckets`, and `vars`.
+- **Deploy**: `opennextjs-cloudflare build && npx wrangler deploy --env production`
+- **Secrets CLI**: Always pipe secrets: `echo 'VALUE' | npx wrangler secret put KEY`. Interactive `secret put` saves empty string in non-interactive terminals.
 
 ## Code Style
 
@@ -63,6 +71,14 @@ content/blog/      # HTML blog posts with Tailwind
 - **Playwright**: E2E against wrangler at `localhost:8788`
 - Use semantic queries: `getByRole()`, `getByLabelText()`
 - Use `data-testid` for stable selectors
+- **Mock `@opennextjs/cloudflare`** in any test that imports modules using `getCloudflareContext()`:
+  ```ts
+  jest.mock('@opennextjs/cloudflare', () => ({
+    getCloudflareContext: () => ({
+      env: { IMAGE_UPLOAD_API_KEY: process.env.IMAGE_UPLOAD_API_KEY ?? '' },
+    }),
+  }))
+  ```
 
 ## Workflow
 
