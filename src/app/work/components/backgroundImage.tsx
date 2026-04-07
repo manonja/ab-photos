@@ -31,30 +31,17 @@ const BackgroundImage: React.FC<BackgroundImageProps> = async ({
 
   try {
     if (random) {
-      // Fetch all photos for the project with caching
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8788'
-      const url = `${baseUrl}/api/photos/${slug}`
+      // Fetch all photos via getPhotoDetails (uses direct DB access on Workers)
+      const result = await getPhotoDetails(slug)
+      const photos = Array.isArray(result) ? result : result ? [result] : []
 
-      // Using only revalidate option for proper ISR (Incremental Static Regeneration)
-      const response = await fetch(url, {
-        next: { revalidate: 3600 }, // Revalidate every hour
-      })
-
-      if (response.ok) {
-        const photos = (await response.json()) as Photo[]
-        if (Array.isArray(photos) && photos.length > 0) {
-          // For static builds, use the same "random" photo each time for consistency
-          // We use the project slug to generate a consistent index
-          const index = getConsistentRandomIndex(slug, photos.length)
-          photo = photos[index]
-        } else {
-          console.warn(`[Component] BackgroundImage: No photos found for project: ${slug}`)
-        }
+      if (photos.length > 0) {
+        // For static builds, use the same "random" photo each time for consistency
+        // We use the project slug to generate a consistent index
+        const index = getConsistentRandomIndex(slug, photos.length)
+        photo = photos[index]
       } else {
-        console.warn(
-          `[Component] BackgroundImage: Failed to fetch photos for project: ${slug}`,
-          response.status,
-        )
+        console.warn(`[Component] BackgroundImage: No photos found for project: ${slug}`)
       }
     } else {
       // Fetch a specific photo by sequence

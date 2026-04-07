@@ -3,6 +3,11 @@ import { getPhotoDetails } from '@/actions/getPhotoDetails'
 import type { Photo } from '@/db/types'
 import ProjectPhotos from '../projectPhotos'
 
+// Mock Cloudflare context (required because getPhotoDetails imports @/db/operations → @opennextjs/cloudflare)
+jest.mock('@opennextjs/cloudflare', () => ({
+  getCloudflareContext: () => ({ env: {} }),
+}))
+
 // Mock the getPhotoDetails function
 jest.mock('@/actions/getPhotoDetails')
 const mockedGetPhotoDetails = getPhotoDetails as jest.MockedFunction<typeof getPhotoDetails>
