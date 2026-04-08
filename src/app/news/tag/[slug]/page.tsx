@@ -1,28 +1,24 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getBlogPostsByTag, getBlogTags } from '@/lib/blog'
-import { prepareBlogPostForDisplay } from '@/lib/blog/adapter'
+import { getNewsByTag, getNewsTags } from '@/actions/getNewsDetails'
 import PostCard from '../../../../components/news/PostCard'
 
-// Edge runtime for HTML blog
 export const revalidate = 3600 // Revalidate every hour
 
-// Generate metadata for this page
 export async function generateMetadata({
   params,
 }: {
   params: { slug: string }
 }): Promise<Metadata> {
-  const blogPosts = await getBlogPostsByTag(params.slug)
+  const posts = await getNewsByTag(params.slug)
 
-  if (!blogPosts || blogPosts.length === 0) {
+  if (!posts || posts.length === 0) {
     return {
       title: 'Tag Not Found | Anton Bossenbroek Photography',
     }
   }
 
-  // Format tag name for display
   const tagName = params.slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
 
   return {
@@ -31,29 +27,23 @@ export async function generateMetadata({
   }
 }
 
-// Generate static paths for all tags
 export async function generateStaticParams() {
-  const tags = await getBlogTags()
+  const tags = await getNewsTags()
 
   return tags.map((tag) => ({
     slug: tag.toLowerCase().replace(/\s+/g, '-'),
   }))
 }
 
-// Required for Cloudflare Pages with dynamic routes
 export const dynamicParams = false
 
 export default async function TagPage({ params }: { params: { slug: string } }) {
-  const blogPosts = await getBlogPostsByTag(params.slug)
+  const posts = await getNewsByTag(params.slug)
 
-  if (!blogPosts || blogPosts.length === 0) {
+  if (!posts || posts.length === 0) {
     notFound()
   }
 
-  // Prepare posts for display
-  const posts = blogPosts.map(prepareBlogPostForDisplay)
-
-  // Format tag name for display
   const tagName = params.slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
 
   return (

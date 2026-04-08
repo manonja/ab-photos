@@ -1,19 +1,16 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getBlogPostBySlug } from '@/lib/blog'
-import { prepareBlogPostForDisplay } from '@/lib/blog/adapter'
+import { getNewsBySlug } from '@/actions/getNewsDetails'
 import PostContent from '../../../components/news/PostContent'
 
 export const revalidate = 3600 // Revalidate every hour
 
-// Generate metadata for this page
 export async function generateMetadata({
   params,
 }: {
   params: { slug: string }
 }): Promise<Metadata> {
-  const blogPost = await getBlogPostBySlug(params.slug)
-  const post = blogPost ? prepareBlogPostForDisplay(blogPost) : null
+  const post = await getNewsBySlug(params.slug)
 
   if (!post) {
     return {
@@ -26,30 +23,26 @@ export async function generateMetadata({
     description: post.excerpt,
     openGraph: {
       title: post.title,
-      description: post.excerpt,
-      images: post.feature_image ? [post.feature_image] : [],
+      description: post.excerpt ?? undefined,
+      images: post.featuredImage ? [post.featuredImage] : [],
       type: 'article',
-      publishedTime: post.published_at,
-      authors: post.primary_author ? [post.primary_author.name] : [],
+      publishedTime: post.date,
+      authors: [post.author],
     },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
-      description: post.excerpt,
-      images: post.feature_image ? [post.feature_image] : [],
+      description: post.excerpt ?? undefined,
+      images: post.featuredImage ? [post.featuredImage] : [],
     },
   }
 }
 
-// For Cloudflare Pages, we can't use generateStaticParams with edge runtime
-// Instead, we'll handle dynamic routing at runtime
 export const dynamicParams = true
 
 export default async function NewsPostPage({ params }: { params: { slug: string } }) {
   console.log('[NewsPostPage] Rendering with slug:', params.slug)
-  const blogPost = await getBlogPostBySlug(params.slug)
-  console.log('[NewsPostPage] Found blog post:', blogPost ? 'yes' : 'no')
-  const post = blogPost ? prepareBlogPostForDisplay(blogPost) : null
+  const post = await getNewsBySlug(params.slug)
 
   if (!post) {
     console.log('[NewsPostPage] Post not found, calling notFound()')
