@@ -49,3 +49,145 @@ VALUES
   ('exhibit-2', 'CRITICAL EYE - PORTRAITS FROM THE STREET AWARDS 2025', 'Sept. 6 – Sept 21, 2025', 'Hin Bus Depot, Kuala Lumpur, Malaysia', 'Finalists of the Critical Eye Photography Awards 2025 with the portrait ''Lady in onesie Pyjama, Embalenhle''. The exhibition showcase the finalists'' portraits from the street.', '/images/exhibits/exhibit_2.jpeg', '2025-09-06', '2025-09-21', 0, 'https://www.klphotoawards.com/home-2023', 0),
   ('exhibit-3', 'AFMP PARIS', 'Nov. 11 – Nov. 15, 2025', '43 Rue Charlot, Paris, France', 'FOTOFILMIC is proud to present the final 11 photographic projects developed during its 2024-25 Annual FotoFilmic Mentoring Program (AFMP) that was led by core mentors Elisa Medde (IT/NL), Stacy Kranitz (USA), and Christian Patterson (USA).', '/images/exhibits/sasol.jpg', '2025-11-11', '2025-11-15', 0, 'https://fotofilmic.com/afmp-exhibition-2024-2025/', 1),
   ('exhibit-4', 'Northwest Current', 'Jan. 8 – Feb. 20, 2026', '300 South Washington Street, Unit Z, Seattle, WA 98104, USA', 'A survey of recent work from artists based in or connected to the Pacific Northwest. Group exhibition at Solas Gallery.', '/images/exhibits/northwest-current.jpg', '2026-01-08', '2026-02-20', 0, 'https://www.solas.gallery/exhibitions/northwest-current', 0);
+
+-- News
+INSERT OR REPLACE INTO news (id, title, date, author, excerpt, featuredImage, tags, published, layout, content)
+VALUES (
+  'sunsetting-64-megatons-artist-feature-der-greif',
+  'Sunsetting 64 Megatons - Artist Feature on Der Greif',
+  '2026-02-20',
+  'Anton Bossenbroek',
+  'Artist Feature on Der Greif, the award-winning organisation for contemporary photography. Featuring the Sunsetting 64 Megatons project, with a foreword by Artistic Director Caroline von Courten from the Face-to-Face educational feedback program.',
+  NULL,
+  '[]',
+  1,
+  'single',
+  '<article class="text-white">
+
+  <div class="space-y-6 text-base font-light italic leading-normal mb-12">
+    <p>"On many levels, the sessions with Anton have been dense, focused, and highly inspiring. He approaches ''Sunsetting 64 Megatons'' from multiple angles, drawing on a profound understanding of industry gained from his bold career shift from engineering to documentary photography. This background allows him to move effortlessly between (visual) languages, differing logics, and fields of inquiry, fueled by a restless drive to investigate the urgent issue of the world''s largest single-site carbon footprint &ndash; the Secunda plant in South Africa.</p>
+
+    <p>His work goes beyond surface-level observation; he uses the Secunda plant as a lens to examine a complex web of economic, (post)colonial, and ecological consequences, hence demanding a multi-layered thinking and the ability to translate this artistically. Following his ambition to create a profound, well-researched artistic monument that challenges existing policies for the sake of a better life on this planet, this Artist Feature is just the beginning&hellip;</p>
+
+    <p>During our conversations, we focused on conceptual complexities and positioning the project within the artistic field &ndash; navigating references, platforms, grants, and collaborations. While these elements are standard in photography curricula, Anton as career-shifter relies solely on his own research. With my insights of the photographic ecosystem (network &amp; methodologies), this is where I can provide the most meaningful contribution to his journey."</p>
+
+    <p class="not-italic text-gray-400">&mdash; Caroline von Courten, Artistic Director, Der Greif</p>
+  </div>
+
+  <div class="my-8 h-px bg-gray-700 w-full"></div>
+
+  <div class="space-y-6 text-base leading-normal">
+    <p>The Secunda plant sits on the Mpumalanga Highveld in South Africa. From a distance, its smokestacks do not stand out from the other coal infrastructure that litters the region. The plant is unique, however: it was born of the apartheid regime''s isolation. When the global community imposed oil embargoes in the nineteen-seventies, energy independence became a state priority. The drive for autarky was framed as Afrikaner nationalism, a survivalist ethos deeply rooted in Dutch Protestant colonial history.</p>
+
+    <p>South Africa has a geological problem: it has no oil, but significant coal deposits. The reality linked the apartheid regime directly to the industrial ambitions of nineteen-twenties Germany. Facing a similar resource deficit, Franz Fischer and Hans Tropsch, German chemists working at the Kaiser Wilhelm Institute for Coal Research in the 1920s, developed a process, in 1924, to convert coal into synthetic fuel. When Hitler rose to power, in 1934, he recognized the process as the lifeblood of the German war machine and invested heavily in its optimization.</p>
+
+    <p>The technology was a spoil of war. While the Nazis refined the process for tanks, post-war America exported the industrial know-how. The U.S. engineering firm Fluor won the contract to build Sasol II and III, constructing the world''s largest coal-to-liquid complex. Today, it remains the single largest point-source of carbon dioxide on Earth emitting up to sixty-four megatons annually.</p>
+
+    <p>In the nineteen-nineties, the transition to democracy revealed a paradox. The African National Congress, which had plotted to sabotage Sasol II in the early eighties, found itself governing a state addicted to it. Today, the dependency is absolute. Sasol generates roughly five per cent of the G.D.P., anchors government pension funds, and injects hundreds of base chemicals from fertilizer to fuel into the national supply chain. It is a petrocultural knot that resists simple excision.</p>
+
+    <p>Does the plant work for us, or do we work for the plant? I served the plant. In 2018, I worked as a contractor, deploying A.I. to predict and reduce mechanical failures. The proximity revealed the scale of the entanglement. The facility is not a discrete object but a viscous force, leaking its history into the soil and its chemistry into the air. It creates a petrochemical debt, a burden that is not merely abstract finance but a physical accumulation of decay that the land and its people are forced to carry.</p>
+
+    <p>To offset a single year of Secunda''s emissions, one would need to plant a forest the size of Finland. The carbon dioxide accumulates, trapping heat in the atmosphere. The plant is reaching its end of life, yet it remains profitable only when Brent crude exceeds fifty-five dollars. As prices hover near the threshold, the capital required to heal the landscape evaporates. The question is historical: Will South Africa mimic Germany, the inventor of the process, where billions have been spent on an exit that still requires pumps to run in perpetuity to keep the land from drowning? Or can the nation find the collective resolve to prioritize the biosphere it inhabits?</p>
+  </div>
+
+  <div class="my-8 h-px bg-gray-700 w-full"></div>
+
+  <div class="mt-8 text-base leading-normal">
+    <p class="text-gray-400">Anton Bossenbroek took part in Der Greif''s <a href="https://dergreif.org/face-to-face" class="underline hover:text-white" target="_blank" rel="noopener noreferrer">Face-to-Face</a> educational feedback program with Artistic Director Caroline von Courten.</p>
+    <p class="mt-4"><a href="https://dergreif.org/artist-feature/anton-bossenbroek" class="underline hover:text-white" target="_blank" rel="noopener noreferrer">View the full Artist Feature on Der Greif &rarr;</a></p>
+  </div>
+
+</article>'
+);
+INSERT OR REPLACE INTO news (id, title, date, author, excerpt, featuredImage, tags, published, layout, content)
+VALUES (
+  'notes-from-the-field-johannesburg-and-east-mpumalanga-south-africa',
+  'Notes from the field - Johannesburg and East Mpumalanga, South Africa',
+  '2025-09-03',
+  'Guest Post - Manon Jacquin',
+  'A glimpse into the first few days of a two months scouting and photograping trip in South Africa for Anton''s last project - Sunsetting 64 Megatons',
+  NULL,
+  '[]',
+  1,
+  'two-column',
+  '<article class="text-white">
+  <!-- <h1 class="text-4xl font-normal uppercase mb-2">Notes from the field - Johannesburg and East Mpumalanga, South Africa</h1> -->
+  <!-- <div class="font-light italic text-gray-400 mb-8">September 3, 2025</div> -->
+  
+  <!-- <div class="my-8 h-px bg-gray-300 w-full"></div> -->
+  
+  <!-- Introduction - full width -->
+  <div class="space-y-6 text-base font-light italic leading-normal mb-12">
+    <p>"Sunsetting 64 Megatons" examines Secunda, South Africa through photography. The project connects Anton''s return to the SASOL Coal-to-Liquid facility where he worked in 2018 with broader questions about industrial transition.
+
+      Built during apartheid in 1975, Secunda''s existence centers on SASOL—now the world''s largest single-point greenhouse gas emitter yet simultaneously South Africa''s largest taxpayer. This creates an intricate dependency where environmental measures rely on the very industry causing harm.
+      
+      By juxtaposing industrial landscapes with intimate portraits and environmental details, the project visualizes the relationship between industrial scale and community vulnerability. Young locals from diverse backgrounds—Zulu, Xhosa, Coloured, and Afrikaans communities—contribute to this multilayered narrative. The work integrates archival materials and historical maps with contemporary imagery, weaving together past and present.</p>
+  </div>
+  
+  <!-- Two column comparison -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+    <div class="space-y-6 text-base leading-normal">
+      <h3 class="text-xl font-normal mb-3">Johannesburg, Gauteng Province</h3>
+      <p>We stayed for three days in Johannesburg. We mostly recharged. Ate incredible food, slept early, worked out a bit, and had an incredible evening where we ended up having a bottle each of delicious red wine. This never happens to us, but that night, the atmosphere was too good!! Being out of Italy was so energising. We realised how much diversity - in food, people, cities - innovation and mixed culture are so important for us. It’s been a while since we had such a change in scenery. It broadened our perspectives already.
+
+      </p>
+      <p>One morning, we found ourselves at Uncle Merv’s coffee, in Maboneng. Maboneng used to be a hype area in Jo’burg, where artists, shops, bookstore and galleries thrived. At least, this was the case in 2018. Not anymore. The taxi dropped us off on Kruger and Fox streets, in the heart of Maboneng. We were the only whites. We clearly were uncomfortable. And for good reasons: people were staring at us, wondering what on earth were we doing here. It was only 10 am in the morning, perhaps too early for tourists? Nevertheless, we headed to the coffee place. It was open, but not one in there. When I say coffee place, please don’t expect a Starbuck type of thing. Obviously. Rather, think small open wooden bar with two high wooden chairs. Lots of plants, nice vibe overall.
+
+      </p>
+      <p>Someone came to us, saying the owner left to grab something, he’ll be back shortly. We had a look around, an art gallery was right next to it. Eventually we walked a bit further down the street, to explore and witness what changed since 2018. We recognised a small gallery where used to be a bookstore. I remember buying a book on South Africa’s resilience and peace building. That bookstore is none existent anymore.
+
+      </p>
+      <p>When heading out, we heard someone calling us. Uncle Merv’s coffee owner! At first we were a bit mistrustful. Turned out we exchanged our whatsapp number and had the most elevating conversation we didn’t have for a while with him. For close to one hour, we discussed photography (he was perhaps as geeky as Anton about cameras, oh boy!), the importance of being in the moment, how covid negatively impacted Maboneng, looting in Jo’burg, the Mpumalanga province, and African art collections.
+
+      </p>
+      <p>We hugged and said goodbye, until next time, perhaps in September when we come back.
+
+      </p>
+    </div>
+    
+    <div class="space-y-6 text-base leading-normal">
+      <h3 class="text-xl font-normal mb-3">eManzana, East Mpumalanga Province
+      </h3>
+      <p>Our next stop was the Paradise Resort, eManzana. The contrast between the name and the place was rather astounding. More on that later.
+
+      </p>
+      <p>eManzana is a small town three hours east of Johannesburg. Driving through towns like Bethal, Hendrina, and Carolina, always reminding us of the Dutch and English colonial past. Driving through Carolina was unsettling. All eyes on us, we didn’t see a single white. It’s always a challenge to know when we are safe or not. We rather assume we are not the most welcomed.
+
+      </p>
+      <p>Arriving at the Paradise Resort was such a relief. Gugu (pronounced “Kuku“) welcomed us so warmly, along with her dog Flesh. Oh boy. It was love at first sight with that one!! He spent the whole week with us. The Paradise Resort has about ten little self catering houses, a swimming pool (empty when we arrived, it’s winter here), at the foot of the Prayer Mountain. The sunset that evening was incredible, and when Gugu said we were more than safe here and that we could go for walks around the house, I felt so good.
+
+      </p>
+      <p>There was always an issue at our house. First, no shower. Then, we were locked inside, impossible to open the door. Then, brown water when taking baths. Oh, and there was no electricity in the bathroom. And of course, spiders and lezard were very common to encounter in the house. I know this may sound like a bad experience to have? It was nothing but. We didn’t sleep that well in a while, woke up between 4:30 and 5:30 am in the morning to go shoot photos and explore the surroundings, and met incredible people. After all, this house felt more as an upgrade compared to the two months trip living in a van in the cold and humid Netherlands last November!
+
+      </p>
+      <p>How on earth did we find ourselves at the Paradise Resort, by the way?
+
+      </p>
+      <p>While still in Italy, Anton contacted a Rock Art specialist after reading his PHD thesis, asking if we could meet because we were interested to better understand South African First Nations cultures and traditions. To Anton’s both surprise and joy, Mduduzi replied, and suggested we meet at the Paradise Resort since he would be there with five students to make research at a rock art site nearby. Oh my god! A dream of mine coming true!! To follow experts on the field and learn more about first nations!
+
+      </p>
+    </div>
+  </div>
+  
+  <!-- Full width conclusion -->
+  <div class="mt-12 space-y-6 text-base leading-normal">
+    <h2 class="text-2xl font-normal mt-8 mb-4">
+    </h2>
+
+    <strong class="font-semibold">That site was specifically known for rock art made by the San People, depicting animals, people and dance scenes. I learned we all have at least 1% DNA coming from the San People. They are the origin of humanity. We were at one of the first site on earth where human descendants drew their first paintings. It was unbelievable and felt very special, as you can imagine.
+
+    </strong>
+    <p>These paintings are believed to be the results of healers trance dances. The paintings were the results of visions, things they saw in the spirit world. Mduduzi is conducting research there because it is still not possible to date the paintings. To do so, he came with students in archeology to do excavations around the sites. There were four sites, La Rochelle one, two, three and four.
+
+    </p>
+    <p>The site was stunning. A 45 minute drive from the Paradise, half of it being on a dirt road. Somehow I love driving off roads. The call of the wild, I suppose! The first morning was cold. And we had proper down jackets. The students only had a thin cotton jacket. I felt for them!
+
+    </p>
+    <p>The rest of the week turned out to be so rich in connection, discoveries, and photography. Being disconnected from the external world (no internet, hence no social media, no supermarket, no drinking water) unsurprisingly reconnected us to our own nature, to Nature, and Humanity as a whole.
+
+    </p>
+    
+  </div>
+</article>'
+);
