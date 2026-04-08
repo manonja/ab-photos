@@ -1,13 +1,13 @@
 import Link from 'next/link'
 import type React from 'react'
-import type { BlogPostDisplay } from '../../lib/blog/types'
+import type { NewsPost } from '@/db/types'
 
 interface PostCardProps {
-  post: BlogPostDisplay
+  post: NewsPost
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
-  const formattedDate = new Date(post.published_at).toLocaleDateString('en-US', {
+  const formattedDate = new Date(post.date).toLocaleDateString('en-US', {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
@@ -21,10 +21,10 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
       {/* Date and Meta */}
       <div className="mb-3 text-sm text-gray-400">
         {formattedDate}
-        {post.primary_tag && (
+        {post.tags[0] && (
           <>
             {' • '}
-            <span className="uppercase text-gray-400">{post.primary_tag.name}</span>
+            <span className="uppercase text-gray-400">{post.tags[0]}</span>
           </>
         )}
       </div>
@@ -37,7 +37,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
 
       {/* Read More - only clickable element */}
       <Link
-        href={`/news/${post.slug}`}
+        href={`/news/${post.id}`}
         className="inline-block text-gray-300 hover:text-white hover:underline"
       >
         Read More
