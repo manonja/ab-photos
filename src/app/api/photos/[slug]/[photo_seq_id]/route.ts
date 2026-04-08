@@ -5,18 +5,19 @@ import { log } from '@/lib/logger'
 
 export async function GET(
   _request: Request,
-  { params }: { params: { slug: string; photo_seq_id: string } },
+  { params }: { params: Promise<{ slug: string; photo_seq_id: string }> },
 ) {
+  const { slug, photo_seq_id } = await params
   const routeLogger = log.withMetadata({
     route: 'api/photos/[slug]/[photo_seq_id]',
-    projectId: params.slug,
-    photoSeqId: params.photo_seq_id,
+    projectId: slug,
+    photoSeqId: photo_seq_id,
   })
 
   routeLogger.info('Starting photo request')
 
   try {
-    const sequence = parseInt(params.photo_seq_id, 10)
+    const sequence = parseInt(photo_seq_id, 10)
 
     if (Number.isNaN(sequence)) {
       routeLogger.warn('Invalid sequence ID provided')
@@ -25,7 +26,7 @@ export async function GET(
 
     routeLogger.withMetadata({ sequence }).debug('Fetching photo from database')
 
-    const photo = await findPhotoByProjectIdAndSeq(params.slug, sequence)
+    const photo = await findPhotoByProjectIdAndSeq(slug, sequence)
 
     if (!photo) {
       routeLogger.withMetadata({ sequence }).warn('Photo not found')

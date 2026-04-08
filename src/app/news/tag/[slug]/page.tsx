@@ -9,9 +9,10 @@ export const revalidate = 3600 // Revalidate every hour
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }): Promise<Metadata> {
-  const posts = await getNewsByTag(params.slug)
+  const { slug } = await params
+  const posts = await getNewsByTag(slug)
 
   if (!posts || posts.length === 0) {
     return {
@@ -19,7 +20,7 @@ export async function generateMetadata({
     }
   }
 
-  const tagName = params.slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
+  const tagName = slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
 
   return {
     title: `${tagName} | Anton Bossenbroek Photography`,
@@ -37,14 +38,15 @@ export async function generateStaticParams() {
 
 export const dynamicParams = false
 
-export default async function TagPage({ params }: { params: { slug: string } }) {
-  const posts = await getNewsByTag(params.slug)
+export default async function TagPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const posts = await getNewsByTag(slug)
 
   if (!posts || posts.length === 0) {
     notFound()
   }
 
-  const tagName = params.slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
+  const tagName = slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
 
   return (
     <main className="flex min-h-screen flex-col items-center p-6">

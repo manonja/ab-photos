@@ -8,9 +8,10 @@ export const revalidate = 3600 // Revalidate every hour
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }): Promise<Metadata> {
-  const post = await getNewsBySlug(params.slug)
+  const { slug } = await params
+  const post = await getNewsBySlug(slug)
 
   if (!post) {
     return {
@@ -40,9 +41,10 @@ export async function generateMetadata({
 
 export const dynamicParams = true
 
-export default async function NewsPostPage({ params }: { params: { slug: string } }) {
-  console.log('[NewsPostPage] Rendering with slug:', params.slug)
-  const post = await getNewsBySlug(params.slug)
+export default async function NewsPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  console.log('[NewsPostPage] Rendering with slug:', slug)
+  const post = await getNewsBySlug(slug)
 
   if (!post) {
     console.log('[NewsPostPage] Post not found, calling notFound()')

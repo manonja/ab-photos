@@ -29,7 +29,7 @@ describe('GET /api/news/[slug]', () => {
     mockedFindNewsBySlug.mockResolvedValue(mockNewsPost)
 
     const response = await GET(new Request('http://test.com'), {
-      params: { slug: 'sunsetting-64-megatons-artist-feature-der-greif' },
+      params: Promise.resolve({ slug: 'sunsetting-64-megatons-artist-feature-der-greif' }),
     })
 
     expect(response.status).toBe(200)
@@ -44,7 +44,7 @@ describe('GET /api/news/[slug]', () => {
     mockedFindNewsBySlug.mockResolvedValue(null)
 
     const response = await GET(new Request('http://test.com'), {
-      params: { slug: 'nonexistent-post' },
+      params: Promise.resolve({ slug: 'nonexistent-post' }),
     })
 
     expect(response.status).toBe(404)
@@ -58,7 +58,7 @@ describe('GET /api/news/[slug]', () => {
     mockedFindNewsBySlug.mockRejectedValue(error)
 
     const response = await GET(new Request('http://test.com'), {
-      params: { slug: 'some-post' },
+      params: Promise.resolve({ slug: 'some-post' }),
     })
 
     expect(response.status).toBe(500)

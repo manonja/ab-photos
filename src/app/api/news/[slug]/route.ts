@@ -3,11 +3,12 @@ import { findNewsBySlug } from '@/db/operations'
 import type { DatabaseError } from '@/db/types'
 import { log } from '@/lib/logger'
 
-export async function GET(_request: Request, { params }: { params: { slug: string } }) {
-  const routeLogger = log.withMetadata({ route: 'api/news/[slug]', slug: params.slug })
+export async function GET(_request: Request, { params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const routeLogger = log.withMetadata({ route: 'api/news/[slug]', slug })
 
   try {
-    const post = await findNewsBySlug(params.slug)
+    const post = await findNewsBySlug(slug)
 
     if (!post) {
       routeLogger.warn('News post not found')
