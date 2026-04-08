@@ -23,7 +23,13 @@ export default async function RotatingBackground({
   } catch (error) {
     console.error('[RotatingBackground] Failed to fetch projects:', error)
     // Use fallback static black background in case of error
-    return <div className="fixed inset-0 -z-10 bg-black" aria-label="Background image - fallback" />
+    return (
+      <div
+        role="img"
+        className="fixed inset-0 -z-10 bg-black"
+        aria-label="Background image - fallback"
+      />
+    )
   }
 
   // Extract only what we need - the IDs of published projects
@@ -34,7 +40,11 @@ export default async function RotatingBackground({
   // If no projects, show a black background
   if (projectIds.length === 0) {
     return (
-      <div className="fixed inset-0 -z-10 bg-black" aria-label="Background image - no projects" />
+      <div
+        role="img"
+        className="fixed inset-0 -z-10 bg-black"
+        aria-label="Background image - no projects"
+      />
     )
   }
 
@@ -63,7 +73,11 @@ export default async function RotatingBackground({
   // If we couldn't fetch any photos, don't crash - just show black background
   if (prefetchedPhotos.length === 0) {
     return (
-      <div className="fixed inset-0 -z-10 bg-black" aria-label="Background image - no photos" />
+      <div
+        role="img"
+        className="fixed inset-0 -z-10 bg-black"
+        aria-label="Background image - no photos"
+      />
     )
   }
 

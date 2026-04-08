@@ -2,55 +2,18 @@ export default function NotFound() {
   return (
     <>
       <title>404: This page could not be found.</title>
-      <div style={styles.error}>
+      <div className="flex h-screen flex-col items-center justify-center bg-white text-center font-sans text-black dark:bg-black dark:text-white">
         <div>
-          <style
-            dangerouslySetInnerHTML={{
-              __html: `body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}`,
-            }}
-          />
-          <h1 className="next-error-h1" style={styles.h1}>
+          <h1 className="m-0 inline-block border-r border-black/30 pr-[23px] mr-5 text-2xl font-medium leading-[49px] align-top dark:border-white/30">
             404
           </h1>
-          <div style={styles.desc}>
-            <h2 style={styles.h2}>This page could not be found.</h2>
+          <div className="inline-block">
+            <h2 className="m-0 text-sm font-normal leading-[49px]">
+              This page could not be found.
+            </h2>
           </div>
         </div>
       </div>
     </>
   )
 }
-
-const styles = {
-  error: {
-    fontFamily:
-      'system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji"',
-    height: '100vh',
-    textAlign: 'center',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  desc: {
-    display: 'inline-block',
-  },
-
-  h1: {
-    display: 'inline-block',
-    margin: '0 20px 0 0',
-    padding: '0 23px 0 0',
-    fontSize: 24,
-    fontWeight: 500,
-    verticalAlign: 'top',
-    lineHeight: '49px',
-  },
-
-  h2: {
-    fontSize: 14,
-    fontWeight: 400,
-    lineHeight: '49px',
-    margin: 0,
-  },
-} as const

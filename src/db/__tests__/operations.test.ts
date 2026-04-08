@@ -140,9 +140,9 @@ describe('Database Operations', () => {
       const result = await findNewsBySlug('first-post')
 
       expect(result).not.toBeNull()
-      expect(result!.id).toBe('first-post')
-      expect(result!.published).toBe(true)
-      expect(result!.tags).toEqual(['photography', 'travel'])
+      expect(result?.id).toBe('first-post')
+      expect(result?.published).toBe(true)
+      expect(result?.tags).toEqual(['photography', 'travel'])
       expect(mockBind).toHaveBeenCalledWith('first-post')
     })
 

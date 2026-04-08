@@ -94,14 +94,9 @@ const NewsletterForm: React.FC<NewsletterFormProps> = ({ status, message, onVali
       <div className="text-sm text-gray-500 pt-2 max-w-lg">
         {status === 'sending' && <div className="text-sm text-gray-500">Sending...</div>}
         {status === 'error' || error ? (
-          <div
-            className="text-sm text-gray-500"
-            dangerouslySetInnerHTML={{ __html: error || getMessage(message) || '' }}
-          />
+          <div className="text-sm text-gray-500">{error || getMessage(message) || ''}</div>
         ) : null}
-        {status === 'success' && !error && (
-          <div dangerouslySetInnerHTML={{ __html: decode(message) }} />
-        )}
+        {status === 'success' && !error && <div>{decode(message)}</div>}
       </div>
     </>
   )

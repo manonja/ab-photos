@@ -52,6 +52,7 @@ const BackgroundImage: React.FC<BackgroundImageProps> = async ({
       console.warn(`[Component] BackgroundImage: No background image found for project: ${slug}`)
       return (
         <div
+          role="img"
           data-testid="background-fallback"
           className="fixed inset-0 -z-10 bg-black"
           aria-label={`Background for ${slug} project`}
@@ -86,6 +87,7 @@ const BackgroundImage: React.FC<BackgroundImageProps> = async ({
     console.error('[Component] BackgroundImage: Error occurred', error)
     return (
       <div
+        role="img"
         data-testid="background-fallback"
         className="fixed inset-0 -z-10 bg-black"
         aria-label={`Background for ${slug} project`}

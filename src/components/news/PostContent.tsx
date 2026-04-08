@@ -62,6 +62,7 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
           {/* HTML Content */}
           <div
             className="blog-content prose prose-lg max-w-none mb-8"
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: authored blog content from database
             dangerouslySetInnerHTML={{ __html: post.content || '' }}
           />
 

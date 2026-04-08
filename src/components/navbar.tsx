@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Suspense } from 'react'
@@ -91,7 +92,7 @@ export default function Navbar() {
             rel="noopener noreferrer"
             aria-label="Follow Anton Bossenbroek on Instagram"
           >
-            <img src="/instagram.svg" alt="Instagram" width="20" height="20" />
+            <Image src="/instagram.svg" alt="Instagram" width={20} height={20} />
           </a>
           <a
             href="https://www.facebook.com/anton.bossenbroek"
@@ -100,7 +101,7 @@ export default function Navbar() {
             rel="noopener noreferrer"
             aria-label="Follow Anton Bossenbroek on Facebook"
           >
-            <img src="/facebook.svg" alt="Facebook" width="20" height="20" />
+            <Image src="/facebook.svg" alt="Facebook" width={20} height={20} />
           </a>
         </div>
       </div>
