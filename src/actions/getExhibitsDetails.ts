@@ -79,7 +79,7 @@ export async function getExhibitsDetails(): Promise<Exhibit[]> {
     })
 
     if (!response.ok) {
-      console.error('[Action] getExhibitsDetails: HTTP error', {
+      console.warn('[Action] getExhibitsDetails: HTTP error', {
         status: response.status,
         statusText: response.statusText,
       })
@@ -89,7 +89,7 @@ export async function getExhibitsDetails(): Promise<Exhibit[]> {
     const data = await response.json()
 
     if (!Array.isArray(data)) {
-      console.error('[Action] getExhibitsDetails: Invalid response format', data)
+      console.warn('[Action] getExhibitsDetails: Invalid response format', data)
       return FALLBACK_EXHIBITS
     }
 
@@ -99,7 +99,7 @@ export async function getExhibitsDetails(): Promise<Exhibit[]> {
     })
     return exhibits
   } catch (fetchError) {
-    console.error('[Action] getExhibitsDetails: HTTP fetch also failed', fetchError)
+    console.warn('[Action] getExhibitsDetails: HTTP fetch also failed', fetchError)
   }
 
   // Strategy 3: Static fallback

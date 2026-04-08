@@ -80,7 +80,7 @@ export const getPhotoDetails = cache(
       }
       return (await response.json()) as Photo[]
     } catch (fetchError) {
-      console.error('[Action] getPhotoDetails: HTTP fetch also failed', fetchError)
+      console.warn('[Action] getPhotoDetails: HTTP fetch also failed', fetchError)
     }
 
     // Strategy 3: Static fallback

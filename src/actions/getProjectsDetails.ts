@@ -32,7 +32,7 @@ export async function getProjectsDetails({ useStatic = false } = {}): Promise<Pr
 
     if (!res.ok) {
       const errorText = await res.text()
-      console.error('[API] getProjectsDetails: Error response', {
+      console.warn('[API] getProjectsDetails: Error response', {
         status: res.status,
         statusText: res.statusText,
         error: errorText,
@@ -44,7 +44,7 @@ export async function getProjectsDetails({ useStatic = false } = {}): Promise<Pr
     const data = await res.json()
 
     if (!Array.isArray(data)) {
-      console.error('[API] getProjectsDetails: Invalid response format', data)
+      console.warn('[API] getProjectsDetails: Invalid response format', data)
       console.log('[API] getProjectsDetails: Falling back to static data')
       return FALLBACK_PROJECTS
     }
@@ -53,7 +53,7 @@ export async function getProjectsDetails({ useStatic = false } = {}): Promise<Pr
     console.log('[API] getProjectsDetails: Successfully fetched', { projectCount: projects.length })
     return projects
   } catch (error) {
-    console.error('[API] getProjectsDetails: Unexpected error', error)
+    console.warn('[API] getProjectsDetails: Unexpected error', error)
     console.log('[API] getProjectsDetails: Falling back to static data')
     return FALLBACK_PROJECTS
   }

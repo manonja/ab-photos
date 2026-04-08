@@ -1,10 +1,20 @@
+import type { Metadata } from 'next'
 import ContactForm from '@/app/contact/components/contactForm'
+
+export const metadata: Metadata = {
+  title: 'Contact | Anton Bossenbroek Photography',
+  description: 'Get in touch with photographer Anton Bossenbroek.',
+  openGraph: {
+    title: 'Contact | Anton Bossenbroek Photography',
+    description: 'Get in touch with photographer Anton Bossenbroek.',
+  },
+}
 
 export default function Contact() {
   return (
     <main className="flex w-full min-h-screen flex-col items-center p-6">
       <div className="flex flex-col relative py-[10%] px-[2%] mx-auto ">
-        <h2 className="uppercase text-2xl font-light">Contact</h2>
+        <h1 className="uppercase text-2xl font-light">Contact</h1>
         <div className="my-8 h-px bg-white w-full max-w-full" />
         <div className="w-full flex-row">
           <div className="text-4xl font-extralight">anton [at] bossenbroek [dot] photo</div>

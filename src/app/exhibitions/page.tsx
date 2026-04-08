@@ -7,6 +7,10 @@ export const revalidate = 3600 // Revalidate every hour
 export const metadata: Metadata = {
   title: 'Exhibitions | Anton Bossenbroek Photography',
   description: 'Photography exhibitions and shows by Anton Bossenbroek.',
+  openGraph: {
+    title: 'Exhibitions | Anton Bossenbroek Photography',
+    description: 'Photography exhibitions and shows by Anton Bossenbroek.',
+  },
 }
 
 export default async function ExhibitionsPage() {

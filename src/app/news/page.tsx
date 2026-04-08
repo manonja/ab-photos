@@ -8,6 +8,10 @@ export const revalidate = 3600 // Revalidate every hour
 export const metadata: Metadata = {
   title: 'News | Anton Bossenbroek Photography',
   description: 'Photography News, stories, and adventures from Anton Bossenbroek.',
+  openGraph: {
+    title: 'News | Anton Bossenbroek Photography',
+    description: 'Photography News, stories, and adventures from Anton Bossenbroek.',
+  },
 }
 
 export default async function NewsPage() {

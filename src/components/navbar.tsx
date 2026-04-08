@@ -3,11 +3,15 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import type { ReactNode } from 'react'
 import { Suspense } from 'react'
-import NavbarWorkDropdown from '@/app/work/components/NavbarWorkDropdown'
 import { useScrollDirection } from '@/hooks/useScrollDirection'
 
-export default function Navbar() {
+interface NavbarProps {
+  workDropdown?: ReactNode
+}
+
+export default function Navbar({ workDropdown }: NavbarProps) {
   const pathname = usePathname()
   const scrollDirection = useScrollDirection({ threshold: 10 })
   const isHomepage = pathname === '/'
@@ -18,7 +22,7 @@ export default function Navbar() {
   return (
     <div className="z-10 w-full px-6 items-center justify-between text-sm lg:flex">
       <Link
-        className="text-6xl font-[anton] left-0 top-0 flex w-full justify-center p-6 lg:static lg:w-auto"
+        className="text-6xl font-anton left-0 top-0 flex w-full justify-center p-6 lg:static lg:w-auto"
         href="/"
         aria-label="Anton Bossenbroek Photography - Home"
       >
@@ -31,17 +35,17 @@ export default function Navbar() {
       >
         <div className="flex flex-row gap-6 lg:gap-4">
           {/* Work - Desktop only */}
-          <Suspense
-            fallback={
-              <span className="hidden lg:flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 hover:border-b cursor-default uppercase">
-                Work
-              </span>
-            }
-          >
-            <div className="hidden lg:flex">
-              <NavbarWorkDropdown />
-            </div>
-          </Suspense>
+          {workDropdown && (
+            <Suspense
+              fallback={
+                <span className="hidden lg:flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 hover:border-b cursor-default uppercase">
+                  Work
+                </span>
+              }
+            >
+              <div className="hidden lg:flex">{workDropdown}</div>
+            </Suspense>
+          )}
 
           {/* Mobile navigation - Exhibitions, News, About only */}
           <Link

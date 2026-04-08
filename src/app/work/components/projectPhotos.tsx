@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import type React from 'react'
 import { getPhotoDetails } from '@/actions/getPhotoDetails'
 
@@ -39,12 +40,15 @@ const ProjectPhotos: React.FC<ProjectPhotosProps> = async ({ slug }) => {
       <div className="grid text-center lg:p-6 gap-2 lg:mb-0 lg:grid-cols-1 lg:text-right self-end">
         {photoArray.map((photo) => (
           <div key={photo.id} className="w-full lg:p-12 pb-4">
-            {/* biome-ignore lint/performance/noImgElement: External CDN images require img for referrer policy */}
-            <img
+            <Image
               src={photo.desktop_blob}
               alt={photo.caption || ''}
+              width={2400}
+              height={1600}
               className="w-full h-auto object-cover lg:max-w-full lg:max-h-screen"
               referrerPolicy="no-referrer"
+              unoptimized
+              sizes="(max-width: 1024px) 100vw, 90vw"
             />
             {photo.caption && (
               <p className="mt-2 text-left italic text-sm text-gray-400">{photo.caption}</p>
@@ -54,7 +58,7 @@ const ProjectPhotos: React.FC<ProjectPhotosProps> = async ({ slug }) => {
       </div>
     )
   } catch (error) {
-    console.error('[Component] ProjectPhotos: Error occurred', error)
+    console.warn('[Component] ProjectPhotos: Error occurred', error)
     return (
       <div className="text-center p-6 mt-10">
         <p className="text-xl mb-2">Unable to load photos</p>
