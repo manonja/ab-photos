@@ -68,16 +68,23 @@ export default function WorkDropdown({ projects }: WorkDropdownProps) {
   const _firstProject = projects.length > 0 ? projects[0] : null
 
   return (
-    <div ref={dropdownRef} className="relative" onClick={(e) => e.stopPropagation()}>
+    // biome-ignore lint/a11y/noStaticElementInteractions: stopPropagation wrapper, not interactive
+    <div
+      ref={dropdownRef}
+      className="relative"
+      role="presentation"
+      onClick={(e) => e.stopPropagation()}
+    >
       {/* Work header that toggles dropdown but is not clickable as a link */}
       <div className="p-0">
-        <span
-          className={`cursor-pointer uppercase ${isOpen ? 'border-b' : 'hover:border-b'}`}
+        <button
+          type="button"
+          className={`cursor-pointer uppercase bg-transparent border-none p-0 font-inherit text-inherit ${isOpen ? 'border-b' : 'hover:border-b'}`}
           onClick={toggleDropdown}
           onMouseEnter={() => setIsOpen(true)}
         >
           Work
-        </span>
+        </button>
       </div>
 
       {/* Dropdown menu */}

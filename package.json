@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts/compile-html.js && NODE_OPTIONS='--inspect' next dev",
-    "build": "node scripts/compile-html.js && next build",
+    "dev": "NODE_OPTIONS='--inspect' next dev",
+    "build": "next build",
     "start": "next start",
     "lint": "biome check src/",
     "lint:fix": "biome check --write src/",

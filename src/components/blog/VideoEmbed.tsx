@@ -1,4 +1,8 @@
-import type { VideoEmbedProps } from '@/lib/blog/types'
+interface VideoEmbedProps {
+  url: string
+  title?: string
+  aspectRatio?: '16:9' | '4:3' | '1:1'
+}
 
 export function VideoEmbed({ url, title, aspectRatio = '16:9' }: VideoEmbedProps) {
   // Extract video ID and determine platform

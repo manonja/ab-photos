@@ -3,14 +3,15 @@ import { findPhotosByProjectId } from '@/db/operations'
 import type { DatabaseError } from '@/db/types'
 import { log } from '@/lib/logger'
 
-export async function GET(_request: Request, { params }: { params: { slug: string } }) {
+export async function GET(_request: Request, { params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
   const routeLogger = log.withMetadata({
     route: 'api/photos/[slug]',
-    projectId: params.slug,
+    projectId: slug,
   })
 
   try {
-    const photos = await findPhotosByProjectId(params.slug)
+    const photos = await findPhotosByProjectId(slug)
 
     if (!photos.length) {
       routeLogger.warn('No photos found for project')

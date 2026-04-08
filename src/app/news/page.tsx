@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { getAllNews } from '@/actions/getNewsDetails'
 import PostCard from '@/components/news/PostCard'
-import { getAllBlogPosts } from '@/lib/blog'
-import { prepareBlogPostForDisplay } from '@/lib/blog/adapter'
 
 export const revalidate = 3600 // Revalidate every hour
 
@@ -12,10 +11,7 @@ export const metadata: Metadata = {
 }
 
 export default async function NewsPage() {
-  // Fetch posts from HTML blog
-  const blogPosts = await getAllBlogPosts()
-  // Prepare posts for display
-  const posts = blogPosts.map(prepareBlogPostForDisplay)
+  const posts = await getAllNews()
 
   if (!posts || posts.length === 0) {
     return (

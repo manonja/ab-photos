@@ -1,5 +1,16 @@
 import Image from 'next/image'
-import type { ImageGalleryProps } from '@/lib/blog/types'
+
+interface BlogImageProps {
+  src: string
+  alt: string
+  caption?: string
+}
+
+interface ImageGalleryProps {
+  images: BlogImageProps[]
+  columns?: 1 | 2 | 3 | 4
+  spacing?: 'tight' | 'normal' | 'loose'
+}
 
 export function ImageGallery({ images, columns = 3, spacing = 'normal' }: ImageGalleryProps) {
   const gapClass = {
@@ -17,8 +28,8 @@ export function ImageGallery({ images, columns = 3, spacing = 'normal' }: ImageG
 
   return (
     <div className={`grid ${gridColsClass} ${gapClass} my-8`}>
-      {images.map((image, index) => (
-        <figure key={index} className="relative group">
+      {images.map((image) => (
+        <figure key={image.src} className="relative group">
           <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-gray-100">
             <Image
               src={image.src}

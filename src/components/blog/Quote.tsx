@@ -1,4 +1,7 @@
-import type { QuoteProps } from '@/lib/blog/types'
+interface QuoteProps {
+  author: string
+  children: React.ReactNode
+}
 
 export function Quote({ author, children }: QuoteProps) {
   return (

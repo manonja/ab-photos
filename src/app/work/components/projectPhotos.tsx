@@ -46,12 +46,9 @@ const ProjectPhotos: React.FC<ProjectPhotosProps> = async ({ slug }) => {
               className="w-full h-auto object-cover lg:max-w-full lg:max-h-screen"
               referrerPolicy="no-referrer"
             />
-            {/* TODO: Add captions to DATABASE and uncomment when ready */}
-            {/* {photo.caption && (
-                            <p className="mt-2 text-left italic text-sm text-gray-400">
-                                {photo.caption}
-                            </p>
-                        )} */}
+            {photo.caption && (
+              <p className="mt-2 text-left italic text-sm text-gray-400">{photo.caption}</p>
+            )}
           </div>
         ))}
       </div>

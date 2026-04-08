@@ -1,25 +1,23 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import type React from 'react'
-import type { BlogPostDisplay } from '../../lib/blog/types'
+import type { NewsPost } from '@/db/types'
 
 interface PostContentProps {
-  post: BlogPostDisplay & { htmlContent?: string }
+  post: NewsPost
 }
 
 const PostContent: React.FC<PostContentProps> = ({ post }) => {
-  const HTMLContent = post.htmlContent
-
   return (
     <article className="mx-auto lg:max-w-7xl max-w-5xl">
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Featured Image - Left Side Panel */}
-        {post.feature_image && (
+        {post.featuredImage && (
           <div className="lg:w-1/3">
             <div className="sticky top-8">
               <div className="relative w-full overflow-hidden rounded-lg">
                 <Image
-                  src={post.feature_image}
+                  src={post.featuredImage}
                   alt={post.title}
                   width={500}
                   height={670}
@@ -40,13 +38,12 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
             {post.tags && post.tags.length > 0 && (
               <div className="mb-4 flex flex-wrap gap-2">
                 {post.tags.map(tag => (
-                  <Link
-                    key={tag.id}
-                    href={`/news/tag/${tag.slug}`}
-                    className="rounded-md bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800 hover:bg-gray-200"
+                  <span
+                    key={tag}
+                    className="rounded-md bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800"
                   >
-                    {tag.name}
-                  </Link>
+                    {tag}
+                  </span>
                 ))}
               </div>
             )} */}
@@ -56,18 +53,8 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
 
             {/* Meta */}
             <div className="mb-8 flex items-center">
-              {post.primary_author?.profile_image && (
-                <div className="relative mr-4 h-12 w-12 overflow-hidden rounded-full">
-                  <Image
-                    src={post.primary_author.profile_image}
-                    alt={post.primary_author.name}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              )}
               <div>
-                {post.primary_author && <p className="font-medium">{post.primary_author.name}</p>}
+                <p className="font-medium">{post.author}</p>
               </div>
             </div>
           </header>
@@ -75,7 +62,8 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
           {/* HTML Content */}
           <div
             className="blog-content prose prose-lg max-w-none mb-8"
-            dangerouslySetInnerHTML={{ __html: HTMLContent || '' }}
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: authored blog content from database
+            dangerouslySetInnerHTML={{ __html: post.content || '' }}
           />
 
           {/* Footer */}
@@ -85,7 +73,7 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
                 <h3 className="text-lg font-bold">Share this post</h3>
                 <div className="mt-2 flex space-x-4">
                   <a
-                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.slug}`)}`}
+                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.id}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-500 hover:text-pink-600"
@@ -93,7 +81,7 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
                     Twitter
                   </a>
                   <a
-                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.slug}`)}`}
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.id}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-500 hover:text-pink-600"
@@ -101,7 +89,7 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
                     Facebook
                   </a>
                   <a
-                    href={`https://www.instagram.com/?url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.slug}`)}`}
+                    href={`https://www.instagram.com/?url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.id}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-500 hover:text-pink-600"

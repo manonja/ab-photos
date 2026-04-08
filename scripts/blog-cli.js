@@ -11,11 +11,10 @@ let chalk
   chalk = (await import('chalk')).default
 })()
 
-const BLOG_DIR = path.join(process.cwd(), 'content/blog')
+const SEED_FILE = path.join(process.cwd(), 'src/db/seed.sql')
 const IMAGES_DIR = path.join(process.cwd(), 'public/images/blog')
 
 // Ensure directories exist
-fs.mkdirSync(BLOG_DIR, { recursive: true })
 fs.mkdirSync(IMAGES_DIR, { recursive: true })
 
 // Simple console colors as fallback
@@ -28,119 +27,76 @@ const colors = {
   white: (text) => (chalk ? chalk.white(text) : text),
 }
 
-program.name('blog').description('CLI tool for managing blog posts').version('1.0.0')
+function escapeSQL(value) {
+  if (value === null || value === undefined) return 'NULL'
+  return "'" + String(value).replace(/'/g, "''") + "'"
+}
+
+program.name('blog').description('CLI tool for managing blog posts (D1)').version('2.0.0')
 
 program
   .command('new <title>')
-  .description('Create a new blog post')
+  .description('Create a new blog post as SQL INSERT in seed.sql')
   .option('-d, --draft', 'Create as draft (unpublished)')
-  .option('-l, --layout <layout>', 'Layout type: single, two-column, or mixed', 'single')
+  .option('-l, --layout <layout>', 'Layout type: single or two-column', 'single')
+  .option('-a, --author <author>', 'Post author', 'Anton Bossenbroek')
   .action(async (title, options) => {
     const date = new Date().toISOString().split('T')[0]
     const slug = title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '')
-    const filename = `${date}-${slug}.html`
-    const filepath = path.join(BLOG_DIR, filename)
 
-    // Check if file already exists
-    if (fs.existsSync(filepath)) {
-      console.error(colors.red(`Error: ${filename} already exists!`))
+    // Check if slug already exists in seed.sql
+    const seedContent = fs.readFileSync(SEED_FILE, 'utf-8')
+    if (seedContent.includes(`'${slug}'`)) {
+      console.error(colors.red(`Error: Post with slug '${slug}' already exists in seed.sql!`))
       process.exit(1)
     }
 
-    // Get current year
-    const year = new Date().getFullYear()
-
-    // Format date for display
-    const displayDate = new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-
-    // Get appropriate template based on layout
-    let contentTemplate = ''
-
-    if (options.layout === 'two-column') {
-      contentTemplate = `  <!-- Two column layout -->
+    const contentTemplate =
+      options.layout === 'two-column'
+        ? `<article class="text-white">
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
     <div class="space-y-6 text-base leading-normal">
-      <h3 class="text-xl font-normal mb-3">Left Column Title</h3>
-      <p>Left column content starts here. Replace this with your actual content.</p>
-      <p>Add more paragraphs as needed.</p>
+      <h3 class="text-xl font-normal mb-3">Left Column</h3>
+      <p>Left column content here.</p>
     </div>
-    
     <div class="space-y-6 text-base leading-normal">
-      <h3 class="text-xl font-normal mb-3">Right Column Title</h3>
-      <p>Right column content starts here. Replace this with your actual content.</p>
-      <p>Add more paragraphs as needed.</p>
+      <h3 class="text-xl font-normal mb-3">Right Column</h3>
+      <p>Right column content here.</p>
     </div>
-  </div>`
-    } else {
-      // Default single column
-      contentTemplate = `  <div class="space-y-6 text-base leading-normal">
-    <p>Write your introduction paragraph here. This is your chance to hook the reader and give them a reason to continue reading.</p>
-    
-    <p>Continue with your main content. Each paragraph should be wrapped in p tags with proper spacing.</p>
-    
-    <h2 class="text-2xl font-normal mt-8 mb-4">First Section Title</h2>
-    
-    <p>Your section content goes here. You can use <strong class="font-semibold">bold text</strong> and <em class="italic">italic text</em> for emphasis.</p>
-    
-    <h2 class="text-2xl font-normal mt-8 mb-4">Second Section Title</h2>
-    
-    <p>More content here. To create a list:</p>
-    
-    <ul class="list-disc list-inside space-y-2 ml-4">
-      <li>First item in your list</li>
-      <li>Second item in your list</li>
-      <li>Third item in your list</li>
-    </ul>
-    
-    <h2 class="text-2xl font-normal mt-8 mb-4">Conclusion</h2>
-    
-    <p>Wrap up your blog post with a strong conclusion that reinforces your main points.</p>
-  </div>`
-    }
-
-    const template = `<!-- 
-title: "${title}"
-slug: "${slug}"
-date: "${date}"
-author: "Anton Bossenbroek"
-excerpt: "A brief description of your post that appears in the listing."
-tags: ["photography"]
-published: ${!options.draft}
-layout: "${options.layout}"
--->
-
-<article class="text-white">
-  <h1 class="text-4xl font-normal uppercase mb-2">${title}</h1>
-  <div class="font-light italic text-gray-400 mb-8">${displayDate}</div>
-  
-  <div class="my-8 h-px bg-gray-300 w-full${options.layout === 'single' ? ' max-w-[80%]' : ''}"></div>
-  
-${contentTemplate}
+  </div>
+</article>`
+        : `<article class="text-white">
+  <div class="space-y-6 text-base leading-normal">
+    <p>Write your introduction here.</p>
+    <h2 class="text-2xl font-normal mt-8 mb-4">Section Title</h2>
+    <p>Your content goes here.</p>
+  </div>
 </article>`
 
-    // Write file
-    await fsp.writeFile(filepath, template)
+    const sql = `
+INSERT OR REPLACE INTO news (id, title, date, author, excerpt, featuredImage, tags, published, layout, content)
+VALUES (
+  ${escapeSQL(slug)},
+  ${escapeSQL(title)},
+  ${escapeSQL(date)},
+  ${escapeSQL(options.author)},
+  ${escapeSQL('A brief description of your post.')},
+  NULL,
+  ${escapeSQL('[]')},
+  ${options.draft ? '0' : '1'},
+  ${escapeSQL(options.layout)},
+  ${escapeSQL(contentTemplate)}
+);
+`
 
-    // Run compile script
-    console.log(colors.yellow(`\n⚙️  Updating compiled data...`))
-    execSync('node scripts/compile-html.js', { stdio: 'inherit' })
+    fs.appendFileSync(SEED_FILE, sql)
 
-    console.log(colors.green(`✓ Created: ${filepath}`))
-    console.log(colors.blue(`\n📝 Opening in VS Code...`))
-
-    // Open in VS Code
-    try {
-      execSync(`code ${filepath}`)
-    } catch (e) {
-      console.log(colors.yellow('Could not open VS Code. Please open manually.'))
-    }
+    console.log(colors.green(`✓ Added post '${slug}' to ${SEED_FILE}`))
+    console.log(colors.blue(`\n📝 Edit the SQL in seed.sql to customize content.`))
+    console.log(colors.yellow(`\n💡 To deploy: npm run blog:publish`))
   })
 
 program
@@ -169,12 +125,12 @@ program
       const mdPath = `/images/blog/${year}/${filename}`
 
       console.log(colors.green(`✓ Image added: ${destination}`))
-      console.log(colors.blue(`\n📋 Markdown reference:`))
-      console.log(colors.white(`![Alt text](${mdPath})`))
+      console.log(colors.blue(`\n📋 Image path:`))
+      console.log(colors.white(mdPath))
 
       // Copy to clipboard if possible (macOS)
       try {
-        execSync(`echo "![Alt text](${mdPath})" | pbcopy`)
+        execSync(`echo "${mdPath}" | pbcopy`)
         console.log(colors.gray('\n(Copied to clipboard)'))
       } catch {}
     } catch (error) {
@@ -186,36 +142,37 @@ program
 program
   .command('list')
   .alias('ls')
-  .description('List all blog posts')
+  .description('List all news posts in seed.sql')
   .option('-d, --drafts', 'Include drafts')
   .action(async (options) => {
-    const files = await fsp.readdir(BLOG_DIR)
-    const posts = files
-      .filter((f) => f.endsWith('.html') && !f.startsWith('_'))
-      .sort()
-      .reverse()
+    const content = fs.readFileSync(SEED_FILE, 'utf-8')
+    const postRegex =
+      /INSERT OR REPLACE INTO news.*?VALUES\s*\(\s*'([^']+)',\s*'([^']+)',\s*'([^']+)',\s*'([^']+)',[\s\S]*?(\d),\s*'([^']+)'/g
+    let match
+    const posts = []
+    while ((match = postRegex.exec(content)) !== null) {
+      posts.push({
+        slug: match[1],
+        title: match[2],
+        date: match[3],
+        author: match[4],
+        published: match[5] === '1',
+        layout: match[6],
+      })
+    }
 
     if (posts.length === 0) {
-      console.log(colors.yellow('No blog posts found.'))
+      console.log(colors.yellow('No news posts found in seed.sql.'))
       return
     }
 
-    console.log(colors.blue('\n📝 Blog Posts:\n'))
+    console.log(colors.blue('\n📝 News Posts:\n'))
 
-    for (const file of posts) {
-      const content = await fsp.readFile(path.join(BLOG_DIR, file), 'utf-8')
-      const titleMatch = content.match(/title:\s*"(.+)"/)
-      const publishedMatch = content.match(/published:\s*(true|false)/)
-      const layoutMatch = content.match(/layout:\s*"(.+)"/)
-      const title = titleMatch ? titleMatch[1] : 'Untitled'
-      const isDraft = publishedMatch && publishedMatch[1] === 'false'
-      const layout = layoutMatch ? layoutMatch[1] : 'single'
-
-      if (isDraft && !options.drafts) continue
-
-      const status = isDraft ? colors.yellow('[DRAFT]') : colors.green('[PUBLISHED]')
-      const layoutTag = colors.gray(`[${layout}]`)
-      console.log(`${status} ${layoutTag} ${file} - ${title}`)
+    for (const post of posts.sort((a, b) => b.date.localeCompare(a.date))) {
+      if (!post.published && !options.drafts) continue
+      const status = post.published ? colors.green('[PUBLISHED]') : colors.yellow('[DRAFT]')
+      const layoutTag = colors.gray(`[${post.layout}]`)
+      console.log(`${status} ${layoutTag} ${post.date} - ${post.title}`)
     }
   })
 
@@ -228,21 +185,17 @@ program
   })
 
 program
-  .command('publish [message]')
-  .description('Commit and push your blog changes')
-  .action((message = 'feat: update blog content') => {
+  .command('publish')
+  .description('Apply seed.sql to D1 database (remote)')
+  .option('--local', 'Apply to local D1 instead of remote')
+  .action((options) => {
     try {
-      console.log(colors.blue('📦 Staging blog files...'))
-      execSync('git add content/blog public/images/blog')
-
-      console.log(colors.blue('💾 Committing changes...'))
-      execSync(`git commit -m "${message}"`)
-
-      console.log(colors.blue('🚀 Pushing to remote...'))
-      execSync('git push')
-
-      console.log(colors.green('\n✓ Blog published successfully!'))
-      console.log(colors.gray('Changes will be live in ~2 minutes.'))
+      const target = options.local ? '--local' : '--remote'
+      console.log(colors.blue(`📦 Applying seed.sql to D1 (${options.local ? 'local' : 'remote'})...`))
+      execSync(`npx wrangler d1 execute ab-photos ${target} --file=src/db/seed.sql`, {
+        stdio: 'inherit',
+      })
+      console.log(colors.green('\n✓ News published to D1 successfully!'))
     } catch (error) {
       console.error(colors.red('Error publishing:'), error.message)
       process.exit(1)

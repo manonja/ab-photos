@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
+import { getExhibitsDetails } from '@/actions/getExhibitsDetails'
 import ExhibitCard from '@/components/exhibits/ExhibitCard'
-import { findAllExhibits } from '@/db/operations'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600 // Revalidate every hour
 
 export const metadata: Metadata = {
   title: 'Exhibitions | Anton Bossenbroek Photography',
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 }
 
 export default async function ExhibitionsPage() {
-  const exhibits = await findAllExhibits()
+  const exhibits = await getExhibitsDetails()
 
   if (!exhibits || exhibits.length === 0) {
     return (

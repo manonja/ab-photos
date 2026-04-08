@@ -17,7 +17,7 @@ interface RotatingBackgroundClientProps {
  * All photos are pre-fetched server-side to avoid client-side data fetching.
  */
 export function RotatingBackgroundClient({
-  projectSlugs,
+  projectSlugs: _projectSlugs,
   interval = 4000,
   prefetchedPhotos,
 }: RotatingBackgroundClientProps) {
@@ -102,7 +102,9 @@ export function RotatingBackgroundClient({
 
   // If no images loaded, show black background
   if (backgrounds.length === 0) {
-    return <div className="fixed inset-0 -z-10 bg-black" aria-label="Loading background" />
+    return (
+      <div role="img" className="fixed inset-0 -z-10 bg-black" aria-label="Loading background" />
+    )
   }
 
   const currentPhoto = backgrounds[currentIndex]
@@ -153,7 +155,7 @@ export function RotatingBackgroundClient({
           />
         </div>
       ) : (
-        <div className="fixed inset-0 -z-10 bg-black" aria-label="Fallback background" />
+        <div role="img" className="fixed inset-0 -z-10 bg-black" aria-label="Fallback background" />
       )}
     </div>
   )

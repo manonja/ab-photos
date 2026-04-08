@@ -1,11 +1,15 @@
 import {
   findAllExhibits,
+  findAllNews,
+  findAllNewsTags,
   findAllProjects,
+  findNewsBySlug,
+  findNewsByTag,
   findPhotoByProjectIdAndSeq,
   findPhotosByProjectId,
   findProjectBySlug,
 } from '../operations'
-import { mockPhotos, mockProjects } from './mocks'
+import { mockNewsPosts, mockPhotos, mockProjects } from './mocks'
 
 // Create mock D1 methods
 const mockFirst = jest.fn()
@@ -109,6 +113,77 @@ describe('Database Operations', () => {
       expect(result[0].isActive).toBe(true)
       expect(result[0].isUpcoming).toBe(false)
       expect(mockPrepare).toHaveBeenCalledWith(expect.stringContaining('FROM exhibits'))
+    })
+  })
+
+  describe('findAllNews', () => {
+    it('should return only published news sorted by date DESC with boolean and JSON parsing', async () => {
+      const publishedPosts = mockNewsPosts.filter((p) => p.published === 1)
+      mockAll.mockResolvedValueOnce({ results: publishedPosts })
+
+      const result = await findAllNews()
+
+      expect(result).toHaveLength(2)
+      expect(result[0].published).toBe(true)
+      expect(result[0].tags).toEqual(expect.arrayContaining(['photography']))
+      expect(Array.isArray(result[0].tags)).toBe(true)
+      expect(mockPrepare).toHaveBeenCalledWith(expect.stringContaining('FROM news'))
+      expect(mockPrepare).toHaveBeenCalledWith(expect.stringContaining('published = 1'))
+    })
+  })
+
+  describe('findNewsBySlug', () => {
+    it('should return a news post by slug with boolean and JSON parsing', async () => {
+      const post = mockNewsPosts[0]
+      mockFirst.mockResolvedValueOnce(post)
+
+      const result = await findNewsBySlug('first-post')
+
+      expect(result).not.toBeNull()
+      expect(result?.id).toBe('first-post')
+      expect(result?.published).toBe(true)
+      expect(result?.tags).toEqual(['photography', 'travel'])
+      expect(mockBind).toHaveBeenCalledWith('first-post')
+    })
+
+    it('should return null when news post not found', async () => {
+      mockFirst.mockResolvedValueOnce(null)
+
+      const result = await findNewsBySlug('non-existent')
+
+      expect(result).toBeNull()
+    })
+  })
+
+  describe('findNewsByTag', () => {
+    it('should return news posts matching the tag', async () => {
+      const publishedPosts = mockNewsPosts.filter((p) => p.published === 1)
+      mockAll.mockResolvedValueOnce({ results: publishedPosts })
+
+      const result = await findNewsByTag('travel')
+
+      expect(result).toHaveLength(1)
+      expect(result[0].id).toBe('first-post')
+    })
+
+    it('should return empty array for non-existent tag', async () => {
+      const publishedPosts = mockNewsPosts.filter((p) => p.published === 1)
+      mockAll.mockResolvedValueOnce({ results: publishedPosts })
+
+      const result = await findNewsByTag('nonexistent')
+
+      expect(result).toEqual([])
+    })
+  })
+
+  describe('findAllNewsTags', () => {
+    it('should return deduplicated sorted tags from all published posts', async () => {
+      const publishedPosts = mockNewsPosts.filter((p) => p.published === 1)
+      mockAll.mockResolvedValueOnce({ results: publishedPosts })
+
+      const result = await findAllNewsTags()
+
+      expect(result).toEqual(['photography', 'travel'])
     })
   })
 })

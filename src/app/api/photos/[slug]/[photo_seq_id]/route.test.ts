@@ -32,7 +32,7 @@ describe('GET /api/photos/[slug]/[photo_seq_id]', () => {
 
     // Act
     const response = await GET(new Request('http://test.com'), {
-      params: { slug: 'nature', photo_seq_id: '1' },
+      params: Promise.resolve({ slug: 'nature', photo_seq_id: '1' }),
     })
 
     // Assert
@@ -47,7 +47,7 @@ describe('GET /api/photos/[slug]/[photo_seq_id]', () => {
 
     // Act
     const response = await GET(new Request('http://test.com'), {
-      params: { slug: 'nature', photo_seq_id: '999' },
+      params: Promise.resolve({ slug: 'nature', photo_seq_id: '999' }),
     })
 
     // Assert
@@ -59,7 +59,7 @@ describe('GET /api/photos/[slug]/[photo_seq_id]', () => {
   it('returns 400 when sequence ID is invalid', async () => {
     // Act
     const response = await GET(new Request('http://test.com'), {
-      params: { slug: 'nature', photo_seq_id: 'invalid' },
+      params: Promise.resolve({ slug: 'nature', photo_seq_id: 'invalid' }),
     })
 
     // Assert
@@ -76,7 +76,7 @@ describe('GET /api/photos/[slug]/[photo_seq_id]', () => {
 
     // Act
     const response = await GET(new Request('http://test.com'), {
-      params: { slug: 'nature', photo_seq_id: '1' },
+      params: Promise.resolve({ slug: 'nature', photo_seq_id: '1' }),
     })
 
     // Assert
