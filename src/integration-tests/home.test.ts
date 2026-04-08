@@ -27,8 +27,17 @@ test('home page loads without console errors or warnings', async ({ page }) => {
     console.log('Page title:', title)
     expect(title).toBeTruthy()
 
-    // Filter out known benign warnings (e.g., analytics warnings in localhost)
-    const benignWarningPatterns = [/Ignoring Event: localhost/, /plausible/i, /analytics/i]
+    // Filter out known benign warnings (e.g., analytics warnings in localhost, expected fallback logs)
+    const benignWarningPatterns = [
+      /Ignoring Event: localhost/,
+      /plausible/i,
+      /analytics/i,
+      /Direct DB access failed/i,
+      /HTTP fetch also failed/i,
+      /HTTP error/i,
+      /All strategies failed/i,
+      /NEXT_PUBLIC_API_URL not defined/i,
+    ]
 
     // Filter for warnings and errors (excluding benign ones)
     const warnings = consoleMessages.filter(

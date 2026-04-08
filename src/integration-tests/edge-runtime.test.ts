@@ -59,7 +59,7 @@ test.describe('Edge Runtime Smoke Tests', () => {
     await page.waitForLoadState('networkidle')
 
     // Verify key content is present
-    const heading = await page.locator('h2').first()
+    const heading = await page.locator('h1').first()
     await expect(heading).toBeVisible()
   })
 
