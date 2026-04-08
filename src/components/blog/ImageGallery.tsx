@@ -1,5 +1,16 @@
 import Image from 'next/image'
-import type { ImageGalleryProps } from '@/lib/blog/types'
+
+interface BlogImageProps {
+  src: string
+  alt: string
+  caption?: string
+}
+
+interface ImageGalleryProps {
+  images: BlogImageProps[]
+  columns?: 1 | 2 | 3 | 4
+  spacing?: 'tight' | 'normal' | 'loose'
+}
 
 export function ImageGallery({ images, columns = 3, spacing = 'normal' }: ImageGalleryProps) {
   const gapClass = {
