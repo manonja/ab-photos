@@ -177,7 +177,27 @@ describe('getNewsBySlug', () => {
     )
   })
 
-  it('returns null when both DB and HTTP fail', async () => {
+  it('returns fallback post when both DB and HTTP fail for known slug', async () => {
+    jest.doMock('@opennextjs/cloudflare', () => ({
+      getCloudflareContext: () => {
+        throw new Error('D1 not available')
+      },
+    }))
+
+    jest.doMock('@/db/operations', () => ({
+      findNewsBySlug: jest.fn().mockRejectedValue(new Error('DB unavailable')),
+    }))
+
+    mockFetch.mockRejectedValue(new Error('Network error'))
+
+    const { getNewsBySlug } = await import('../getNewsDetails')
+    const result = await getNewsBySlug('sunsetting-64-megatons-artist-feature-der-greif')
+
+    expect(result).not.toBeNull()
+    expect(result?.id).toBe('sunsetting-64-megatons-artist-feature-der-greif')
+  })
+
+  it('returns null when both DB and HTTP fail for unknown slug', async () => {
     jest.doMock('@opennextjs/cloudflare', () => ({
       getCloudflareContext: () => {
         throw new Error('D1 not available')

@@ -90,7 +90,12 @@ export async function getNewsBySlug(slug: string): Promise<NewsPost | null> {
     }
   }
 
-  // Strategy 3: Return null
+  // Strategy 3: Static fallback
+  const fallback = FALLBACK_NEWS.find((p) => p.id === slug)
+  if (fallback) {
+    console.warn('[Action] getNewsBySlug: All strategies failed, returning fallback')
+    return fallback
+  }
   console.warn('[Action] getNewsBySlug: All strategies failed, returning null')
   return null
 }
