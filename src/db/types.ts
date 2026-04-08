@@ -18,6 +18,19 @@ export interface Project {
 
 export type { Exhibit } from '@/types/exhibit'
 
+export interface NewsPost {
+  id: string
+  title: string
+  date: string
+  author: string
+  excerpt: string | null
+  featuredImage: string | null
+  tags: string[]
+  published: boolean
+  layout: string
+  content: string
+}
+
 export interface DatabaseError extends Error {
   code?: string
   query?: string
