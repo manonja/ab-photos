@@ -1,6 +1,6 @@
 import type { Exhibit } from '@/types/exhibit'
 import { getDb } from './client'
-import type { Photo, Project } from './types'
+import type { NewsPost, Photo, Project } from './types'
 
 export async function findPhotosByProjectId(projectId: string): Promise<Photo[]> {
   console.log('[DB] findPhotosByProjectId: Starting request', { projectId })
@@ -70,6 +70,72 @@ export async function findPhotoByProjectIdAndSeq(
     photoId: result.id,
   })
   return result
+}
+
+interface NewsPostRow {
+  id: string
+  title: string
+  date: string
+  author: string
+  excerpt: string | null
+  featuredImage: string | null
+  tags: string
+  published: number
+  layout: string
+  content: string
+}
+
+function mapNewsRow(row: NewsPostRow): NewsPost {
+  return {
+    ...row,
+    tags: JSON.parse(row.tags),
+    published: Boolean(row.published),
+  }
+}
+
+export async function findAllNews(): Promise<NewsPost[]> {
+  console.log('[DB] findAllNews: Starting request')
+  const db = getDb()
+  const { results } = await db
+    .prepare('SELECT * FROM news WHERE published = 1 ORDER BY date DESC')
+    .all<NewsPostRow>()
+  console.log('[DB] findAllNews: Successfully fetched news', {
+    postCount: results.length,
+  })
+  return results.map(mapNewsRow)
+}
+
+export async function findNewsBySlug(slug: string): Promise<NewsPost | null> {
+  console.log('[DB] findNewsBySlug: Starting request', { slug })
+  const db = getDb()
+  const result = await db
+    .prepare('SELECT * FROM news WHERE id = ? LIMIT 1')
+    .bind(slug)
+    .first<NewsPostRow>()
+  if (!result) {
+    console.warn('[DB] findNewsBySlug: Post not found', { slug })
+    return null
+  }
+  console.log('[DB] findNewsBySlug: Successfully fetched post', { slug })
+  return mapNewsRow(result)
+}
+
+export async function findNewsByTag(tag: string): Promise<NewsPost[]> {
+  console.log('[DB] findNewsByTag: Starting request', { tag })
+  const posts = await findAllNews()
+  return posts.filter((p) => p.tags.some((t) => t.toLowerCase() === tag.toLowerCase()))
+}
+
+export async function findAllNewsTags(): Promise<string[]> {
+  console.log('[DB] findAllNewsTags: Starting request')
+  const posts = await findAllNews()
+  const tagSet = new Set<string>()
+  for (const post of posts) {
+    for (const tag of post.tags) {
+      tagSet.add(tag)
+    }
+  }
+  return Array.from(tagSet).sort()
 }
 
 export async function findAllExhibits(): Promise<Exhibit[]> {
