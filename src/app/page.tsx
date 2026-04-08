@@ -14,6 +14,11 @@ export async function generateMetadata(): Promise<Metadata> {
     title: 'Anton Bossenbroek Photography',
     description:
       'Explore the photography portfolio of Anton Bossenbroek featuring landscape and travel photography',
+    openGraph: {
+      title: 'Anton Bossenbroek Photography',
+      description:
+        'Explore the photography portfolio of Anton Bossenbroek featuring landscape and travel photography',
+    },
   }
 }
 

@@ -1,17 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@layer base {
-  @font-face {
-    font-family: "Lexend";
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-  }
-}
 
 :root {
   --foreground-rgb: 255, 255, 255;
@@ -120,11 +109,12 @@ body {
 
 .blog-content a {
   color: #3b82f6;
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 .blog-content a:hover {
   text-decoration: underline;
+  color: #60a5fa;
 }
 
 .blog-content table {

@@ -84,7 +84,7 @@ const BackgroundImage: React.FC<BackgroundImageProps> = async ({
       </Suspense>
     )
   } catch (error) {
-    console.error('[Component] BackgroundImage: Error occurred', error)
+    console.warn('[Component] BackgroundImage: Error occurred', error)
     return (
       <div
         role="img"

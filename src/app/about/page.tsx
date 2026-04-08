@@ -34,12 +34,12 @@ export default function About() {
             {/* Text container */}
             <div className="w-full lg:w-1/2">
               {/* Headline */}
-              <h2 className="text-xl lg:text-2xl leading-relaxed mb-6 lg:mt-0">
+              <h1 className="text-xl lg:text-2xl leading-relaxed mb-6 lg:mt-0">
                 Anton Bossenbroek is a documentary and landscape photographer living between The
                 Netherlands and Canada. His work investigates how hyperobjects — massive forces like
                 pollution and industrial infrastructure — shape our world in ways that often go
                 unnoticed.
-              </h2>
+              </h1>
 
               {/* Divider */}
               <div className="my-6 h-px bg-white w-full" />

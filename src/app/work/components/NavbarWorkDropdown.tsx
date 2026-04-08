@@ -43,7 +43,7 @@ export default async function NavbarWorkDropdown() {
       </>
     )
   } catch (error) {
-    console.error('Error loading projects for dropdown:', error)
+    console.warn('Error loading projects for dropdown:', error)
     // If we fail to load projects, show non-clickable Work
     return (
       <span className="flex place-items-center gap-2 pr-1 p-2 pointer-events-auto lg:p-0 cursor-default uppercase">

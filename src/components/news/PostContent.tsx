@@ -70,13 +70,13 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
           <footer className="mt-12 border-t border-gray-200 pt-8">
             <div className="flex flex-wrap items-center justify-between">
               <div className="mb-4">
-                <h3 className="text-lg font-bold">Share this post</h3>
+                <h2 className="text-lg font-bold">Share this post</h2>
                 <div className="mt-2 flex space-x-4">
                   <a
                     href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.id}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-500 hover:text-pink-600"
+                    className="text-gray-400 hover:text-pink-600"
                   >
                     Twitter
                   </a>
@@ -84,7 +84,7 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
                     href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.id}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-500 hover:text-pink-600"
+                    className="text-gray-400 hover:text-pink-600"
                   >
                     Facebook
                   </a>
@@ -92,7 +92,7 @@ const PostContent: React.FC<PostContentProps> = ({ post }) => {
                     href={`https://www.instagram.com/?url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/news/${post.id}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-500 hover:text-pink-600"
+                    className="text-gray-400 hover:text-pink-600"
                   >
                     Instagram
                   </a>

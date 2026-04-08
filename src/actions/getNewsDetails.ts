@@ -53,7 +53,7 @@ export async function getAllNews(): Promise<NewsPost[]> {
         return data
       }
     } catch (fetchError) {
-      console.error('[Action] getAllNews: HTTP fetch also failed', fetchError)
+      console.warn('[Action] getAllNews: HTTP fetch also failed', fetchError)
     }
   }
 
@@ -86,7 +86,7 @@ export async function getNewsBySlug(slug: string): Promise<NewsPost | null> {
       }
       if (response.status === 404) return null
     } catch (fetchError) {
-      console.error('[Action] getNewsBySlug: HTTP fetch also failed', fetchError)
+      console.warn('[Action] getNewsBySlug: HTTP fetch also failed', fetchError)
     }
   }
 
@@ -105,7 +105,7 @@ export async function getNewsByTag(tag: string): Promise<NewsPost[]> {
     console.log('[Action] getNewsByTag: Fetching posts by tag', { tag })
     return await findNewsByTag(tag)
   } catch (error) {
-    console.error('[Action] getNewsByTag: Failed', error)
+    console.warn('[Action] getNewsByTag: Failed', error)
     return []
   }
 }
@@ -115,7 +115,7 @@ export async function getNewsTags(): Promise<string[]> {
     console.log('[Action] getNewsTags: Fetching all tags')
     return await findAllNewsTags()
   } catch (error) {
-    console.error('[Action] getNewsTags: Failed', error)
+    console.warn('[Action] getNewsTags: Failed', error)
     return []
   }
 }

@@ -40,7 +40,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         href={`/news/${post.id}`}
         className="inline-block text-gray-300 hover:text-white hover:underline"
       >
-        Read More
+        Read more<span className="sr-only">: {post.title}</span>
       </Link>
     </div>
   )
