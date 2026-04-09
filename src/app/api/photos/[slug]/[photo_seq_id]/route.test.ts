@@ -82,6 +82,6 @@ describe('GET /api/photos/[slug]/[photo_seq_id]', () => {
     // Assert
     expect(response.status).toBe(500)
     const data = await response.json()
-    expect(data).toEqual({ error: 'Failed to fetch photo', code: 'P2002' })
+    expect(data).toEqual({ error: 'Failed to fetch photo' })
   })
 })

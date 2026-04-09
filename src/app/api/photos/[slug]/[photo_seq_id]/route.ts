@@ -42,9 +42,6 @@ export async function GET(
       .withError(error as Error)
       .withMetadata({ errorCode: dbError.code })
       .error('Failed to fetch photo')
-    return NextResponse.json(
-      { error: 'Failed to fetch photo', code: dbError.code },
-      { status: 500 },
-    )
+    return NextResponse.json({ error: 'Failed to fetch photo' }, { status: 500 })
   }
 }

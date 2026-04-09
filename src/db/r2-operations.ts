@@ -15,13 +15,3 @@ export async function putImage(
     httpMetadata: { contentType },
   })
 }
-
-export async function deleteImage(key: string): Promise<void> {
-  const bucket = getR2()
-  await bucket.delete(key)
-}
-
-export async function listImages(prefix?: string): Promise<R2Objects> {
-  const bucket = getR2()
-  return bucket.list({ prefix })
-}
