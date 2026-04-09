@@ -26,9 +26,6 @@ export async function GET(_request: Request, { params }: { params: Promise<{ slu
       .withError(error as Error)
       .withMetadata({ errorCode: dbError.code })
       .error('Failed to fetch photos')
-    return NextResponse.json(
-      { error: 'Failed to fetch photos', code: dbError.code },
-      { status: 500 },
-    )
+    return NextResponse.json({ error: 'Failed to fetch photos' }, { status: 500 })
   }
 }

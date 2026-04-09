@@ -63,6 +63,6 @@ describe('GET /api/news/[slug]', () => {
 
     expect(response.status).toBe(500)
     const data = await response.json()
-    expect(data).toEqual({ error: 'Failed to fetch news post', code: 'D1_ERROR' })
+    expect(data).toEqual({ error: 'Failed to fetch news post' })
   })
 })

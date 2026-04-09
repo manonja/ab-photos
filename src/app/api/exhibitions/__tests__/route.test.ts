@@ -53,7 +53,6 @@ describe('GET /api/exhibitions', () => {
     expect(response.status).toBe(500)
     expect(data).toEqual({
       error: 'Failed to fetch exhibits',
-      code: 'CONNECTION_ERROR',
     })
   })
 })

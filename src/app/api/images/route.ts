@@ -44,7 +44,11 @@ export async function POST(request: Request) {
     )
   }
 
-  const filename = file.name
+  const filename =
+    file.name
+      .split(/[/\\]/)
+      .pop()
+      ?.replace(/[^a-zA-Z0-9._-]/g, '_') || 'upload'
   const key = path ? `${path}/${filename}` : `uploads/${filename}`
   const contentType = file.type || 'application/octet-stream'
 

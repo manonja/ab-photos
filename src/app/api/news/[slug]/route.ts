@@ -23,9 +23,6 @@ export async function GET(_request: Request, { params }: { params: Promise<{ slu
       .withError(error as Error)
       .withMetadata({ errorCode: dbError.code })
       .error('Failed to fetch news post')
-    return NextResponse.json(
-      { error: 'Failed to fetch news post', code: dbError.code },
-      { status: 500 },
-    )
+    return NextResponse.json({ error: 'Failed to fetch news post' }, { status: 500 })
   }
 }

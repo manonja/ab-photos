@@ -58,22 +58,3 @@ export async function getProjectsDetails({ useStatic = false } = {}): Promise<Pr
     return FALLBACK_PROJECTS
   }
 }
-
-/**
- * Returns project slugs for static site generation.
- *
- * @returns Array of objects with slug property for Next.js static paths
- */
-export function getStaticProjectPaths(): { slug: string }[] {
-  return FALLBACK_PROJECTS.map((project) => ({ slug: project.id }))
-}
-
-/**
- * Checks if a given slug is a valid project slug against static project list.
- *
- * @param slug - The slug to check
- * @returns Boolean indicating if the slug is valid
- */
-export function isValidProjectSlug(slug: string): boolean {
-  return FALLBACK_PROJECTS.some((project) => project.id === slug)
-}

@@ -18,6 +18,6 @@ export async function GET() {
       .withError(error as Error)
       .withMetadata({ errorCode: dbError.code })
       .error('Failed to fetch news')
-    return NextResponse.json({ error: 'Failed to fetch news', code: dbError.code }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to fetch news' }, { status: 500 })
   }
 }

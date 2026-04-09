@@ -1,20 +1,16 @@
 const mockGet = jest.fn()
 const mockPut = jest.fn()
-const mockDelete = jest.fn()
-const mockList = jest.fn()
 
 const mockR2Bucket = {
   get: mockGet,
   put: mockPut,
-  delete: mockDelete,
-  list: mockList,
 } as unknown as R2Bucket
 
 jest.mock('../r2-client', () => ({
   getR2: () => mockR2Bucket,
 }))
 
-import { deleteImage, getImage, listImages, putImage } from '../r2-operations'
+import { getImage, putImage } from '../r2-operations'
 
 describe('R2 Operations', () => {
   beforeEach(() => {
@@ -58,41 +54,6 @@ describe('R2 Operations', () => {
         httpMetadata: { contentType: 'image/jpeg' },
       })
       expect(result).toBe(mockResult)
-    })
-  })
-
-  describe('deleteImage', () => {
-    it('removes the object by key', async () => {
-      mockDelete.mockResolvedValue(undefined)
-
-      await deleteImage('photos/old.jpg')
-
-      expect(mockDelete).toHaveBeenCalledWith('photos/old.jpg')
-    })
-  })
-
-  describe('listImages', () => {
-    it('returns matching keys with prefix', async () => {
-      const mockObjects = {
-        objects: [{ key: '7-rad/a.jpg' }, { key: '7-rad/b.jpg' }],
-        truncated: false,
-      }
-      mockList.mockResolvedValue(mockObjects)
-
-      const result = await listImages('7-rad/')
-
-      expect(mockList).toHaveBeenCalledWith({ prefix: '7-rad/' })
-      expect(result).toBe(mockObjects)
-    })
-
-    it('lists all images when no prefix given', async () => {
-      const mockObjects = { objects: [], truncated: false }
-      mockList.mockResolvedValue(mockObjects)
-
-      const result = await listImages()
-
-      expect(mockList).toHaveBeenCalledWith({ prefix: undefined })
-      expect(result).toBe(mockObjects)
     })
   })
 })
