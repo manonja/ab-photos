@@ -1,7 +1,8 @@
 import type React from 'react'
 import { Suspense } from 'react'
 import { getPhotoDetails } from '@/actions/getPhotoDetails'
-import type { Photo } from '@/db/types'
+import type { Photo } from '@/types/database'
+import { getHeroAlign } from '@/utils/getHeroAlign'
 import BackgroundImageClient from './backgroundImageClient'
 
 interface BackgroundImageProps {
@@ -80,6 +81,7 @@ const BackgroundImage: React.FC<BackgroundImageProps> = async ({
           src={photo.desktop_blob}
           alt={photo.caption || `Background image for ${slug} project`}
           disableOverlay={disableOverlay}
+          align={getHeroAlign(slug)}
         />
       </Suspense>
     )

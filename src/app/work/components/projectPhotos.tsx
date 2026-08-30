@@ -1,14 +1,14 @@
-import Image from 'next/image'
 import type React from 'react'
 import { getPhotoDetails } from '@/actions/getPhotoDetails'
+import PhotoScroller from './photoScroller'
 
 interface ProjectPhotosProps {
   slug: string
 }
 
 /**
- * A component that displays a grid of photos for a specific project.
- * Photos are displayed in a single column on large screens with padding.
+ * A component that displays the photos of a project as a full-window,
+ * snap-scrolling sequence (one photo per screen, caption at the bottom).
  *
  * @param slug - The unique identifier of the project
  */
@@ -36,27 +36,9 @@ const ProjectPhotos: React.FC<ProjectPhotosProps> = async ({ slug }) => {
       )
     }
 
-    return (
-      <div className="grid text-center lg:p-6 gap-2 lg:mb-0 lg:grid-cols-1 lg:text-right self-end">
-        {photoArray.map((photo) => (
-          <div key={photo.id} className="w-full lg:p-12 pb-4">
-            <Image
-              src={photo.desktop_blob}
-              alt={photo.caption || ''}
-              width={2400}
-              height={1600}
-              className="w-full h-auto object-cover lg:max-w-full lg:max-h-screen"
-              referrerPolicy="no-referrer"
-              unoptimized
-              sizes="(max-width: 1024px) 100vw, 90vw"
-            />
-            {photo.caption && (
-              <p className="mt-2 text-left italic text-sm text-gray-400">{photo.caption}</p>
-            )}
-          </div>
-        ))}
-      </div>
-    )
+    const sortedPhotos = [...photoArray].sort((a, b) => a.sequence - b.sequence)
+
+    return <PhotoScroller photos={sortedPhotos} />
   } catch (error) {
     console.warn('[Component] ProjectPhotos: Error occurred', error)
     return (

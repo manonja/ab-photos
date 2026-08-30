@@ -4,10 +4,19 @@ import Image from 'next/image'
 import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+import type { HeroAlign } from '@/utils/getHeroAlign'
+
 interface BackgroundImageClientProps {
   src: string
   alt: string
   disableOverlay?: boolean
+  align?: HeroAlign
+}
+
+const ALIGN_CLASS: Record<HeroAlign, string> = {
+  top: 'object-top',
+  center: 'object-center',
+  bottom: 'object-bottom',
 }
 
 /**
@@ -23,6 +32,7 @@ const BackgroundImageClient: React.FC<BackgroundImageClientProps> = ({
   src,
   alt,
   disableOverlay = false,
+  align = 'center',
 }) => {
   const [opacity, setOpacity] = useState(1)
   const [blurAmount, setBlurAmount] = useState(0)
@@ -183,7 +193,7 @@ const BackgroundImageClient: React.FC<BackgroundImageClientProps> = ({
           priority
           quality={90}
           sizes="100vw"
-          className="object-cover"
+          className={`object-cover ${ALIGN_CLASS[align]}`}
           referrerPolicy="no-referrer"
           unoptimized={true}
           fetchPriority="high"
