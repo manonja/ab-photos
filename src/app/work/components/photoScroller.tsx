@@ -92,7 +92,7 @@ const PhotoScroller: React.FC<PhotoScrollerProps> = ({ photos }) => {
           data-snap-section
           className="relative h-svh w-full snap-start snap-always"
         >
-          <div className="absolute inset-x-0 top-0 bottom-12 p-3 lg:p-10">
+          <div className="absolute inset-x-0 top-0 bottom-16 p-3 pb-1 lg:p-10 lg:pb-2">
             <div className="relative h-full w-full">
               <Image
                 src={photo.desktop_blob}
@@ -106,7 +106,7 @@ const PhotoScroller: React.FC<PhotoScrollerProps> = ({ photos }) => {
             </div>
           </div>
           {photo.caption && (
-            <p className="absolute inset-x-0 bottom-3 px-3 text-center italic text-sm text-gray-400 lg:px-10">
+            <p className="absolute inset-x-0 bottom-10 px-3 text-right italic text-sm text-gray-400 lg:px-10">
               {photo.caption}
             </p>
           )}
