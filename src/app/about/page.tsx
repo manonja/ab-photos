@@ -35,10 +35,7 @@ export default function About() {
             <div className="w-full lg:w-1/2">
               {/* Headline */}
               <h1 className="text-xl lg:text-2xl leading-relaxed mb-6 lg:mt-0">
-                Anton Bossenbroek is a documentary and landscape photographer living between The
-                Netherlands and Canada. His work investigates how hyperobjects — massive forces like
-                pollution and industrial infrastructure — shape our world in ways that often go
-                unnoticed.
+                Anton Bossenbroek is a photographer living between the Netherlands and Canada.
               </h1>
 
               {/* Divider */}
@@ -46,29 +43,11 @@ export default function About() {
 
               {/* Body text */}
               <p className={`mt-4 text-base leading-relaxed ${workSans.className}`}>
-                Anton builds on 20 years of experience as a machine learning engineer and combines
-                photography, data analysis, and geospatial imagery to explore the impact of humans
-                on landscapes, societies, and communities. Through technology and personal
-                observation, he reveals the far-reaching effects of industrial forces that remain
-                hidden in daily life.
-              </p>
-              <p className={`mt-6 text-base leading-relaxed ${workSans.className}`}>
-                Anton merges visual and factual layers to highlight the full impact of these hidden
-                influences. He analyzes satellite data on light pollution, requests open government
-                documents with the help of large language models, and visits national archives in
-                South Africa. His work grounds itself in the belief that life often conceals the
-                larger consequences of our consumption patterns and industrial demands.
-              </p>
-              <p className={`mt-6 text-base leading-relaxed ${workSans.className}`}>
-                In his ongoing long-term project &quot;Sunsetting 64 Megatons,&quot; Anton documents
-                the largest C02 emitting plant in the world, in Secunda, South Africa, where he once
-                worked as a Machine Learning expert. He now illustrates how the local community
-                depends on an industry that needs to change for the sake of our climate. He weaves
-                in portraits and personal narratives to remind viewers that these issues aren&apos;t
-                just technical or economic—they involve real people whose lives could be upended as
-                we shift away from carbon-intensive systems. Ultimately, Anton&apos;s work seeks to
-                spark deeper reflection on how we can balance economic needs with our responsibility
-                to care for both the planet and one another.
+                He came to photography after twenty years as a machine learning engineer, and his
+                approach remains forensic: photographs built alongside satellite data and national
+                archives. His work has been developed through the FotoFilmic Annual Mentoring
+                Program and a Magnum mentorship, featured by Der Greif, and shown in Paris, Seattle,
+                Kuala Lumpur, and British Columbia.
               </p>
             </div>
           </div>
