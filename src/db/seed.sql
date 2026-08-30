@@ -92,7 +92,7 @@ VALUES (
   'A glimpse into the first few days of a two-month scouting and photographing trip in South Africa for Anton''s latest project - Sunsetting 64 Megatons',
   NULL,
   '[]',
-  1,
+  0,
   'two-column',
   '<article class="text-white">
   <!-- <h1 class="text-4xl font-normal uppercase mb-2">Notes from the field - Johannesburg and East Mpumalanga, South Africa</h1> -->
