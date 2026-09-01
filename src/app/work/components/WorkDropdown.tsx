@@ -74,6 +74,7 @@ export default function WorkDropdown({ projects }: WorkDropdownProps) {
       className="relative"
       role="presentation"
       onClick={(e) => e.stopPropagation()}
+      onMouseLeave={() => setIsOpen(false)}
     >
       {/* Work header that toggles dropdown but is not clickable as a link */}
       <div className="p-0">
