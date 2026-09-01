@@ -16,7 +16,9 @@ const DEFAULT_STYLE: TitleStyle = {
 /** Per-project overrides so each title can be visually distinct. */
 const TITLE_STYLE_BY_PROJECT: Record<string, Partial<TitleStyle>> = {
   '7-rad': {
-    fontSize: 'clamp(80px, 24vw, 350px)',
+    // 350px was chosen on a 1150px-tall studio canvas (~30% of height);
+    // the svh term keeps that proportion on shorter screens.
+    fontSize: 'clamp(80px, min(24vw, 30svh), 350px)',
     letterSpacing: '-0.05em',
     inkShift: '-0.04em',
   },
