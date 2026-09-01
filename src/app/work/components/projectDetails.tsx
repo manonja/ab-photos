@@ -30,16 +30,16 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = async ({ slug }) => {
       >
         {slug.replace(/-/g, ' ')}
       </h1>
-      {/* Saved grid: date col 2, subtitle cols 3-4 (same row), body cols 3-4
-          in two text columns on the next row, tight under the subtitle. */}
-      <div className="mt-2 p-4 lg:grid lg:grid-cols-5 lg:gap-x-6 lg:p-0">
+      {/* Saved grid (9 cols, 20px gutter): date cols 2-3, subtitle cols 4-7
+          (same row), body cols 4-7 in two text columns on the next row. */}
+      <div className="mt-2 p-4 lg:grid lg:grid-cols-9 lg:gap-x-5 lg:p-0">
         <div className="text-[32px] font-bold leading-none lg:col-start-2 lg:col-span-2 lg:row-start-1">
           {date}
         </div>
-        <div className="mt-12 text-2xl lg:col-start-3 lg:col-span-2 lg:row-start-1 lg:mt-0">
+        <div className="mt-12 text-2xl lg:col-start-4 lg:col-span-4 lg:row-start-1 lg:mt-0">
           {subtitle}
         </div>
-        <div className="lg:col-start-3 lg:col-span-2 lg:row-start-2">
+        <div className="lg:col-start-4 lg:col-span-4 lg:row-start-2">
           <div className="my-3 h-px bg-gray-300 w-full max-w-[40%]" />
           {/* One text, flowed over two balanced columns on large screens */}
           <div className="mt-2 text-base leading-normal text-justify hyphens-auto lg:columns-2 lg:gap-10">
