@@ -36,7 +36,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = async ({ slug }) => {
         {/* Lexend's built-in spacing is wide; tracking-tight brings the date
             back to normal. Matching leading-tight top-aligns it with the
             subtitle across the row. */}
-        <div className="text-[32px] font-bold leading-tight tracking-tight lg:col-start-2 lg:col-span-2 lg:row-start-1">
+        <div className="text-[32px] font-light leading-tight tracking-tight lg:col-start-2 lg:col-span-2 lg:row-start-1">
           {date}
         </div>
         <div className="mt-12 text-2xl leading-tight lg:col-start-4 lg:col-span-4 lg:row-start-1 lg:mt-0">
