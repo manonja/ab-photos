@@ -2,12 +2,16 @@
 
 import Image from 'next/image'
 import type React from 'react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { Photo } from '@/types/database'
 
 interface PhotoScrollerProps {
   photos: Photo[]
 }
+
+// Images narrower than this are low-resolution sources (e.g. satellite crops)
+// that get upscaled to full width with hard pixels instead of smoothing.
+const PIXELATE_BELOW_WIDTH = 1000
 
 /**
  * Full-window photo viewer with snap scrolling.
@@ -17,6 +21,7 @@ interface PhotoScrollerProps {
  */
 const PhotoScroller: React.FC<PhotoScrollerProps> = ({ photos }) => {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [pixelated, setPixelated] = useState<Record<string, boolean>>({})
 
   useEffect(() => {
     // Snap scrolling must live on the document scroll container so the hero
@@ -101,10 +106,17 @@ const PhotoScroller: React.FC<PhotoScrollerProps> = ({ photos }) => {
               width={2400}
               height={1600}
               sizes="100vw"
-              className="h-auto w-auto object-contain"
+              className={`h-auto object-contain ${
+                pixelated[photo.id] ? 'w-full [image-rendering:pixelated]' : 'w-auto'
+              }`}
               style={{ maxHeight: 'calc(100svh - 6rem)', maxWidth: '100%' }}
               referrerPolicy="no-referrer"
               unoptimized
+              onLoad={(e) => {
+                if (e.currentTarget.naturalWidth < PIXELATE_BELOW_WIDTH) {
+                  setPixelated((prev) => ({ ...prev, [photo.id]: true }))
+                }
+              }}
             />
             {photo.caption && (
               <figcaption className="mt-2 w-full text-right text-sm text-gray-400">
