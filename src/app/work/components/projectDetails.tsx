@@ -33,16 +33,19 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = async ({ slug }) => {
       {/* Saved grid (9 cols, 20px gutter): date cols 2-3, subtitle cols 4-7
           (same row), body cols 4-7 in two text columns on the next row. */}
       <div className="mt-2 p-4 lg:grid lg:grid-cols-9 lg:gap-x-5 lg:p-0">
-        <div className="text-[32px] font-bold leading-none lg:col-start-2 lg:col-span-2 lg:row-start-1">
+        {/* Lexend's built-in spacing is wide; tracking-tight brings the date
+            back to normal. Matching leading-tight top-aligns it with the
+            subtitle across the row. */}
+        <div className="text-[32px] font-bold leading-tight tracking-tight lg:col-start-2 lg:col-span-2 lg:row-start-1">
           {date}
         </div>
-        <div className="mt-12 text-2xl lg:col-start-4 lg:col-span-4 lg:row-start-1 lg:mt-0">
+        <div className="mt-12 text-2xl leading-tight lg:col-start-4 lg:col-span-4 lg:row-start-1 lg:mt-0">
           {subtitle}
         </div>
         <div className="lg:col-start-4 lg:col-span-4 lg:row-start-2">
           <div className="my-3 h-px bg-gray-300 w-full max-w-[40%]" />
           {/* One text, flowed over two balanced columns on large screens */}
-          <div className="mt-2 text-base leading-normal text-justify hyphens-auto lg:columns-2 lg:gap-10">
+          <div className="mt-2 text-base leading-normal text-left lg:columns-2 lg:gap-10">
             <p>{description}</p>
             {complementaryText && <p className="mt-4">{complementaryText}</p>}
           </div>
