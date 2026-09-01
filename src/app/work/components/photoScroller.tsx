@@ -107,7 +107,7 @@ const PhotoScroller: React.FC<PhotoScrollerProps> = ({ photos }) => {
               unoptimized
             />
             {photo.caption && (
-              <figcaption className="mt-2 w-full text-right italic text-sm text-gray-400">
+              <figcaption className="mt-2 w-full text-right text-sm text-gray-400">
                 {photo.caption}
               </figcaption>
             )}
