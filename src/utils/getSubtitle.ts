@@ -2,7 +2,7 @@ export const getSubtitle = (slug: string): string => {
   let subtitle: string
   if (slug === '7-rad') {
     subtitle =
-      '7 Rad - is a visual exploration of how urban landscapes are transformed at night, depicting the grandeur, complexity and curiosity of a man-made environment.'
+      '7 Rad is a visual exploration of how urban landscapes transform at night, depicting the grandeur and complexity of a man-made environment.'
   } else if (slug === 'pyrenees') {
     subtitle =
       'Through rugged landscapes and solitary trails, this project captures the profound stillness and untamed beauty of the Pyrenees, inviting a reconnection with the wild essence within us.'
