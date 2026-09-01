@@ -90,26 +90,28 @@ const PhotoScroller: React.FC<PhotoScrollerProps> = ({ photos }) => {
         <section
           key={photo.id}
           data-snap-section
-          className="relative h-svh w-full snap-start snap-always"
+          className="flex h-svh w-full snap-start snap-always items-center justify-center p-3 lg:p-10"
         >
-          <div className="absolute inset-x-0 top-0 bottom-16 p-3 pb-1 lg:p-10 lg:pb-2">
-            <div className="relative h-full w-full">
-              <Image
-                src={photo.desktop_blob}
-                alt={photo.caption || ''}
-                fill
-                sizes="100vw"
-                className="object-contain"
-                referrerPolicy="no-referrer"
-                unoptimized
-              />
-            </div>
-          </div>
-          {photo.caption && (
-            <p className="absolute inset-x-0 bottom-10 px-3 text-right italic text-sm text-gray-400 lg:px-10">
-              {photo.caption}
-            </p>
-          )}
+          {/* The figure shrink-wraps to the rendered image, so the caption's
+              right edge follows the image's right edge, not the window's. */}
+          <figure className="flex max-h-full max-w-full flex-col items-center">
+            <Image
+              src={photo.desktop_blob}
+              alt={photo.caption || ''}
+              width={2400}
+              height={1600}
+              sizes="100vw"
+              className="h-auto w-auto object-contain"
+              style={{ maxHeight: 'calc(100svh - 6rem)', maxWidth: '100%' }}
+              referrerPolicy="no-referrer"
+              unoptimized
+            />
+            {photo.caption && (
+              <figcaption className="mt-2 w-full text-right italic text-sm text-gray-400">
+                {photo.caption}
+              </figcaption>
+            )}
+          </figure>
         </section>
       ))}
     </div>
