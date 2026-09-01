@@ -16,7 +16,7 @@ const DEFAULT_STYLE: TitleStyle = {
 /** Per-project overrides so each title can be visually distinct. */
 const TITLE_STYLE_BY_PROJECT: Record<string, Partial<TitleStyle>> = {
   '7-rad': {
-    fontSize: 'clamp(80px, 21vw, 300px)',
+    fontSize: 'clamp(80px, 24vw, 350px)',
     letterSpacing: '-0.05em',
     inkShift: '-0.04em',
   },
