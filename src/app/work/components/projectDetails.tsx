@@ -20,20 +20,15 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = async ({ slug }) => {
             <div className="-mt-10 uppercase text-2xl font-normal lg:-mt-16">{slug}</div>
             <div className="font-light italic ">{date}</div>
           </div>
-          <div className="lg:flex-1 w-full lg:w-1/3 p-4 ">
-            {' '}
-            {/* Column for text content */}
-            <div className="text-2xl max-w-[90%] ">{subtitle}</div> {/* Subtitle */}
-            <div className="my-8 h-px bg-gray-300 w-full max-w-[80%]" />
-            <p className="mt-2 text-base leading-normal max-w-[90%]">
-              {' '}
-              {/* Paragraph */}
-              {description}
-            </p>
+          <div className="lg:flex-[2] w-full lg:w-2/3 p-4">
+            <div className="text-2xl max-w-[45%]">{subtitle}</div> {/* Subtitle */}
+            <div className="my-8 h-px bg-gray-300 w-full max-w-[40%]" />
+            {/* One text, flowed over two balanced columns on large screens */}
+            <div className="mt-2 text-base leading-normal lg:columns-2 lg:gap-16">
+              <p>{description}</p>
+              {complementaryText && <p className="mt-4">{complementaryText}</p>}
+            </div>
           </div>
-          {complementaryText && (
-            <div className="flex-1 w-full lg:w-1/3 p-4">{complementaryText}</div>
-          )}
         </div>
       </div>
     </main>
