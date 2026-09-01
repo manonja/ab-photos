@@ -19,8 +19,8 @@ values. Two variants exist; ask which (or infer from the request):
   (`lg:absolute lg:left-[47.214%] lg:top-[48.5%] lg:w-[38.197%]`).
 
 Reference implementations (copy the whole file and adapt content/seed):
-scratchpad `7rad-grid-studio.html` and `7rad-golden-studio.html` from the
-2026-08/09 session; both are published artifacts (Grid Studio
+`references/7rad-grid-studio.html` and `references/7rad-golden-studio.html`
+beside this skill; both are published artifacts (Grid Studio
 `c6de436c-...`, Golden Studio `24c46fc0-...`).
 
 ## Building the artifact
