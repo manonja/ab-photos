@@ -52,7 +52,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <BackgroundImage slug={slug} random={true} />
       <main
         data-snap-section
-        className="flex min-h-svh flex-col lg:w-[90%] justify-between items-center lg:p-6 p-2 snap-start snap-always"
+        className="flex min-h-svh w-full flex-col justify-between lg:py-6 py-2 snap-start snap-always"
       >
         <div className="mt-24 w-full" />
         <ProjectDetails slug={slug} />
