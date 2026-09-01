@@ -54,7 +54,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         data-snap-section
         className="flex min-h-svh flex-col lg:w-[90%] justify-between items-center lg:p-6 p-2 snap-start snap-always"
       >
-        <div className="mt-40 lg:pt-0 h-px bg-white w-full" />
+        <div className="mt-24 w-full" />
         <ProjectDetails slug={slug} />
       </main>
       <ProjectPhotos slug={slug} />
