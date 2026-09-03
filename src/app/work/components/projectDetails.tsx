@@ -12,7 +12,14 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = async ({ slug }) => {
   const subtitle = getSubtitle(slug)
   const description = getDescription(slug)
   const complementaryText = getComplementaryText(slug)
-  const date = slug === 'pyrenees' ? 'Summer 2021' : slug === '7-rad' ? '2021-ongoing' : ''
+  const date =
+    slug === 'pyrenees'
+      ? 'Summer 2021'
+      : slug === '7-rad'
+        ? '2021-ongoing'
+        : slug === 'sunsetting-64-megatons'
+          ? '2024-ongoing'
+          : ''
   const titleStyle = getTitleStyle(slug)
   return (
     <main className="flex w-full flex-col lg:absolute lg:inset-x-2 lg:inset-y-0 lg:block">
