@@ -96,7 +96,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = async ({ slug }) => {
           <div
             className={
               golden.grouped
-                ? 'lg:mt-6'
+                ? 'lg:mt-3'
                 : `lg:absolute lg:left-[47.214%] ${golden.body} lg:w-[38.197%]`
             }
           >
