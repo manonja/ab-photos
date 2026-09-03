@@ -4,6 +4,12 @@ import type { Project } from '@/types/database'
 const FALLBACK_PROJECTS: Project[] = [
   { id: '7-rad', title: '7 Rad', description: '', isPublished: true },
   { id: 'pyrenees', title: 'Pyrenees', description: '', isPublished: true },
+  {
+    id: 'sunsetting-64-megatons',
+    title: 'Sunsetting 64 Megatons',
+    description: '',
+    isPublished: true,
+  },
   // Add more static project data as needed
 ]
 

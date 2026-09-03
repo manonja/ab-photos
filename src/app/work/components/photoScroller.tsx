@@ -90,7 +90,7 @@ const PhotoScroller: React.FC<PhotoScrollerProps> = ({ photos }) => {
         <section
           key={photo.id}
           data-snap-section
-          className="flex h-svh w-full snap-start snap-always items-center justify-center p-3 lg:p-10"
+          className="flex h-svh w-full snap-start snap-always items-center justify-center p-2 lg:p-4"
         >
           {/* The figure shrink-wraps to the rendered image, so the caption's
               right edge follows the image's right edge, not the window's. */}
@@ -102,7 +102,7 @@ const PhotoScroller: React.FC<PhotoScrollerProps> = ({ photos }) => {
               height={1600}
               sizes="100vw"
               className="h-auto w-auto object-contain"
-              style={{ maxHeight: 'calc(100svh - 6rem)', maxWidth: '100%' }}
+              style={{ maxHeight: 'calc(100svh - 5rem)', maxWidth: '100%' }}
               referrerPolicy="no-referrer"
               unoptimized
             />
