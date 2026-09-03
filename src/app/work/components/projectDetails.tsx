@@ -31,14 +31,16 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = async ({ slug }) => {
       ? {
           date: 'lg:top-[42.956%]',
           subtitle: 'lg:top-[52.786%]',
-          body: 'lg:top-[61.803%]',
+          body: '',
           dateText: 'text-2xl',
+          grouped: true,
         }
       : {
           date: 'lg:top-[41.6%]',
           subtitle: 'lg:top-[48.5%]',
           body: 'lg:top-[57%]',
           dateText: 'text-[32px]',
+          grouped: false,
         }
   return (
     <main className="flex w-full flex-col lg:absolute lg:inset-x-2 lg:inset-y-0 lg:block">
@@ -71,18 +73,39 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = async ({ slug }) => {
         >
           {date}
         </div>
-        {/* Golden x: 0.472 → 0.854. */}
+        {/* Golden x: 0.472 → 0.854. The subtitle's height varies with the
+            viewport, so grouped layouts anchor both blocks at the subtitle's
+            golden thread and flow the body below it with a fixed gap —
+            a fixed body thread would collide on short screens. */}
         <div
-          className={`mt-12 text-2xl leading-tight lg:absolute lg:left-[47.214%] ${golden.subtitle} lg:mt-0 lg:w-[38.197%]`}
+          className={
+            golden.grouped
+              ? `contents lg:absolute lg:left-[47.214%] ${golden.subtitle} lg:block lg:w-[38.197%]`
+              : 'contents'
+          }
         >
-          {subtitle}
-        </div>
-        <div className={`lg:absolute lg:left-[47.214%] ${golden.body} lg:w-[38.197%]`}>
-          <div className="my-3 h-px bg-gray-300 w-full max-w-[40%] lg:hidden" />
-          {/* One text, flowed over two balanced columns on large screens */}
-          <div className="mt-2 text-base leading-normal text-left lg:mt-0 lg:columns-2 lg:gap-10">
-            <p>{description}</p>
-            {complementaryText && <p className="mt-4">{complementaryText}</p>}
+          <div
+            className={`mt-12 text-2xl leading-tight lg:mt-0 ${
+              golden.grouped
+                ? ''
+                : `lg:absolute lg:left-[47.214%] ${golden.subtitle} lg:w-[38.197%]`
+            }`}
+          >
+            {subtitle}
+          </div>
+          <div
+            className={
+              golden.grouped
+                ? 'lg:mt-6'
+                : `lg:absolute lg:left-[47.214%] ${golden.body} lg:w-[38.197%]`
+            }
+          >
+            <div className="my-3 h-px bg-gray-300 w-full max-w-[40%] lg:hidden" />
+            {/* One text, flowed over two balanced columns on large screens */}
+            <div className="mt-2 text-base leading-normal text-left lg:mt-0 lg:columns-2 lg:gap-10">
+              <p>{description}</p>
+              {complementaryText && <p className="mt-4">{complementaryText}</p>}
+            </div>
           </div>
         </div>
       </div>
