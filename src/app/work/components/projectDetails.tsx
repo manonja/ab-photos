@@ -21,6 +21,25 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = async ({ slug }) => {
           ? '2024-ongoing'
           : ''
   const titleStyle = getTitleStyle(slug)
+  // Long titles break over fixed lines chosen in the layout studio.
+  const titleLines =
+    slug === 'sunsetting-64-megatons' ? ['sunsetting', '64 megatons'] : [slug.replace(/-/g, ' ')]
+  // Per-project golden-section y positions (saved from the studio); x columns
+  // are shared. Tailwind needs these as full literal class names.
+  const golden =
+    slug === 'sunsetting-64-megatons'
+      ? {
+          date: 'lg:top-[42.956%]',
+          subtitle: 'lg:top-[52.786%]',
+          body: 'lg:top-[61.803%]',
+          dateText: 'text-2xl',
+        }
+      : {
+          date: 'lg:top-[41.6%]',
+          subtitle: 'lg:top-[48.5%]',
+          body: 'lg:top-[57%]',
+          dateText: 'text-[32px]',
+        }
   return (
     <main className="flex w-full flex-col lg:absolute lg:inset-x-2 lg:inset-y-0 lg:block">
       {/* Golden Studio layout: on lg every block sits at golden-section
@@ -35,21 +54,30 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = async ({ slug }) => {
           fontSize: titleStyle.fontSize,
           letterSpacing: titleStyle.letterSpacing,
           marginLeft: titleStyle.inkShift,
+          lineHeight: titleStyle.lineHeight,
         }}
       >
-        {slug.replace(/-/g, ' ')}
+        {titleLines.map((line) => (
+          <span key={line} className="block">
+            {line}
+          </span>
+        ))}
       </h1>
       <div className="mt-2 p-4 lg:contents">
         {/* Lexend's built-in spacing is wide; tracking-tight brings the date
             back to normal. Golden x: 0.236 → 0.472. */}
-        <div className="text-[32px] font-light leading-tight tracking-tight lg:absolute lg:left-[23.607%] lg:top-[41.6%] lg:w-[23.607%]">
+        <div
+          className={`${golden.dateText} font-light leading-tight tracking-tight lg:absolute lg:left-[23.607%] ${golden.date} lg:w-[23.607%]`}
+        >
           {date}
         </div>
         {/* Golden x: 0.472 → 0.854. */}
-        <div className="mt-12 text-2xl leading-tight lg:absolute lg:left-[47.214%] lg:top-[48.5%] lg:mt-0 lg:w-[38.197%]">
+        <div
+          className={`mt-12 text-2xl leading-tight lg:absolute lg:left-[47.214%] ${golden.subtitle} lg:mt-0 lg:w-[38.197%]`}
+        >
           {subtitle}
         </div>
-        <div className="lg:absolute lg:left-[47.214%] lg:top-[57%] lg:w-[38.197%]">
+        <div className={`lg:absolute lg:left-[47.214%] ${golden.body} lg:w-[38.197%]`}>
           <div className="my-3 h-px bg-gray-300 w-full max-w-[40%] lg:hidden" />
           {/* One text, flowed over two balanced columns on large screens */}
           <div className="mt-2 text-base leading-normal text-left lg:mt-0 lg:columns-2 lg:gap-10">
