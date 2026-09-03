@@ -92,10 +92,9 @@ const PhotoScroller: React.FC<PhotoScrollerProps> = ({ photos }) => {
           data-snap-section
           className="flex h-svh w-full snap-start snap-always items-center justify-center p-2 lg:p-4"
         >
-          {/* The figure shrink-wraps to the rendered image, so the caption —
-              overlaid inside the frame — follows the image's edges, not the
-              window's. */}
-          <figure className="relative flex max-h-full max-w-full flex-col items-center">
+          {/* The figure shrink-wraps to the rendered image, so the caption's
+              right edge follows the image's right edge, not the window's. */}
+          <figure className="flex max-h-full max-w-full flex-col items-center">
             <Image
               src={photo.desktop_blob}
               alt={photo.caption || ''}
@@ -103,12 +102,12 @@ const PhotoScroller: React.FC<PhotoScrollerProps> = ({ photos }) => {
               height={1600}
               sizes="100vw"
               className="h-auto w-auto object-contain"
-              style={{ maxHeight: 'calc(100svh - 2rem)', maxWidth: '100%' }}
+              style={{ maxHeight: 'calc(100svh - 5rem)', maxWidth: '100%' }}
               referrerPolicy="no-referrer"
               unoptimized
             />
             {photo.caption && (
-              <figcaption className="absolute right-3 bottom-2 text-right text-sm text-white/80 [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">
+              <figcaption className="mt-2 w-full text-right text-sm text-gray-400">
                 {photo.caption}
               </figcaption>
             )}
