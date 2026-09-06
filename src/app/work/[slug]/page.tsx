@@ -50,9 +50,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   return (
     <>
       <BackgroundImage slug={slug} random={true} />
+      {/* scroll-mt-64 exceeds the navbar's height, so this section's snap
+          point clamps to the document top — without it, mandatory snap
+          makes the navbar above unreachable. */}
       <main
         data-snap-section
-        className="relative flex min-h-svh w-full flex-col justify-between lg:py-6 py-2 snap-start snap-always"
+        className="relative flex min-h-svh w-full flex-col justify-between lg:py-6 py-2 snap-start snap-always scroll-mt-64"
       >
         <div className="mt-24 w-full" />
         <ProjectDetails slug={slug} />
